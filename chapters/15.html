@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>The Future of Local-First Autonomous Design - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #cc7373;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #cc7373; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART IV: SHIPPING & EXTENSIONS &middot; SECTION 15</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">The Future of Local-First Autonomous Design</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Where agent-native design-as-code is heading</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">13 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-15-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Where MCP Is Heading</a>
+        <a href="#ch-15-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Agent and Model Trajectory</a>
+        <a href="#ch-15-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Design-as-Code Deepens</a>
+        <a href="#ch-15-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Open-Source Community Dynamics</a>
+        <a href="#ch-15-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">My Bet on What Endures</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-15-1" data-section="ch-15-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Where MCP Is Heading</span></a>
+          <a href="#ch-15-2" data-section="ch-15-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Agent and Model Trajectory</span></a>
+          <a href="#ch-15-3" data-section="ch-15-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Design-as-Code Deepens</span></a>
+          <a href="#ch-15-4" data-section="ch-15-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Open-Source Community Dynamics</span></a>
+          <a href="#ch-15-5" data-section="ch-15-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>My Bet on What Endures</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-15-1" data-section="ch-15-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Where MCP Is Heading</span></a>
+          <a href="#ch-15-2" data-section="ch-15-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Agent and Model Trajectory</span></a>
+          <a href="#ch-15-3" data-section="ch-15-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Design-as-Code Deepens</span></a>
+          <a href="#ch-15-4" data-section="ch-15-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Open-Source Community Dynamics</span></a>
+          <a href="#ch-15-5" data-section="ch-15-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>My Bet on What Endures</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">15</p>
+    <h1 class="chapter-title co-title">The Future of Local-First Autonomous Design</h1>
+    <p class="co-standfirst">Where agent-native design-as-code is heading</p>
+    <div class="co-body co-body--dropcap">
+      <p>Agents and renderers will churn. The durable layer is the brand contract and the local-first control surface, and that is where to place your bet. This chapter separates what endures from what is volatile, reads the signals in the MCP roadmap and agent market, and closes with a grounded prediction on what the local-first autonomous design category looks like in 2027 and beyond.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-15-1">
+    <h2 class="section-title"><span class="section-num">15.1</span> Where MCP Is Heading</h2>
+
+<p class="section-intro">MCP (Model Context Protocol) began as a way to let an AI agent call an external tool. Sixteen months later, it has become infrastructure --- and the 2026-07-28 RC is the largest revision since the protocol launched in November 2024.</p>
+
+    <p>As of June 2026, the MCP specification is stable at 2025-11-25. The 2026-07-28 RC, scheduled to finalize on July 28, 2026, introduces four changes that matter for Open Design specifically.</p>
+
+    <p><strong>Stateless HTTP.</strong> The current protocol requires session affinity --- a client and server must hold a persistent connection. The RC makes the core protocol stateless: clients cache the tools list, servers run behind ordinary HTTP load balancers. This means MCP can operate at cloud scale without custom session routing. For local-first use, it changes nothing. For the ecosystem, it removes the biggest adoption barrier for enterprise deployments. That matters to Open Design because it means the MCP surface that Open Design exposes will be reachable from more agents running in more environments.</p>
+
+    <p><strong>MCP Apps.</strong> The RC adds a mechanism for servers to ship interactive HTML into sandboxed iframes with bidirectional JSON-RPC. In plain terms: an MCP server can now render a UI panel inside the agent's host application. This is structurally similar to what Open Design already does with its preview iframe --- the difference is that MCP Apps puts that capability in the protocol itself, so any MCP-compatible host can surface it without custom integration code. <!-- TODO-VERIFY: Verify exact sandbox model and JSON-RPC specification details against the final 2026-07-28 spec when it ships --></p>
+
+    <p><strong>Tasks.</strong> Long-running work moves to an independent extension. Generation runs in Open Design are already long-running; this extension standardizes how agents report progress and intermediate results across the ecosystem.</p>
+
+    <p><strong>OAuth 2.0 / OIDC with Resource Indicators (RFC 8707).</strong> Standardized auth prevents token misuse across multi-server setups. This matters most in team and enterprise deployments of Open Design.</p>
+
+    <p>By March 2026, MCP hit 97 million monthly SDK downloads, up from approximately 2 million a year earlier. It is used across Claude Code, ChatGPT, Gemini, GitHub Copilot, and Cursor. The MCP Registry transferred to the Linux Foundation's Agentic AI Foundation on March 20, 2026. That governance structure --- an open foundation, vendor-neutral, with a chartered roadmap --- is the best available signal that MCP is infrastructure and not a vendor play.</p>
+
+    <div class="callout tip">
+      <p>Open Design exposes an MCP server. That interface will survive agent churn because MCP is the durable layer, not the agent you happen to connect today. Wire two or three agents and let MCP be the stable contract between them and Open Design.</p>
+    </div>
+
+    <figure class="figure--full" id="fig-15-1" data-screenshot-id="ch-15-shot-01">
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Nov 2024</strong>
+          <p>MCP launches. Session-based HTTP, tool/resource/prompt primitives. Protocol ships alongside Claude Code.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>2025-11-25</strong>
+          <p>Stable spec frozen. Broad multi-vendor adoption begins: GitHub Copilot, Cursor, Gemini, ChatGPT all integrate.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Mar 20, 2026</strong>
+          <p>MCP Registry transfers to Linux Foundation's Agentic AI Foundation. Vendor-neutral governance established. 97M monthly SDK downloads.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>2026-07-28 RC</strong>
+          <p><em>Largest revision since launch.</em> Stateless HTTP, MCP Apps (sandboxed iframe UI), Tasks extension, OAuth 2.0 / OIDC (RFC 8707).</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>2027+</strong>
+          <p>Enterprise-scale stateless deployments. MCP as foundational infrastructure across the full agent ecosystem.</p>
+        </div>
+      </div>
+      <figcaption>Figure 15.1 — MCP roadmap milestones through June 2026, with the 2026-07-28 RC marked as the largest revision since launch. Schematic illustration (not a screenshot). Sources: modelcontextprotocol.io/development/roadmap; Linux Foundation press release, March 20, 2026.</figcaption>
+    </figure>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>MCP 2025-11-25</strong>
+          <p>Stable spec. Session-based HTTP, tool/resource/prompt primitives.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>2026-07-28 RC</strong>
+          <p>Stateless HTTP, MCP Apps, Tasks extension, OAuth/OIDC.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Linux Foundation</strong>
+          <p>Vendor-neutral governance. MCP Registry under Agentic AI Foundation since March 20, 2026.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Enterprise readiness</strong>
+          <p>Load-balanced deployments, standardized auth, interactive server UIs.</p>
+        </div>
+      </div>
+      <figcaption>Figure 15.2 — MCP maturation path: from session-based dev tooling to stateless, governed infrastructure.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-15-2">
+    <h2 class="section-title"><span class="section-num">15.2</span> The Agent and Model Trajectory</h2>
+
+<p class="section-intro">The agent market is in its most volatile phase. Between April and June 2026, a major model pricing cut and the sunset of an entire agent CLI happened within weeks of each other. That pace is the norm, not an anomaly.</p>
+
+    <h3>The Consolidation Timeline</h3>
+
+    <p>The clearest example of agent volatility is Gemini CLI. Google announced its sunset on the Google Developers Blog, with the service stopping for consumer tiers on June 18, 2026. According to multiple reports including The Register and the Google Developers Blog announcement, its announced replacement is Antigravity CLI, described in those reports as closed-source and Go-based, in contrast to Gemini CLI's open-source model. Multiple news sources and community discussions noted that this transition was announced without a prior open-source community consultation process. That is the documented cost of anchoring your workflow to a single vendor's CLI.</p>
+
+    <p>At the same time, OpenCode has emerged as the leading open-source alternative, reaching approximately 150,000 GitHub stars and a reported 6.5 million monthly active developers as of Q2 2026, per OpenCode's own published figures (opencode.ai). It is MIT-licensed, model-agnostic, and supports 75+ LLM providers. <!-- TODO-VERIFY: Verify current OpenCode star count and MAD figure against opencode.ai official sources at time of publication --> Those numbers will continue to grow; the point is not the count but what they signal: there is now a credible, community-owned option at the terminal-native tier.</p>
+
+    <p>The agent market has consolidated into five observable categories as of June 2026:</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Agent CLI Market Categories (June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Examples</th>
+            <th>Vendor risk</th>
+            <th>MCP support</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Closed IDE-forks</td>
+            <td>Cursor, Devin Desktop (formerly Windsurf)</td>
+            <td>High --- proprietary roadmap</td>
+            <td>Partial</td>
+          </tr>
+          <tr>
+            <td>Open IDE-forks</td>
+            <td>Void</td>
+            <td>Low --- community-governed</td>
+            <td>Partial</td>
+          </tr>
+          <tr>
+            <td>Terminal-native agents</td>
+            <td>Claude Code, OpenCode, Aider</td>
+            <td>Mixed --- varies by vendor</td>
+            <td>Full (Claude Code, OpenCode)</td>
+          </tr>
+          <tr>
+            <td>VS Code extensions</td>
+            <td>Cline, Roo Code, Continue.dev</td>
+            <td>Low to medium</td>
+            <td>Full</td>
+          </tr>
+          <tr>
+            <td>BYOK shells</td>
+            <td>Various orchestration harnesses</td>
+            <td>Variable</td>
+            <td>Varies</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Model Cost Trajectory</h3>
+
+    <p>Between February 2026 and June 2026, Anthropic reduced Claude Opus 4.7 pricing from the previous Opus 4.1 rate of $15/$75 to $5/$25 per million tokens --- a reduction of approximately 67% in four months. <!-- TODO-VERIFY: Verify exact Claude Opus 4.7 pricing reduction timeline and current rates against official Anthropic pricing page at publication date --> As of June 2026, GPT-5.5 is reported at $5/$30 per million tokens, with a $0.50 cached-input option for repeated context. <!-- TODO-VERIFY: Verify GPT-5.5 pricing against official OpenAI pricing page at publication date --> Small and medium models (Haiku-class, GPT mini, Gemini Flash) have seen even steeper reductions since 2023 --- one pricing tracker (morphllm.com) puts the cumulative drop at 99.7% from the 2023 baseline, though that figure is from a single source and should be treated as directionally correct rather than precise. <!-- TODO-VERIFY: Verify 99.7% cumulative cost drop figure independently; single-source, directional only --></p>
+
+    <p>The practical implication: the cost barrier to running local-first agent workflows has collapsed. Design generation requires multiple model calls per artifact --- the initial generation pass, iteration rounds, export validation. At $5 per million input tokens, a complete generate-preview-iterate-export loop costs less than a cup of coffee. The durable layer --- DESIGN.md, the local daemon, the skill catalog --- becomes more valuable as the cost of running inference against it approaches zero.</p>
+
+    <p>There is also a second-order effect worth naming: as inference costs fall, the differentiator is no longer which model you use, but how well you have structured your design intent. A DESIGN.md that precisely encodes your brand's type ramp, spacing scale, and component rules will consistently produce better output than a vague prompt regardless of the underlying model. Cheap inference raises the relative value of good brand contracts.</p>
+
+    <p>Consolidation is not over. Cognition Labs acquired Windsurf (formerly Codeium's IDE) and relaunched it as Devin Desktop in 2026. Near-weekly Codex CLI releases mark OpenAI's terminal-native push. The five-category taxonomy above describes where things stand in June 2026, but it will likely need revision by end of year --- probably because one or more categories collapses through acquisition.</p>
+
+    <div class="callout warning">
+      <p>Over-investing in any single agent or model given documented churn is the most common strategic error I see. Gemini CLI's sunset, OpenCode's rebrand from the original Zed-based tooling, and near-weekly Codex releases all prove the point. Invest in the durable layer --- DESIGN.md, local-first, MCP. Rent the volatile layer: the agent CLI, the model, the pricing tier.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-15-3">
+    <h2 class="section-title"><span class="section-num">15.3</span> Design-as-Code Deepens</h2>
+
+<p class="section-intro">The DESIGN.md specification is the most consequential recent development for local-first autonomous design. Not because it is new --- Open Design has used design-as-code contracts since its first release --- but because Google open-sourced the specification on April 21, 2026, which means the format is now standardized, portable, and no longer tied to any one tool.</p>
+
+    <p>The DESIGN.md spec, published at <code>github.com/google-labs-code/design.md</code> as of April 21, 2026, defines a machine-readable brand contract structured around W3C Design Token Community Group (DTCG) format. Tokens export to <code>tokens.json</code>, <code>tailwind.config.js</code>, and <code>design-system.css</code> natively. The spec is documented as compatible with Claude Code, Cursor, OpenCode, and Google's own Stitch tool. <!-- TODO-VERIFY: Verify the Google open-source origin, April 21, 2026 date, cited repo URL, and W3C DTCG alignment against primary sources before lock --></p>
+
+    <p>Within 10 days of the associated "awesome list" being published in March 2026, it reached 40,500+ GitHub stars --- among the fastest initial growth of any awesome list on record, according to one tracking source. <!-- TODO-VERIFY: Verify "fastest awesome list growth" claim independently; single source, anecdotal, may be imprecise --> That speed of adoption is a signal that the design-as-code model was already latent demand waiting for a portable specification to anchor it.</p>
+
+    <p>This matters for Open Design specifically because the DESIGN.md files in Open Design's bundled brand systems are now written against a portable, spec-compliant format. If Open Design ceased to exist tomorrow, every DESIGN.md in your project directory would still work with any agent CLI that implements the spec. The durable layer, volatile layer model is not a metaphor --- it is a practical portability guarantee.</p>
+
+    <div class="callout">
+      <p><strong>My take:</strong> The open-sourcing of DESIGN.md in April 2026 is the single most important structural event for local-first autonomous design since the MCP spec launched. It separates the brand contract from any one tool. If you have been waiting for a stable long-term bet, a portable, Google-open-sourced, W3C-aligned specification is it. I would be wrong if Google abandons it or if the W3C DTCG format diverges significantly --- watch both. But the starting position is very strong.</p>
+    </div>
+
+    <figure>
+      <div class="compare">
+        <div class="compare-good">
+          <p><strong>Durable investment:</strong> Your house DESIGN.md</p>
+          <p>Portable spec, W3C-aligned tokens, works across Claude Code, Cursor, OpenCode, Stitch. Survives any single agent's shutdown.</p>
+        </div>
+        <div class="compare-bad">
+          <p><strong>Volatile investment:</strong> Agent-specific prompt tuning</p>
+          <p>Locked to one CLI's quirks. Breaks on version bump. Zero portability when the vendor pivots or sunsets.</p>
+        </div>
+      </div>
+      <figcaption>Figure 15.3 — The durable layer vs the volatile layer in practice. Put your design intent in DESIGN.md, not in agent-specific prompt strings.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-15-4">
+    <h2 class="section-title"><span class="section-num">15.4</span> Open-Source Community Dynamics</h2>
+
+<p class="section-intro">Open Design at v0.9.0, released June 2, 2026, carries 63,000+ GitHub stars and 7,000+ forks. Ten releases in two months (April through June 2026) point to a monthly release cadence and an active maintainer group. By the time you read this, v1.0.0 is likely out.</p>
+
+    <p>These counts age weekly and should not be treated as precise --- the point is the pattern. Monthly releases, consistent star growth, and approximately 310 contributors (inferred from search results; <!-- TODO-VERIFY: Verify contributor count against GitHub contributor tab on nexu-io/open-design at publication date -->) describe a project in active maintenance, not a project coasting on early momentum.</p>
+
+    <p>The Open Design Fellow program offers funded community engagement, including reported incentives for merged pull requests and LLM credits for contributors. <!-- TODO-VERIFY: Verify exact Fellow program amounts and whether the program is ongoing or time-limited against the official Open Design GitHub or blog at publication date; do not rely on reported figures until confirmed --> The strategic intent is clear --- lower the barrier to building skills and plugins, so the catalog keeps growing without the core team having to own everything.</p>
+
+    <p>More broadly, the design tool market is unsettled. A 2026 Figma design trends report noted that nearly half of designers are still searching for their go-to stack, and the average toolstack has doubled to seven tools. Local-first autonomous design is one answer to that fragmentation, not the only one. The community dynamics of Open Design --- an Apache-2.0 license, a funded Fellow program, an active Discord, and a plugin ecosystem that grows with each release --- are a hedge against the project itself stalling. If the core team slows down, the plugin and skill contributors carry it forward. That is the structural advantage of an open-source project with a large enough contributor base, and it is one of the reasons I read the 7,000+ fork count as a signal of genuine community investment rather than passive curiosity.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Open Design Community Snapshot (June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Last verified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>GitHub stars</td>
+            <td>63,000+</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>GitHub forks</td>
+            <td>7,000+</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Current version</td>
+            <td>v0.9.0 (released June 2, 2026)</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Release cadence</td>
+            <td>~10 releases in 2 months (April–June 2026)</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Skills</td>
+            <td>259+ as of June 2026</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Brand systems</td>
+            <td>142+ as of June 2026</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Official plugins</td>
+            <td>261 as of June 2026</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Supported agent CLIs</td>
+            <td>21+ as of June 2026</td>
+            <td>June 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-15-5">
+    <h2 class="section-title"><span class="section-num">15.5</span> My Bet on What Endures</h2>
+
+<p class="section-intro">Forward-looking chapters are cheaply written and expensively wrong. I will be specific about what I think is durable, what I think is volatile, and where I could be wrong on each.</p>
+
+    <p>The durable layer, volatile layer model is the mental model this chapter has used throughout, and it is also my actual operating framework. Here is how I apply it to a concrete investment decision.</p>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>DESIGN.md contract</strong>
+          <p>Durable. Portable spec. Survives tool churn.</p>
+        </div>
+        <div class="flow-arrow">↕</div>
+        <div class="flow-item">
+          <strong>Local-first control</strong>
+          <p>Durable. Privacy, cost, independence arguments are structural.</p>
+        </div>
+        <div class="flow-arrow">↕</div>
+        <div class="flow-item">
+          <strong>MCP interface</strong>
+          <p>Durable. LF-governed, 97M monthly downloads as of March 2026, multi-vendor adoption.</p>
+        </div>
+        <div class="flow-arrow">↕</div>
+        <div class="flow-item">
+          <strong>Agent CLIs + models</strong>
+          <p>Volatile. Sunset, acquisition, repricing weekly.</p>
+        </div>
+      </div>
+      <figcaption>Figure 15.4 — The durable-volatile stack. Invest in the bottom three. Rent the top one.</figcaption>
+    </figure>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Durable vs Volatile Layers</caption>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Durable or volatile</th>
+            <th>What to do about it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DESIGN.md brand contract</td>
+            <td>Durable</td>
+            <td>Invest time here. Author a house DESIGN.md that fully describes your design system. It is portable across all agent CLIs implementing the spec.</td>
+          </tr>
+          <tr>
+            <td>Local-first control surface</td>
+            <td>Durable</td>
+            <td>The forces driving it --- privacy, cost, vendor independence --- are structural. Pick a local-first tool and keep artifacts in your own storage.</td>
+          </tr>
+          <tr>
+            <td>MCP interface standard</td>
+            <td>Durable</td>
+            <td>Build integrations against MCP, not against a single agent's proprietary plugin API. The Linux Foundation governance makes this bet safer than a vendor-owned standard.</td>
+          </tr>
+          <tr>
+            <td>Specific agent CLI</td>
+            <td>Volatile</td>
+            <td>Run two agents (Chapter 11 shows the pairing logic). Never hard-code a single CLI into required team workflows.</td>
+          </tr>
+          <tr>
+            <td>Model and pricing tier</td>
+            <td>Volatile</td>
+            <td>Parameterize model choice in your skills and DESIGN.md tooling. Expect pricing to change quarterly; budget accordingly.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>What to Watch (2026–2027)</caption>
+        <thead>
+          <tr>
+            <th>Signal</th>
+            <th>Why it matters</th>
+            <th>Where to check</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MCP 2026-07-28 RC ships on time and agents adopt stateless HTTP</td>
+            <td>Confirms MCP as scalable infrastructure; unlocks enterprise and team deployments</td>
+            <td><a href="https://modelcontextprotocol.io/development/roadmap">modelcontextprotocol.io/development/roadmap</a></td>
+          </tr>
+          <tr>
+            <td>Google Antigravity CLI remains closed-source vs opens</td>
+            <td>Confirms or refutes the vendor-lock risk in the closed IDE-fork category</td>
+            <td>Google Developers Blog, <a href="https://antigravity.google">antigravity.google</a></td>
+          </tr>
+          <tr>
+            <td>Open Design hits v1.0.0</td>
+            <td>Signals API stability and production readiness; a major milestone for team adoption</td>
+            <td>github.com/nexu-io/open-design releases</td>
+          </tr>
+          <tr>
+            <td>DESIGN.md adoption across non-Open Design tooling</td>
+            <td>Determines whether the brand contract becomes an ecosystem standard or remains niche</td>
+            <td><a href="https://designmd.ai">designmd.ai</a>, GitHub awesome-design-md stars</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <p><strong>My take:</strong> Local-first autonomous design is a durable category even if Open Design itself is not the winner. The control and contract model will outlast any specific tool. I believe this because the forces driving it --- ongoing privacy regulation in the EU and Australia, model inference costs falling toward commodity, vendor lock-in risk proven repeatedly by acquisitions and sunsets --- are structural, not promotional. (This is my reading of market trends, not legal or regulatory advice; verify current regulatory requirements with qualified counsel.) I could be wrong if cloud design tools successfully commoditize the local-first value proposition (plausible, but they face the same governance and data-residency headwinds). The safest hedge is the one this book has recommended throughout: keep your artifacts, your DESIGN.md, and your MCP wiring portable. The tool changes; the contract doesn't have to.</p>
+    </div>
+
+    <p>The phrase to hold onto is durable layer, volatile layer. Build everything repeatable --- your brand contract, your skill library, your export workflows --- on the durable side. Treat agents, models, and pricing as infrastructure you rent, not infrastructure you own. That posture keeps you competitive regardless of which tool wins the next eighteen months.</p>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="14.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 14</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Evaluating the Stack for Your Organization</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 14</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Evaluating the Stack for Your Organization</p>
+        </div>
+      </div>
+    </a>
+    <a href="16.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 16</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Building Your Own Design Pipeline</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 16</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Building Your Own Design Pipeline</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #fe7141; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Building Your Own Design Pipeline</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Capstone: a repeatable agent-native design system for your team</p>
+        </div>
+        <a href="16.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

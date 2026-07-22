@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Decks, Motion, and Images - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #748ef5;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #748ef5; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART II: WORKING IN OPEN DESIGN &middot; SECTION 07</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Decks, Motion, and Images</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Presentations, HyperFrames HTML-to-MP4, and AI images</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">18 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-07-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Presentation Decks</a>
+        <a href="#ch-07-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">HyperFrames Motion Graphics</a>
+        <a href="#ch-07-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Rendering to MP4</a>
+        <a href="#ch-07-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">AI Images</a>
+        <a href="#ch-07-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">One Brand Across Every Format</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-07-1" data-section="ch-07-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Presentation Decks</span></a>
+          <a href="#ch-07-2" data-section="ch-07-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>HyperFrames Motion Graphics</span></a>
+          <a href="#ch-07-3" data-section="ch-07-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Rendering to MP4</span></a>
+          <a href="#ch-07-4" data-section="ch-07-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>AI Images</span></a>
+          <a href="#ch-07-5" data-section="ch-07-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>One Brand Across Every Format</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-07-1" data-section="ch-07-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Presentation Decks</span></a>
+          <a href="#ch-07-2" data-section="ch-07-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>HyperFrames Motion Graphics</span></a>
+          <a href="#ch-07-3" data-section="ch-07-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Rendering to MP4</span></a>
+          <a href="#ch-07-4" data-section="ch-07-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>AI Images</span></a>
+          <a href="#ch-07-5" data-section="ch-07-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>One Brand Across Every Format</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">07</p>
+    <h1 class="chapter-title co-title">Decks, Motion, and Images</h1>
+    <p class="co-standfirst">Presentations, HyperFrames HTML-to-MP4, and AI images</p>
+    <div class="co-body co-body--dropcap">
+      <p>The same brand contract that styles a prototype also styles a deck, a motion graphic, and an image, so one system covers every output format.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       Section 7.1 — Presentation Decks
+       ═══════════════════════════════════════════ -->
+
+  <section class="chapter-section" id="ch-07-1">
+    <h2 class="section-title"><span class="section-num">7.1</span> Presentation Decks</h2>
+
+<p class="section-en">Generate a themed deck and cover the available deck styles</p>
+    <p class="section-intro">
+      Prototypes live in a browser. Decks go to a boardroom, a PDF inbox, or a PowerPoint review. Open Design's deck artifacts are branded, slide-structured HTML documents that export to PPTX, PDF, and five other formats without leaving the four-beat loop you already know.
+    </p>
+
+    <p>
+      As of June 2026, Open Design ships 15 deck templates with 36 theme variants — from the default
+      <strong>magazine-style</strong> layout (called <code>guizang-ppt</code>, featuring a WebGL hero
+      and checklist slides) to the <strong>Swiss International</strong> grid-anchored style with
+      monochrome accents. The same DESIGN.md token set that colors a prototype also colors a deck:
+      <code>--od-color-primary</code>, <code>--od-color-accent</code>, and <code>--od-type-sans</code>
+      all carry across.
+    </p>
+    <!-- TODO-VERIFY: Confirm exact deck template and theme counts in v0.9.0 README (15 templates, 36 variants) -->
+
+    <h3 id="7.1.1">Generate a BlockFrame Deck</h3>
+    <p>
+      The walkthrough below follows a real deck creation flow in Open Design. Instead of starting from
+      a blank canvas, the user chooses <strong>Slide deck</strong>, selects the
+      <strong>Html Ppt Zhangzara Block Frame</strong> example prompt, answers the deck intake questions,
+      and lets the agent build a 10-slide internal design-review deck. The important detail is the
+      process: deck mode narrows the agent's job before generation begins.
+    </p>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>
+          Start on the Home surface and choose a deck template before sending the prompt. In this
+          example, the selected prompt is BlockFrame:
+        </p>
+        <pre><code>BlockFrame — Neobrutalist deck with pastel-neon color blocks and chunky
+black borders. Anything that should feel pop-graphic and design-led:
+indie SaaS launches, agency credentials, creative reviews, brand redesigns.</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>
+          Let the intake form constrain the deck. Open Design asks what the deck is about, who it is
+          for, how many slides it should contain, what kind of imagery it should use, and whether to
+          include speaker notes. This is not decoration: those answers become generation context.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>
+          Answer the brief in the chat. In the captured run, the deck is an internal
+          <strong>Design review</strong>, aimed at an internal review audience, with
+          <strong>10-12 slides</strong>, mostly decorative shapes and minimal photos, and script-like
+          speaker notes under each slide.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>
+          Watch the generation plan and final preview. The agent copies the BlockFrame example into
+          the project, replaces each slide's content, generates a 10-slide deck, and opens the result
+          in the deck preview. The toolbar shows the deck counter, and the final screenshot shows slide
+          1 of 10, titled <strong>Design Review</strong>.
+        </p>
+      </div>
+    </div>
+
+    <figure class="figure--full" data-screenshot-id="ch-07-shot-01">
+      <img
+        src="../images/od-v011-deck-blockframe-workflow.png"
+        alt="Six Open Design screenshots showing the BlockFrame deck workflow: template selection, project creation, intake questions, answers, generation plan, and final 10-slide deck preview"
+        loading="lazy"
+      />
+      <figcaption>Figure 7.1 — The deck workflow in Open Design, captured from a real BlockFrame run. The sequence shows template selection on the Home surface, the project opening with the prompt in chat, the quick deck brief, the answered intake form, the agent's slide-by-slide plan, and the final 10-slide <strong>Design Review</strong> deck preview. User-provided screenshots from Open Design v0.11.0, captured June 2026.</figcaption>
+    </figure>
+
+    <h3 id="7.1.2">Deck Styles and Export Formats</h3>
+    <p>
+      Deck style is a first-class prompt parameter, not a post-generation setting.
+      State it up front or the agent picks <code>guizang-ppt</code> by default.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Deck export formats supported by Open Design v0.9.0 (June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Use case</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PPTX</td>
+            <td>PowerPoint review, stakeholder handoff</td>
+            <td>Agent-driven; fallback to PDF→slide if <code>slides.json</code> absent</td>
+          </tr>
+          <tr>
+            <td>HTML (inlined)</td>
+            <td>Browser presentation, link-share</td>
+            <td>Self-contained single file; all fonts and assets inlined</td>
+          </tr>
+          <tr>
+            <td>PDF</td>
+            <td>Print, email</td>
+            <td>Print-aware layout; page breaks per slide</td>
+          </tr>
+          <tr>
+            <td>ZIP</td>
+            <td>Archive, asset bundle</td>
+            <td>HTML + extracted assets; editable in any editor</td>
+          </tr>
+          <tr>
+            <td>Markdown</td>
+            <td>Version control, review comments</td>
+            <td>Slide content as Markdown sections; no layout preserved</td>
+          </tr>
+          <tr>
+            <td>MP4</td>
+            <td>Social media, async presentation</td>
+            <td>Requires HyperFrames render path (see <a href="#ch-07-2" class="xref">Section 7.2</a>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout tip">
+      <p>Name the deck style in every prompt. Even "use the default style" is better than silence, because it prevents the agent from switching styles across iterations.</p>
+    </div>
+
+    <h3 id="7.1.3">Troubleshooting Deck Generation</h3>
+    <p>
+      Deck generation failures are usually prompt-level, not system-level. The agent over-generates
+      text on slides when the prompt is open-ended, and under-specifies layout when the slide count is
+      left implicit. Below are the common failure patterns and their fixes.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Common deck generation issues and fixes</caption>
+        <thead>
+          <tr>
+            <th>Symptom</th>
+            <th>Cause</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Slides overflow with bullet points</td>
+            <td>Prompt did not constrain slide density</td>
+            <td>Add "max 5 words per bullet, max 4 bullets per slide" to the prompt</td>
+          </tr>
+          <tr>
+            <td>PPTX opens but slides are not individually editable</td>
+            <td>Skill took the PDF-to-page-to-slide fallback path (no <code>slides.json</code> emitted)</td>
+            <td>Iterate with: "Ensure the output includes a slides.json structure for native PPTX export"</td>
+          </tr>
+          <tr>
+            <td>Brand colors are correct in preview but wrong in PPTX</td>
+            <td>PPTX export serializes colors from the slide CSS; theme was not injected before export</td>
+            <td>Re-export after confirming DESIGN.md is selected as the active brand in the project</td>
+          </tr>
+          <tr>
+            <td>Deck preview blank or shows loading spinner indefinitely</td>
+            <td>Daemon SSE connection dropped mid-generation</td>
+            <td>Check daemon health at <code>localhost:7456/health</code>; restart if unresponsive</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-07-2">
+    <h2 class="section-title"><span class="section-num">7.2</span> HyperFrames Motion Graphics</h2>
+
+<p class="section-en">Generate an HTML-to-MP4 motion graphic and understand the render path</p>
+    <p class="section-intro">
+      Most AI design tools generate static artifacts. Open Design generates motion. The mechanism is
+      HyperFrames (Apache-2.0) — a headless Chrome plus FFmpeg pipeline that renders HTML and CSS
+      animations, GSAP timelines, Lottie files, and Three.js scenes into deterministic, frame-accurate
+      MP4 video. One brand, many surfaces includes video.
+    </p>
+
+    <p>
+      HyperFrames is integrated as a first-class citizen in Open Design.
+      <!-- TODO-VERIFY: Confirm HyperFrames Apache-2.0 license from official HyperFrames repository as of June 2026 -->
+      The agent skill that produces motion artifacts emits HTML with <code>data-start</code>,
+      <code>data-duration</code>, and <code>data-track-index</code> attributes on each scene block,
+      plus a <strong>paused GSAP timeline</strong> assigned to <code>window.__timelines</code>.
+      HyperFrames seeks the timeline frame by frame during capture — no real-time playback required.
+    </p>
+
+    <p>
+      As of June 2026, Open Design ships 11 bundled HyperFrames video templates alongside
+      39 Seedance video prompts. <!-- TODO-VERIFY: Reconcile "11 HyperFrames templates + 39 Seedance prompts" count against plugin taxonomy in ch-09; outline says "50 video templates among plugins" -->
+      Animation adapters include GSAP, CSS animations, Lottie, Three.js, Anime.js, WAAPI, and custom
+      adapters — giving the agent a broad vocabulary for motion.
+    </p>
+
+    <h3 id="7.2.1">Why HyperFrames Instead of Remotion</h3>
+    <p>
+      The competing motion-from-code tool in the agent ecosystem is Remotion, which is React-based.
+      HyperFrames uses plain HTML, CSS, and JavaScript. For AI-generated output, that distinction
+      matters: LLMs produce more reliable plain-HTML motion than they produce React component trees,
+      because HTML/CSS/JS occupies a far larger share of training data than React-specific animation
+      patterns.
+    </p>
+
+    <div class="callout">
+      <p><strong>My take:</strong> HyperFrames is the most differentiated artifact type in Open Design. I haven't found another agent-native pipeline that renders branded motion from plain HTML. Most hosted tools give you a template library; this gives you a renderer you drive with prompts. The caveat is real: render times make it a deliberate-use feature, not a rapid-fire one. Don't run it on every iteration — use it once the HTML prototype is close to final.</p>
+    </div>
+
+    <h3 id="7.2.2">Scene Structure</h3>
+    <p>
+      When you ask the agent to build a motion artifact, the emitted HTML follows a predictable
+      structure. Understanding it helps you write better prompts and debug motion that doesn't render
+      correctly.
+    </p>
+
+    <div class="code-block" data-lang="html" data-label="Example">
+      <div class="code-label">Example</div>
+      <pre><code class="language-html">&lt;!-- Scene with data attributes for timing --&gt;
+&lt;div data-start="2.0"
+     data-duration="3.5"
+     data-track-index="0"
+     class="scene-content"&gt;
+  &lt;!-- Animation elements here --&gt;
+&lt;/div&gt;
+
+&lt;!-- GSAP timeline: paused, seekable --&gt;
+&lt;script&gt;
+const timeline = gsap.timeline({ paused: true });
+// animation definitions
+window.__timelines = [timeline];
+&lt;/script&gt;</code></pre>
+    </div>
+
+    <p>
+      The <code>paused: true</code> is mandatory. HyperFrames cannot seek a playing timeline —
+      it steps frame by frame and needs to control playback position directly. If the skill emits a
+      timeline that auto-plays, the render will produce duplicate or blurred frames.
+    </p>
+
+    <h3 id="7.2.2a">Animation Adapters</h3>
+    <p>
+      HyperFrames supports six animation methods out of the box: GSAP, CSS animations (keyframes),
+      Lottie (JSON-based vector animation), Three.js (WebGL 3D), Anime.js, and the Web Animations API
+      (WAAPI). Custom adapters can be added, but those six cover the full range of motion work that
+      agent-generated HTML is likely to produce. When you write a motion prompt, you can specify the
+      animation method or let the agent choose based on the effect you describe:
+    </p>
+    <ul>
+      <li><strong>GSAP</strong> — best for complex, sequenced, timeline-driven animation</li>
+      <li><strong>CSS animations</strong> — simplest; agent defaults to this for straightforward transitions</li>
+      <li><strong>Three.js</strong> — for 3D scenes and WebGL effects; render times are longer</li>
+      <li><strong>Lottie</strong> — useful when you have an existing Lottie JSON from a designer</li>
+    </ul>
+    <p>
+      For most branded motion artifacts — logo reveals, title cards, data visualizations — GSAP is
+      the practical choice. It produces seekable timelines natively and is the adapter with the most
+      examples in LLM training data.
+    </p>
+
+    <h3 id="7.2.3">The HyperFrames Render Pipeline</h3>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>HTML + CSS + GSAP</strong>
+          <p>Skill emits animated HTML with paused timelines and scene data attributes</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Frame Capture</strong>
+          <p>Headless Chrome seeks each frame; <code>N/2</code> CPU cores (max 4) run in parallel</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>FFmpeg Encode</strong>
+          <p>Frame sequence encoded to MP4; ~8s capture + ~8s encode for 240 frames</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>MP4 Output</strong>
+          <p>Deterministic, frame-accurate video file with brand tokens intact</p>
+        </div>
+      </div>
+      <figcaption>Figure 7.2 — HyperFrames render path from HTML animation to MP4 file. The capture and encode phases run sequentially; total render time scales with frame count and CPU cores available.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-07-3">
+    <h2 class="section-title"><span class="section-num">7.3</span> Rendering to MP4</h2>
+
+<p class="section-en">Cover the HTML-to-video render and export</p>
+    <p class="section-intro">
+      Generating a motion graphic is a two-phase operation: the agent produces the HTML artifact, and
+      then HyperFrames renders it to video. The second phase runs entirely on your machine and is
+      CPU-intensive. Budget for it.
+    </p>
+
+    <h3 id="7.3.1">Generate a Motion Artifact</h3>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Start from the Home prompt, choose <strong>HyperFrames</strong>, and select the <strong>Motion Frames</strong> template. The prompt should name the motion concept, the loop length, and the export target:</p>
+        <pre><code>Design an animated hero — a rotating type ring around a wireframe globe,
+with the headline "Reach every country." Loop at 12s, ready for
+HyperFrames export.</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>
+          Open Design creates a project with the prompt still visible in the chat pane. The assistant
+          turn should produce a single HTML motion source, not a random prototype: rings, globe,
+          headline, CSS keyframes, and render metadata all belong to the same artifact.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>
+          Review the poster frame in the preview. If the composition is weak, the typography is flat,
+          or the visual system does not feel like a motion piece, iterate before render. A good
+          HyperFrames result starts as a good HTML frame.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>
+          Switch to <strong>Code</strong> and check the motion contract. The source should be plain
+          HTML/CSS, with deterministic keyframes and duration/fps metadata that HyperFrames can
+          capture frame by frame.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p>
+          Only after the preview and source are approved, hand the entry HTML to HyperFrames. The
+          render metadata sets the MP4 target — entry file, duration, fps, frame count, capture method,
+          encoder, and output name.
+        </p>
+      </div>
+    </div>
+
+    <figure class="figure--full" data-screenshot-id="ch-07-shot-02">
+      <img
+        src="../images/od-v011-hyperframes-motionframes-workflow.png"
+        alt="Open Design Motion Frames workflow showing HyperFrames selection, prompt, generated motion HTML, preview, code view, and render metadata"
+        loading="lazy"
+      />
+      <figcaption>Figure 7.3 — A Motion Frames workflow for HyperFrames export. The sequence starts on the Home prompt with the HyperFrames chip selected, opens a mock-safe project with the original prompt visible, shows the generated motion HTML and preview, then checks the render metadata before MP4 capture. Entry screen supplied by the author; remaining captures from a local Open Design v0.11.0 project, June 2026.</figcaption>
+    </figure>
+
+    <div class="callout warning">
+      <p>Render times are not instant. As of June 2026, a 240-frame (approximately 8-second at 30fps) composition takes roughly 16 seconds end-to-end on a standard laptop — 8 seconds for headless Chrome frame capture and 8 seconds for FFmpeg encoding. HyperFrames uses half of available CPU cores by default, capped at 4, and each worker consumes significant RAM. Keep clips short during iteration. Render final quality once the HTML is confirmed correct.</p>
+    </div>
+
+    <h3 id="7.3.2">Brand Tokens in Motion</h3>
+    <p>
+      HyperFrames reads brand tokens from DESIGN.md through Open Design's CSS custom property
+      injection. The skill binds <code>--od-color-primary</code> and <code>--od-color-accent</code>
+      into the animation's <code>:root</code> before render:
+    </p>
+
+    <div class="code-block" data-lang="css" data-label="Example">
+      <div class="code-label">Example</div>
+      <pre><code class="language-css">:root {
+  --brand-primary: var(--od-color-primary);
+  --brand-accent:  var(--od-color-accent);
+  --brand-type:    var(--od-type-sans);
+}
+
+.animated-element {
+  fill:        var(--brand-primary);
+  font-family: var(--brand-type);
+}</code></pre>
+    </div>
+
+    <p>
+      This binding is what makes one brand, many surfaces real for motion: you do not re-specify colors
+      in the animation prompt. The DESIGN.md carries them, and HyperFrames picks them up through the
+      injected custom properties.
+    </p>
+  </section>
+
+  <section class="chapter-section" id="ch-07-4">
+    <h2 class="section-title"><span class="section-num">7.4</span> AI Images</h2>
+
+<p class="section-en">Configure an image provider and generate brand-aligned images</p>
+    <p class="section-intro">
+      Image generation in the current Open Design build is routed through <strong>Media providers</strong>,
+      not a separate image-only settings page. The same settings panel holds keys and gateways for
+      image, video, audio, search, and related media services. Once a provider is configured there,
+      Image mode can use it as part of the project workflow: prompt, provider, model, aspect ratio,
+      negative prompt, generated files, and reuse notes stay beside the design artifact.
+    </p>
+
+    <h3 id="7.4.1">Media Providers, Not Just Image Providers</h3>
+    <p>
+      The important architectural shift is that Open Design treats generated media as a shared
+      capability. In Settings, open <strong>Media providers</strong>. That panel exposes provider
+      cards such as <strong>Nano Banana</strong>, <strong>OpenRouter</strong>, <strong>SenseAudio</strong>,
+      <strong>Tavily Search</strong>, and <strong>Volcengine Ark (Doubao)</strong>. Not every entry is
+      an image generator: SenseAudio is audio, Tavily is web research, and Volcengine is used for
+      Seedance / Seedream-style media workflows. The point is that media credentials live in one
+      place, and projects call the provider they need.
+    </p>
+    <p>
+      For image work, the two most useful paths are currently <strong>Nano Banana</strong> and an
+      OpenAI-compatible route such as <code>gpt-image-2</code>. Nano Banana is shown in the settings
+      screen with a Google-hosted default gateway and a configurable model field. OpenRouter is useful
+      when you want one key to reach multiple image or video models. OpenAI <code>gpt-image-2</code>
+      remains a strong default for clean product imagery, illustration, and brand-safe campaign assets.
+      The workflow does not change when you swap providers: the project records the selected model and
+      the media dispatcher writes the resulting files into the project.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>How Media providers map into Image mode</caption>
+        <thead>
+          <tr>
+            <th>Provider path</th>
+            <th>Use it for</th>
+            <th>What Open Design records</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Nano Banana</td>
+            <td>Fast image ideation, campaign stills, product scenes, and design references</td>
+            <td>API key / gateway, model, prompt, aspect ratio, negative prompt, output files</td>
+          </tr>
+          <tr>
+            <td>OpenAI <code>gpt-image-2</code></td>
+            <td>Polished product imagery, clean illustration, and brand-controlled hero assets</td>
+            <td>Provider model, prompt, generated PNG/JPEG assets, and follow-up regeneration notes</td>
+          </tr>
+          <tr>
+            <td>OpenRouter</td>
+            <td>Trying several image/video models behind one key without changing the project flow</td>
+            <td>Gateway URL, selected upstream model, cost / provider choice, output file list</td>
+          </tr>
+          <tr>
+            <td>Volcengine Ark / Seedream</td>
+            <td>Image and video pipelines when the campaign needs matching stills and motion</td>
+            <td>Media surface, model, aspect, generated assets, and any downstream video handoff</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="7.4.2">Configure a Provider and Generate</h3>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>
+          Open <strong>Settings → Media providers</strong>. Add the key for the provider you want to
+          use. Some image prompts can run through Nano Banana or OpenRouter-backed models; this
+          template is an image-to-image edit, so the library description points it at the OpenAI
+          image route, <code>gpt-image-2</code>, with a reference image uploaded alongside the prompt.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>
+          Pick a real template from the image library. In the example, the selected template is
+          <strong>Illustration - Crayon Kid-Drawing Rework</strong>. The template is not a blank image
+          prompt; it already encodes the style transfer: keep the reference layout, redraw it with
+          wobbly crayon strokes, replace the palette with playful colors, and add childlike details
+          such as stars, clouds, rainbows, candy, and a smiling sun.
+        </p>
+        <pre><code>Rework the given image into a crayon-style illustration,
+transforming the entire scene into something that feels hand-drawn
+by a 10-year-old. Preserve the general layout and spatial relationships
+of the original image.</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>
+          Upload the reference image and send the template prompt. Open Design keeps the prompt in
+          the chat pane while the output appears as an image file in the project workspace. The point
+          is not just that the image exists; the book-worthy process is that the chosen template,
+          provider route, reference image, generated file, and prompt remain reviewable together.
+        </p>
+        <pre><code>Mode: image-to-image edit
+Provider route: gpt-image-2
+Input: uploaded reference image
+Output: generated crayon illustration</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>
+          Review the generated image in the image viewer. If the output loses the reference structure,
+          ask for a stricter layout-preserving pass. If the drawing is too polished, ask for more
+          uneven crayon texture and simpler childlike forms.
+        </p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-07-image-panel" data-screenshot-id="ch-07-shot-03">
+      <img
+        src="../images/od-v011-real-crayon-template-workflow.png"
+        alt="Open Design real crayon image template workflow showing Media providers, Crayon Kid-Drawing template selection, and generated crayon output"
+        loading="lazy"
+      />
+      <figcaption>Figure 7.4 — A real Open Design image-template workflow. The sequence starts with Media providers, then selects the <em>Illustration - Crayon Kid-Drawing Rework</em> template from the library, and ends with the generated crayon image in the Open Design image viewer. Screenshots supplied by the author, captured June 2026.</figcaption>
+    </figure>
+
+    <h3 id="7.4.3">The Image Prompt Library</h3>
+    <p>
+      Image templates are useful because they encode repeatable visual operations. The Crayon
+      Kid-Drawing template is a good example: it is not asking for a generic "cute image." It defines
+      a style-transfer operation, states that the layout must be preserved, names the crayon palette,
+      describes the texture, adds childlike embellishments, and includes a negative prompt that blocks
+      photorealism, vector sharpness, dark palettes, and watermarks. That is the kind of prompt a
+      designer can reuse, critique, and improve.
+    </p>
+    <p>
+      The same library also contains prompt templates that are not style-transfer jobs. For example,
+      <strong>Illustrated City Food Map</strong> starts from a different design intent: generate a
+      hand-drawn, watercolor-style tourist map with numbered local food specialties, landmarks, and
+      a legend. That is a different reusable operation from the crayon edit. One preserves an uploaded
+      reference and changes its style; the other creates a new illustrated information artifact from
+      a structured brief.
+    </p>
+
+    <figure class="figure--full" data-screenshot-id="ch-07-shot-03b">
+      <img
+        src="../images/od-v011-real-city-food-map-template.png"
+        alt="Open Design project created from the Illustrated City Food Map image template, showing the template prompt and preparing state"
+        loading="lazy"
+      />
+      <figcaption>Additional image-template example — <em>Illustrated City Food Map</em> creates a hand-drawn food-map brief rather than a style-transfer edit. The screenshot shows the real Open Design project creation state, with the prompt visible in chat and the workspace preparing the image output. Screenshot supplied by the author, captured June 2026.</figcaption>
+    </figure>
+
+    <div class="callout">
+      <p><strong>My take:</strong> The template library is the important UI here. It turns image generation from a blank prompt box into a catalog of named design operations: style transfer, poster generation, UI rework, portrait treatment, explainer slides, and so on. The provider matters, but the template is what makes the result repeatable.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-07-5">
+    <h2 class="section-title"><span class="section-num">7.5</span> One Brand Across Every Format</h2>
+
+<p class="section-en">Show the same brand carrying across deck, motion, and image</p>
+    <p class="section-intro">
+      One brand, many surfaces is not a slogan — it's an architectural property. The DESIGN.md binds
+      once and flows to all three artifact renderers without re-specification. This section shows
+      how the binding works and where it can break down.
+    </p>
+
+    <h3 id="7.5.1">The Renderer Map</h3>
+    <p>
+      Each artifact type has a dedicated renderer. The brand tokens arrive through the same CSS
+      custom property injection regardless of which renderer picks them up.
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Artifact renderers in Open Design v0.9.0 (June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Artifact</th>
+            <th>Renderer</th>
+            <th>Export</th>
+            <th>Brand token entry point</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Presentation deck</td>
+            <td>Deck skill → sandboxed srcdoc iframe</td>
+            <td>PPTX, PDF, HTML, ZIP, Markdown</td>
+            <td><code>--od-color-*</code>, <code>--od-type-*</code> injected into slide CSS</td>
+          </tr>
+          <tr>
+            <td>Motion graphic</td>
+            <td>HyperFrames (headless Chrome + FFmpeg)</td>
+            <td>MP4</td>
+            <td><code>--od-color-*</code>, <code>--od-type-*</code> injected before frame capture</td>
+          </tr>
+          <tr>
+            <td>AI image</td>
+            <td>Image provider API (<code>gpt-image-2</code>, ImageRouter, etc.)</td>
+            <td>PNG, embedded asset</td>
+            <td>DESIGN.md <code>visual_voice</code> + color tokens serialized to image prompt text</td>
+          </tr>
+          <tr>
+            <td>Web/mobile prototype</td>
+            <td>Prototype skill → sandboxed srcdoc iframe</td>
+            <td>HTML, ZIP</td>
+            <td><code>--od-color-*</code>, <code>--od-type-*</code> injected into prototype CSS</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="7.5.2">Brand Consistency in Practice</h3>
+    <p>
+      The deck and motion renderers consume brand tokens directly as CSS custom properties — the
+      mapping is exact. The image renderer converts tokens to natural language before passing them to
+      the image API. That conversion introduces interpretation. A deck with
+      <code>--od-color-primary: #0B5FFF</code> renders that exact blue; an image prompt that says
+      "brand blue" may render differently across providers and runs.
+    </p>
+
+    <figure>
+      <div class="compare">
+        <div class="compare-good">
+          <p><strong>Consistent token binding (deck + motion):</strong></p>
+          <pre><code># DESIGN.md active
+# Deck: --od-color-primary renders exact hex
+# Motion: HyperFrames reads same CSS var
+# Both: deterministic brand color output</code></pre>
+        </div>
+        <div class="compare-bad">
+          <p><strong>Lossy token binding (image generation):</strong></p>
+          <pre><code># DESIGN.md active
+# Image: tokens serialized to text prompt
+# Provider interprets "brand blue" loosely
+# Different runs, different blue shades</code></pre>
+        </div>
+      </div>
+      <figcaption>Figure 7.5 — Brand token binding is deterministic for deck and motion artifacts; image generation introduces a natural-language translation step that can produce variation across runs.</figcaption>
+    </figure>
+
+    <p>
+      This is not a bug in Open Design — it's an inherent property of image generation APIs. The
+      practical mitigation is to write an explicit <code>visual_voice</code> section in your
+      DESIGN.md that describes color mood precisely: "deep saturated cobalt, not navy, not royal blue."
+      The more specific the language, the less the API interprets.
+    </p>
+
+    <h3 id="7.5.3">A Single Project, Three Formats</h3>
+    <p>
+      The strongest demonstration of one brand, many surfaces is running all three artifact types
+      inside a single project with one DESIGN.md. The brand tokens are bound once at the project
+      level; every generation reads from the same source.
+    </p>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Create a new project. Author or import a DESIGN.md with colors, type, and a <code>visual_voice</code> section.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Generate a 6-slide deck using the <code>guizang-ppt</code> style. Export to HTML.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>
+          In the same project, generate a 10-second HyperFrames title card animation. The colors
+          and typeface come directly from the DESIGN.md — no color re-specification in the prompt.
+        </p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>
+          Generate a hero image for the deck cover using the configured image provider. Compare the
+          image output against the deck slides: type and primary color should match. If there is drift
+          in the image, tighten the <code>visual_voice</code> field and regenerate.
+        </p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-07-one-brand" data-screenshot-id="ch-07-shot-04">
+      <div class="diagram">
+        <div class="flow">
+          <div class="flow-item">
+            <strong>DESIGN.md</strong>
+            <p>
+              One brand contract<br>
+              <code>--od-color-primary</code><br>
+              <code>--od-color-accent</code><br>
+              <code>--od-type-sans</code><br>
+              <code>visual_voice</code>
+            </p>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-item">
+            <strong>Deck</strong>
+            <p>
+              Deck skill<br>
+              CSS custom properties<br>
+              injected into slide CSS<br>
+              → PPTX / PDF / HTML
+            </p>
+          </div>
+          <div class="flow-arrow">↗</div>
+          <div class="flow-item">
+            <strong>Motion</strong>
+            <p>
+              HyperFrames skill<br>
+              CSS vars injected<br>
+              before frame capture<br>
+              → MP4
+            </p>
+          </div>
+          <div class="flow-arrow">↘</div>
+          <div class="flow-item">
+            <strong>Image</strong>
+            <p>
+              Image skill<br>
+              Tokens serialized<br>
+              to prompt text<br>
+              → PNG / embedded
+            </p>
+          </div>
+        </div>
+      </div>
+      <figcaption>Figure 7.6 — One project, three artifact types (deck, motion, image), one DESIGN.md. Brand tokens flow from a single source to each renderer; deck and motion bindings are deterministic via CSS custom properties, image binding passes through a natural-language translation step. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+
+    <h3 id="7.5.4">When Brand Consistency Breaks</h3>
+    <p>
+      Two failure modes break cross-format consistency:
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Brand consistency failure modes and fixes</caption>
+        <thead>
+          <tr>
+            <th>Symptom</th>
+            <th>Cause</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Deck and motion use different primary color</td>
+            <td>Two DESIGN.md files in the project, one per artifact</td>
+            <td>Consolidate to a single DESIGN.md at the project root</td>
+          </tr>
+          <tr>
+            <td>Image colors drift across regenerations</td>
+            <td>Image prompt text is too vague about color</td>
+            <td>Specify color precisely in <code>visual_voice</code>: hue, saturation, lightness intent</td>
+          </tr>
+          <tr>
+            <td>PPTX fonts don't match deck preview</td>
+            <td>PPTX export uses system fonts; web font from DESIGN.md not embedded</td>
+            <td>Use fonts with broad system availability or embed via PPTX font embedding option</td>
+          </tr>
+          <tr>
+            <td>Motion animation uses wrong accent color</td>
+            <td>Skill emitted hardcoded hex instead of <code>var(--od-color-accent)</code></td>
+            <td>Iterate prompt: "Use CSS custom properties for all colors, not hardcoded values"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warning">
+      <p>The "one brand, many surfaces" principle depends on one DESIGN.md file per project. If you create artifact-specific overrides by editing the DESIGN.md between generations, you introduce drift. Keep one canonical brand file and use prompt instructions for artifact-specific adjustments — don't mutate the source of truth.</p>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="06.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 06</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Web and Mobile Prototypes</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 06</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Web and Mobile Prototypes</p>
+        </div>
+      </div>
+    </a>
+    <a href="08.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 08</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Preview and Export Pipeline</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 08</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Preview and Export Pipeline</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #60aeb8; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">The Preview and Export Pipeline</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Sandboxed iframe to HTML, PDF, PPTX, MP4, ZIP, and Markdown</p>
+        </div>
+        <a href="08.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

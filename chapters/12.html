@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Multi-Agent Design Teams - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #a9b158;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #a9b158; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART III: SYSTEMS & TEAMS &middot; SECTION 12</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Multi-Agent Design Teams</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Orchestrating parallel agents for a single design goal</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">13 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-12-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Why Run Agents in Parallel</a>
+        <a href="#ch-12-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Assigning Roles</a>
+        <a href="#ch-12-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Routing Roles to Agents</a>
+        <a href="#ch-12-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Running the Team</a>
+        <a href="#ch-12-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Merging and Reviewing</a>
+        <a href="#ch-12-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">When Not to Use a Team</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-12-1" data-section="ch-12-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Why Run Agents in Parallel</span></a>
+          <a href="#ch-12-2" data-section="ch-12-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Assigning Roles</span></a>
+          <a href="#ch-12-3" data-section="ch-12-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Routing Roles to Agents</span></a>
+          <a href="#ch-12-4" data-section="ch-12-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Running the Team</span></a>
+          <a href="#ch-12-5" data-section="ch-12-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Merging and Reviewing</span></a>
+          <a href="#ch-12-6" data-section="ch-12-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When Not to Use a Team</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-12-1" data-section="ch-12-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Why Run Agents in Parallel</span></a>
+          <a href="#ch-12-2" data-section="ch-12-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Assigning Roles</span></a>
+          <a href="#ch-12-3" data-section="ch-12-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Routing Roles to Agents</span></a>
+          <a href="#ch-12-4" data-section="ch-12-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Running the Team</span></a>
+          <a href="#ch-12-5" data-section="ch-12-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Merging and Reviewing</span></a>
+          <a href="#ch-12-6" data-section="ch-12-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When Not to Use a Team</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">12</p>
+    <h1 class="chapter-title co-title">Multi-Agent Design Teams</h1>
+    <p class="co-standfirst">Orchestrating parallel agents for a single design goal</p>
+    <div class="co-body co-body--dropcap">
+      <p>Splitting a design goal across role-specialized agents produces more variations faster, but only pays off when the coordination cost is lower than the parallelism gain. This chapter shows you how to think about agents as a team: an orchestrator assigns roles, each agent works in parallel inside the same Open Design project, and you merge the outputs at review. It also tells you when to ignore all of that and go back to one agent.</p>
+    </div>
+  </section>
+
+  <!-- 12.1 Why Run Agents in Parallel -->
+
+  <section class="chapter-section" id="ch-12-1">
+    <h2 class="section-title">Why Run Agents in Parallel</h2>
+
+<p>
+    A single agent iterates one artifact at a time. It generates, you review, it revises. That loop works perfectly for a single polished output. But there are tasks where you don't want one good answer---you want ten options fast: hero treatments, copy variants, motion pacing alternatives, color-scheme explorations. That's the moment agents as a team become worth the overhead.
+  </p>
+
+  <p>
+    Open Design's daemon is a Node 24 Express server with SSE streaming (covered in <a href="#ch-02">Chapter 02</a>). It accepts concurrent requests over separate SSE channels and stores each artifact independently in the <code>.od/projects/&lt;id&gt;/</code> layout. As of June 2026, the daemon does not enforce a concurrency ceiling at the application layer---it relies on the underlying Node event loop and your provider's rate limits. That means you can connect multiple agent CLIs to the same project simultaneously. <!-- TODO-VERIFY: no documented concurrency ceiling in daemon source; verify against daemon implementation before publication -->
+  </p>
+
+  <p>
+    The practical benefit: layout exploration that would take three sequential loops in a solo session---generate, review, repeat---can run in one round when three agents fan out in parallel. The coordination cost is real: you write a clear brief for each role, wait for the slower agent to finish, and then do a merge pass. That cost is low when you have seven variations to produce. It's high when you have one.
+  </p>
+
+  <p>
+    There's also a quality argument for the variation case specifically. When you run one agent through three hero options sequentially, each option is influenced by the previous one---the agent anchors on what it just made. When three agents each produce one option independently, you get genuine divergence. That divergence is the product; it's why you parallelized in the first place.
+  </p>
+
+  <div class="callout tip">
+    <p>Use the parallel pattern when the task is inherently parallel---variation sets, A/B treatments, multi-section drafts---and use a single agent for single outputs. The decision point is roughly: if you'd review all outputs at once anyway, fan out.</p>
+  </div>
+
+  <!-- Fan-out/fan-in diagram -->
+  <figure class="figure--full" id="fig-12-1">
+    <div class="diagram">
+      <table style="width:100%;border-collapse:separate;border-spacing:0;">
+        <tbody>
+          <!-- Row 1: Orchestrator -->
+          <tr>
+            <td colspan="5" style="text-align:center;padding:0.5rem 0 0;">
+              <div style="display:inline-block;padding:0.6rem 1.4rem;border:2px solid var(--primary);border-radius:4px;background:var(--surface);font-family:var(--body-font);font-weight:700;color:var(--text);">Orchestrator</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">Assigns goal + role brief to each agent</div>
+            </td>
+          </tr>
+          <!-- Row 2: fan-out arrows -->
+          <tr style="height:2.2rem;">
+            <td style="width:20%;"></td>
+            <td style="width:20%;text-align:center;vertical-align:bottom;padding-bottom:0;font-size:1.2rem;color:var(--text-secondary);">↙</td>
+            <td style="width:20%;text-align:center;vertical-align:bottom;padding-bottom:0;font-size:1.2rem;color:var(--text-secondary);">↓</td>
+            <td style="width:20%;text-align:center;vertical-align:bottom;padding-bottom:0;font-size:1.2rem;color:var(--text-secondary);">↘</td>
+            <td style="width:20%;"></td>
+          </tr>
+          <!-- Row 3: three role agent nodes -->
+          <tr>
+            <td></td>
+            <td style="text-align:center;padding:0 0.25rem;">
+              <div style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:4px;background:var(--highlight);font-family:var(--body-font);font-weight:600;color:var(--text);">Layout</div>
+              <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.2rem;">HTML prototype</div>
+            </td>
+            <td style="text-align:center;padding:0 0.25rem;">
+              <div style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:4px;background:var(--highlight);font-family:var(--body-font);font-weight:600;color:var(--text);">Variations</div>
+              <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.2rem;">HTML fragments ×3</div>
+            </td>
+            <td style="text-align:center;padding:0 0.25rem;">
+              <div style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:4px;background:var(--highlight);font-family:var(--body-font);font-weight:600;color:var(--text);">Copy</div>
+              <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.2rem;">Markdown doc</div>
+            </td>
+            <td></td>
+          </tr>
+          <!-- Row 4: fan-in arrows -->
+          <tr style="height:2.2rem;">
+            <td></td>
+            <td style="text-align:center;vertical-align:top;padding-top:0;font-size:1.2rem;color:var(--text-secondary);">↘</td>
+            <td style="text-align:center;vertical-align:top;padding-top:0;font-size:1.2rem;color:var(--text-secondary);">↓</td>
+            <td style="text-align:center;vertical-align:top;padding-top:0;font-size:1.2rem;color:var(--text-secondary);">↙</td>
+            <td></td>
+          </tr>
+          <!-- Row 5: Reviewer node -->
+          <tr>
+            <td colspan="5" style="text-align:center;padding:0 0 0.5rem;">
+              <div style="display:inline-block;padding:0.6rem 1.4rem;border:2px solid var(--accent);border-radius:4px;background:var(--surface);font-family:var(--body-font);font-weight:700;color:var(--text);">Review + Merge</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.25rem;">Compare artifacts, pick or combine outputs</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption>Figure 12.1 — Multi-agent topology: the orchestrator fans work to three role agents (Layout, Variations, Copy) running in parallel; all outputs converge at a single review and merge step. Schematic illustration (not a screenshot).</figcaption>
+  </figure>
+
+  <!-- Flow diagram representing the fan-out/fan-in -->
+  <figure>
+    <div class="flow">
+      <div class="flow-item">
+        <strong>Orchestrator</strong>
+        <p>Assigns goal + role brief to each agent</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>Role Agents</strong>
+        <p>Layout, Variations, Copy — run in parallel</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>Review + Merge</strong>
+        <p>Compare artifacts, pick or combine outputs</p>
+      </div>
+    </div>
+    <figcaption>Figure 12.2 — The fan-out/fan-in loop. The orchestrator distributes the goal; role agents work concurrently; the review step pulls outputs together into one decision.</figcaption>
+  </figure>
+
+  <!-- 12.2 Assigning Roles -->
+  </section>
+
+  <section class="chapter-section" id="ch-12-2">
+    <h2 class="section-title">Assigning Roles</h2>
+
+<p>
+    Before you open a terminal, define the roles. A role has three parts: a name, a responsibility boundary, and an artifact target. The boundaries matter because agents don't coordinate with each other---they only read the brief you gave them. If two roles overlap, you'll get two artifacts solving the same problem and a harder merge.
+  </p>
+
+  <p>
+    Here's the role framework I use for visual design goals. It maps to the artifact types Open Design generates natively (web prototypes, motion graphics, copy layers), so each role produces something the preview can render independently.
+  </p>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Design Agent Roles — as of June 2026</caption>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Responsibility</th>
+          <th>Artifact target</th>
+          <th>Suggested agent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Orchestrator</td>
+          <td>Writes the goal brief, assigns roles, reviews and merges outputs</td>
+          <td>None (human or lead agent)</td>
+          <td>Claude Code or human</td>
+        </tr>
+        <tr>
+          <td>Layout</td>
+          <td>Page structure, component hierarchy, grid, spacing</td>
+          <td>Single-page HTML prototype</td>
+          <td>Claude Code (capable proprietary)</td>
+        </tr>
+        <tr>
+          <td>Variations</td>
+          <td>Three to five alternative hero or section treatments</td>
+          <td>Multiple single-component HTML fragments</td>
+          <td>OpenCode (MIT, cost-effective)</td>
+        </tr>
+        <tr>
+          <td>Copy</td>
+          <td>Headline, subheading, CTA, and microcopy options</td>
+          <td>Markdown copy document or HTML text overlay</td>
+          <td>Cursor (fast setup, strong language model)</td>
+        </tr>
+        <tr>
+          <td>Motion</td>
+          <td>HyperFrames animation of key transitions or a hero sequence</td>
+          <td>HyperFrames HTML artifact (renders to MP4)</td>
+          <td>Claude Code (HyperFrames prompt complexity)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    The Orchestrator role doesn't have to be an agent. In most runs I play orchestrator myself: I write the goal brief, paste role-specific sub-briefs into each agent CLI, and do the review pass manually. Automating the orchestrator step is possible---you could use Claude Code as an agent-of-agents, delegating sub-briefs programmatically via MCP---but it adds a layer of indirection that usually slows down small teams more than it helps. The value of a human orchestrator is judgment at merge time: knowing that Variation-B fits better than Variation-A for reasons no brief could specify.
+  </p>
+
+  <!-- 12.3 Routing Roles to Agents -->
+  </section>
+
+  <section class="chapter-section" id="ch-12-3">
+    <h2 class="section-title">Routing Roles to Agents</h2>
+
+<p>
+    <a href="#ch-11">Chapter 11</a> covers the full agent comparison. The routing logic for multi-agent design work follows one principle: use capable proprietary agents for work that requires the most context-holding and the highest quality ceiling; use cheap or open agents for work that needs volume. This isn't a permanent hierarchy---agent capabilities and pricing churn monthly, and the table below will age. It reflects the best routing I've found as of June 2026. <!-- TODO-VERIFY: agent capability/pricing hierarchy from ch-11; verify OpenCode MIT license status has not changed -->
+  </p>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Role-to-Agent Routing — as of June 2026</caption>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Recommended agent</th>
+          <th>Rationale</th>
+          <th>Cost tier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Layout (hero work)</td>
+          <td>Claude Code (Anthropic Pro/Max)</td>
+          <td>Complex layout requires deep context and multi-step reasoning about design hierarchy</td>
+          <td>$20–$200/month</td>
+        </tr>
+        <tr>
+          <td>Variations (exploration)</td>
+          <td>OpenCode v1.17.3 (MIT)</td>
+          <td>Volume-first; acceptable if individual variation quality is lower; self-hosted models keep cost near zero</td>
+          <td>Free (self-hosted)</td>
+        </tr>
+        <tr>
+          <td>Copy</td>
+          <td>Cursor Pro</td>
+          <td>Low setup overhead; strong language model access via Anthropic; copy work rarely needs multi-file context</td>
+          <td>$20/month</td>
+        </tr>
+        <tr>
+          <td>Motion (HyperFrames)</td>
+          <td>Claude Code</td>
+          <td>HyperFrames HTML animation prompts are complex; use the same capable agent as Layout unless budget is tight</td>
+          <td>$20–$200/month</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <p><strong>My take:</strong> Multi-agent design teams are oversold for single artifacts and undersold for variation-heavy work. They shine when you need ten hero options, not one perfect page. Coordination overhead dominates for a single output but disappears when the task is inherently parallel. If you're treating agents as a team, the "team" only earns its coordination cost when you'd genuinely review all outputs side by side anyway. If you find yourself manually stitching outputs together, the goal was probably not parallel to begin with---go back to one agent.</p>
+  </div>
+
+  <!-- 12.4 Running the Team -->
+  </section>
+
+  <section class="chapter-section" id="ch-12-4">
+    <h2 class="section-title">Running the Team</h2>
+
+<p>
+    The walkthrough below runs the Layout, Variations, and Copy roles in parallel against one design goal: a landing page for a local-first design tool. All three agents connect to the same Open Design project via MCP (Model Context Protocol), which was covered in <a href="#ch-10">Chapter 10</a>. Each agent generates into a separate artifact within the project.
+  </p>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p><strong>Create the project.</strong> Open a new Open Design project from the UI or CLI. Note the project ID from the URL or the <code>.od/projects/</code> directory. All three agents will target this project ID.</p>
+      <pre><code>$ od project new "Landing Page - Local-First Tool"
+# Output: project created at .od/projects/lp-local-first-001/</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p><strong>Write the orchestrator brief.</strong> Before opening any agent CLI, write a shared goal brief that all role agents will receive, plus individual role briefs that constrain each agent to their boundary. Paste-ready prompts below.</p>
+      <pre><code># Shared goal brief (paste into every role agent first)
+Goal: a landing page for a local-first design tool.
+Brand: use Open Design's own DESIGN.md (load from project).
+Constraints: single-page HTML, no external dependencies,
+  self-contained artifact, dark theme.
+
+# Layout agent brief
+Role: Layout.
+Your job: page structure and hero section only.
+Deliver: one single-page HTML prototype with
+  structural sections (hero, features, CTA, footer)
+  and placeholder content. No copy, no motion.
+
+# Variations agent brief
+Role: Variations.
+Your job: three alternative hero section treatments.
+Deliver: three separate HTML fragments, each a
+  standalone hero section. Label them Variation-A,
+  Variation-B, Variation-C.
+
+# Copy agent brief
+Role: Copy.
+Your job: headline, subheading, CTA, and feature
+  copy options.
+Deliver: a Markdown document with three sets of
+  headline + subheading + CTA. Label them Copy-1,
+  Copy-2, Copy-3.</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p><strong>Connect agents and stagger the starts.</strong> Open three separate terminal sessions, each with a different agent CLI connected to Open Design via <code>od mcp install &lt;agent&gt;</code>. Start the Layout agent first, wait five to ten seconds, then start Variations, then Copy. This stagger prevents all three from hitting the model provider simultaneously and saturating the shared rate limit.</p>
+      <pre><code># Terminal 1: Layout agent (Claude Code)
+$ od mcp install claude-code
+# Paste shared goal brief + layout brief, submit
+
+# Terminal 2: Variations agent (OpenCode) — start 5-10s later
+$ od mcp install opencode
+# Paste shared goal brief + variations brief, submit
+
+# Terminal 3: Copy agent (Cursor) — start 5-10s later
+$ od mcp install cursor
+# Paste shared goal brief + copy brief, submit</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">4</span>
+    <div class="step-content">
+      <p><strong>Monitor the SSE streams.</strong> Each agent's generation streams into a separate artifact in the Open Design preview. Watch the project artifact list in the UI: you should see three artifacts populating in near-parallel. The Layout artifact will likely finish last because it's the most complex; the Copy artifact (Markdown) will finish first.</p>
+      <figure class="figure--full" id="fig-12-2">
+        <img src="../images/od-v011-demo-parallel-sse-progress.png" alt="Open Design workspace showing a fictional parallel generation run with three artifact writers and SSE progress events" loading="lazy" />
+        <figcaption>Figure 12.3 — Parallel generation in progress, not just the finished comparison. The prompt asks for three directions, the assistant turn lists the active artifact file, and the preview shows SSE <code>write_file</code> events with per-direction progress while the run is still streaming. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">5</span>
+    <div class="step-content">
+      <p><strong>Wait for all three agents to finish.</strong> Don't start the merge pass while any agent is still generating. A partial Layout artifact plus the final Copy document produces a confusing review. Give each agent a clear window to complete, then move to the merge step.</p>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <p>As of June 2026, multiple agents sharing the same Open Design daemon also share the same BYOK proxy and the same provider rate-limit quota. If all three agents send model-inference requests at the same moment, they compete for the same API quota. The result is cascading 429 errors and partial artifacts. Stagger starts by five to ten seconds per agent, and if you're using the same provider for all roles, consider spreading roles across different providers via the BYOK configuration in <a href="#ch-10">Chapter 10</a>.</p>
+  </div>
+
+  <!-- 12.5 Merging and Reviewing -->
+  </section>
+
+  <section class="chapter-section" id="ch-12-5">
+    <h2 class="section-title">Merging and Reviewing</h2>
+
+<p>
+    The merge step is not a technical operation---Open Design does not have a built-in artifact merge tool as of June 2026. It's a design review. You open each artifact in the sandboxed preview, decide which structural choices from Layout to keep, which hero treatment from Variations fits best, and which copy set from Copy to apply, then ask one agent (usually the Layout agent, since it owns the structural artifact) to apply the chosen copy and the chosen hero treatment. The merge is a prompt, not a file operation.
+  </p>
+
+  <div class="compare">
+    <div class="compare-good">
+      <p><strong>Effective merge flow:</strong></p>
+      <pre><code># Round 2 prompt to Layout agent
+Keep the current page structure.
+Replace the hero section with Variation-B
+  (the split layout with the terminal screenshot).
+Apply Copy-2 (headline: "Design on your machine").
+Export the merged artifact as a self-contained HTML file.</code></pre>
+    </div>
+    <div class="compare-bad">
+      <p><strong>Ineffective merge flow:</strong></p>
+      <pre><code># Asking a fresh agent to "merge" three artifacts
+Here are three HTML files. Combine them into
+  one landing page.
+[paste Variation-A, Variation-B, Variation-C, Layout, Copy-1...]
+# Result: agent produces a fourth artifact that
+# misses the point of all three</code></pre>
+    </div>
+  </div>
+
+  <p>
+    The effective merge uses the Layout agent as the owner of the final artifact and treats the other outputs as references it incorporates via a clear revision prompt. The ineffective merge hands the merge problem to a new agent with too much context and no clear decision.
+  </p>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Multi-Agent Troubleshooting</caption>
+      <thead>
+        <tr>
+          <th>Symptom</th>
+          <th>Cause</th>
+          <th>Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>One or more agents return a 429 error mid-generation</td>
+          <td>Concurrent requests exceeded provider rate limit; all agents share the BYOK proxy quota</td>
+          <td>Stagger agent starts by 5–10 seconds; or route roles to different providers in BYOK config (see <a href="#ch-10">Chapter 10</a>)</td>
+        </tr>
+        <tr>
+          <td>Artifact preview is blank after generation completes</td>
+          <td>SSE stream completed but the artifact parser hit a malformed output; or the sandboxed iframe failed to load the artifact</td>
+          <td>Reload the artifact in preview; if blank persists, ask the agent to regenerate with a simplified prompt; check browser console for sandbox errors</td>
+        </tr>
+        <tr>
+          <td>Two agents write to the same artifact, producing corrupted output</td>
+          <td>Role briefs overlapped; both agents targeted the same artifact name or slot</td>
+          <td>Ensure role briefs give each agent a distinct artifact name; re-run the affected agent with a corrected brief</td>
+        </tr>
+        <tr>
+          <td>SQLite lock error or daemon crash under concurrent load</td>
+          <td>Multiple agents writing to <code>.od/app.sqlite</code> simultaneously; better-sqlite3 uses synchronous writes that can conflict</td>
+          <td>Reduce concurrency to two agents at a time; stagger starts; <!-- TODO-VERIFY: SQLite write-lock behavior under concurrent agent writes; verify against daemon source --> restart the daemon after a crash and re-run from the last stable artifact</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 12.6 When Not to Use a Team -->
+  </section>
+
+  <section class="chapter-section" id="ch-12-6">
+    <h2 class="section-title">When Not to Use a Team</h2>
+
+<p>
+    Multi-agent design isn't always the right call. The coordination cost is real: writing per-role briefs, managing multiple terminal sessions, staggering starts, and doing a deliberate merge pass. That overhead is worth it when you're exploring a wide design space. It isn't worth it in these cases:
+  </p>
+
+  <ul>
+    <li><strong>Single-artifact outputs.</strong> If the deliverable is one polished landing page, one reviewed deck, or one branded email, a single capable agent iterated through the four-beat loop will outperform a three-agent fan-out on quality and time.</li>
+    <li><strong>Tight feedback loops.</strong> If you're iterating every five minutes on a detail, switching between three CLI sessions kills the flow. Stay in one agent.</li>
+    <li><strong>Unclear role boundaries.</strong> If you can't write clean, non-overlapping role briefs in under ten minutes, the task isn't structured enough to parallelize. Clarify the goal first.</li>
+    <li><strong>Provider-limited environments.</strong> If your BYOK setup is rate-limited or you're on a single low-quota API key, the contention overhead makes multi-agent slower than sequential.</li>
+  </ul>
+
+  <div class="callout">
+    <p><strong>My take:</strong> I treat agents as a team mainly for exploration phases---before I know which direction to commit to. Once I've picked a direction, I drop back to one agent and drive it to completion. The team metaphor only holds when everyone on the team is doing a different job at the same time. If you're assigning three agents to the same problem, you're not running a team---you're running a lottery.</p>
+  </div>
+
+  <p>
+    The test is simple: could you review all the outputs side by side in one sitting and pick a winner in under thirty minutes? If yes, parallelism earns its overhead. If the outputs require reconciliation, context-sharing, or sequential refinement before any of them are reviewable, you've added coordination for negative gain. Go back to one agent, define the goal more tightly, and run the generate-preview-iterate-export loop from <a href="#ch-03">Chapter 03</a>.
+  </p>
+
+  <p>
+    As of June 2026, multi-agent design orchestration in Open Design is a practice, not a product feature. Open Design does not provide an orchestration UI, an agent scheduler, a merge tool, or a diff view across artifacts. What it provides is a daemon that supports concurrent generation and a project model that lets multiple artifacts coexist inside a single <code>.od/projects/&lt;id&gt;/</code> directory. The orchestration layer---how you brief agents, how you stagger them, how you decide on a winner---is entirely yours to design and run.
+  </p>
+
+  <div class="callout tip">
+    <p><strong>Next:</strong> Chapter 13 takes the patterns from this chapter---fan-out, role assignment, merge review---and shows them running inside four complete end-to-end workflows: a stakeholder review package, a legacy app brand refresh, a Figma-to-component-library migration, and a motion and image campaign. Each case names what went wrong and how it was fixed, so you can take the arc directly into your own work.</p>
+  </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="11.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 11</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Choosing Your Agent</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 11</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Choosing Your Agent</p>
+        </div>
+      </div>
+    </a>
+    <a href="13.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 13</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Case Studies</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 13</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Case Studies</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #c29a50; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Case Studies</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Four real workflows from prompt to shipped artifact</p>
+        </div>
+        <a href="13.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

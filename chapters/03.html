@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Your First Artifact - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #deb056;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #deb056; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART I: FOUNDATIONS &middot; SECTION 03</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Your First Artifact</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">The complete generate-preview-iterate-export loop</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">20 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-03-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Connect One Agent</a>
+        <a href="#ch-03-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Pick a Brand and Prompt</a>
+        <a href="#ch-03-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Watch It Stream</a>
+        <a href="#ch-03-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Iterate With One Prompt</a>
+        <a href="#ch-03-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Export and Verify</a>
+        <a href="#ch-03-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">When the First Loop Breaks</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-03-1" data-section="ch-03-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Connect One Agent</span></a>
+          <a href="#ch-03-2" data-section="ch-03-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Pick a Brand and Prompt</span></a>
+          <a href="#ch-03-3" data-section="ch-03-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Watch It Stream</span></a>
+          <a href="#ch-03-4" data-section="ch-03-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Iterate With One Prompt</span></a>
+          <a href="#ch-03-5" data-section="ch-03-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Export and Verify</span></a>
+          <a href="#ch-03-6" data-section="ch-03-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When the First Loop Breaks</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-03-1" data-section="ch-03-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Connect One Agent</span></a>
+          <a href="#ch-03-2" data-section="ch-03-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Pick a Brand and Prompt</span></a>
+          <a href="#ch-03-3" data-section="ch-03-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Watch It Stream</span></a>
+          <a href="#ch-03-4" data-section="ch-03-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Iterate With One Prompt</span></a>
+          <a href="#ch-03-5" data-section="ch-03-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Export and Verify</span></a>
+          <a href="#ch-03-6" data-section="ch-03-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When the First Loop Breaks</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">03</p>
+    <h1 class="chapter-title co-title">Your First Artifact</h1>
+    <p class="co-standfirst">The complete generate-preview-iterate-export loop</p>
+    <div class="co-body co-body--dropcap">
+      <p>Every Open Design workflow, no matter how complex, is the same four-beat loop: generate, preview, iterate, export.</p>
+    </div>
+  </section>
+
+  <figure class="figure--full" id="fig-ch03-loop">
+    <img src="../images/fig-diagram-of-the-four-beat-open-de-g8og50.jpg" alt="Diagram of the four-beat Open Design workflow loop: Generate, Preview, Iterate, Export, with a single curved feedback arrow looping back from Iterate to Generate." loading="lazy" />
+    <figcaption>Figure 3.1 — The four-beat loop. Every Open Design session, from a one-off sketch to a multi-artifact release, is the same cycle: <strong>generate</strong> a first pass, <strong>preview</strong> it in the sandbox, <strong>iterate</strong> on what's wrong, then <strong>export</strong> --- and start the next artifact.</figcaption>
+  </figure>
+
+  <!-- Section 3.1 -->
+
+  <section class="chapter-section" id="ch-03-1">
+    <h2 class="section-title"><span class="section-num">3.1</span> Connect One Agent</h2>
+
+<p class="section-en">Wire a single coding-agent CLI to Open Design via the MCP installer</p>
+    <p class="section-intro">Open Design doesn't generate anything on its own. It needs a brain --- a coding-agent CLI connected over MCP (Model Context Protocol), the open standard for wiring AI agents to external tools. Your first step is connecting one agent. Once that's done, you own the loop.</p>
+
+    <p>As of June 2026, Open Design supports 21+ coding-agent CLIs including Claude Code, Cursor, GitHub Copilot, OpenAI Codex CLI, Gemini CLI, OpenCode, Kimi CLI, and Aider (per the Open Design README at github.com/nexu-io/open-design). Each connects through the same command pattern: <code>od mcp install &lt;agent&gt;</code>.</p>
+
+    <p>Before running that command, the daemon must already be running. If you followed Chapter 02, you started it with <code>pnpm tools-dev run web</code> and can confirm it's healthy at <code>http://localhost:7456</code>. If the page is blank, the daemon isn't up yet --- start there before continuing.</p>
+
+    <h3>Installing the MCP connection</h3>
+
+    <p>With the daemon running, connect Claude Code in one command:</p>
+
+    <pre><code>$ od mcp install claude-code</code></pre>
+
+    <!-- Source: github.com/nexu-io/open-design README and Issue #3430 (June 2026) -->
+
+    <p>To connect a different agent instead:</p>
+
+    <pre><code>$ od mcp install cursor
+$ od mcp install copilot
+$ od mcp install codex</code></pre>
+
+    <p>The installer writes the MCP server entry to your agent's configuration file. For Claude Code, that's <code>~/.claude/settings.json</code>. For Cursor, it updates <code>.cursor/mcp.json</code>. You don't need to know the details to proceed --- the installer handles them.</p>
+
+    <p>After installation, restart your agent CLI so it picks up the new MCP server. Then confirm the connection from inside the agent by listing available MCP tools. You should see Open Design tool names like <code>od_generate</code>, <code>od_preview</code>, and <code>od_export</code> in the tool list.</p>
+
+    <div class="callout tip">
+      <p>Connect exactly one agent for your first loop. Once you know the loop works end-to-end, you can wire additional agents. Running two CLIs against the same daemon on your first run adds noise without adding value.</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Confirm the daemon is running by visiting <code>http://localhost:7456</code> in a browser. You should see the Open Design UI.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Open a terminal and run <code>od mcp install claude-code</code> (or substitute your agent name).</p>
+        <pre><code>$ od mcp install claude-code</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Restart your agent CLI. In Claude Code, this means closing and reopening the terminal session, or running <code>/mcp</code> to reload MCP servers.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>Verify the connection by asking your agent: <code>List the Open Design MCP tools available</code>. A healthy connection returns tool names. A failed connection returns nothing or an error about an unreachable MCP server.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-03-2">
+    <h2 class="section-title"><span class="section-num">3.2</span> Pick a Brand and Prompt</h2>
+
+<p class="section-en">Set the composer levers, choose a mode, attach a brand system, then write the first prompt</p>
+    <p class="section-intro">Before you generate anything, you set the home composer and make two content choices: which brand system to apply, and what artifact to ask for. Neither choice is permanent --- you'll iterate after the first generation --- but starting with clear levers and a concrete prompt gives the agent constraints to work against.</p>
+
+    <h3>One composer, many levers</h3>
+
+    <p>As of Open Design desktop v0.15.1, the home surface is built around a single prompt composer with attached levers: attachment, template, mode, agent and model, design system, and working directory. Every lever is optional. Defaults are sane. Selections become chips you can clear. The product model is not a dashboard of separate tools --- it is one box with constraints you can see before you hit Send.</p>
+
+    <figure class="figure--full" id="fig-ch03-home-composer">
+      <img src="../images/od-v015-01-home.png" alt="Open Design v0.15.1 home surface with hero headline, central prompt composer showing Template, Design mode, and Send controls, template strip, and recent project cards" loading="lazy" />
+      <figcaption>Figure 3.1a — The v0.15.1 home composer. One prompt field; levers for template, mode, agent, design system, and working directory sit on or under the box. Recent projects and the community rail sit below. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3>Ask, Plan, Design — modes as cost contracts</h3>
+
+    <p>The mode dropdown is not a cosmetic label. Ask, Plan, and Design map to Light, Standard, and Heavy expected cost, and the behaviour fork is system-prompt composition:</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Session modes — Open Design v0.15.1</caption>
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Cost badge</th>
+            <th>What the agent is allowed to do</th>
+            <th>When to use it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Ask</strong></td>
+            <td>Light</td>
+            <td>Q&amp;A and exploration; no file writes. The model suggests switching modes for build requests.</td>
+            <td>Discovery, critique of an existing idea, cheap clarification before you spend a Heavy run</td>
+          </tr>
+          <tr>
+            <td><strong>Plan</strong></td>
+            <td>Standard</td>
+            <td>Same context stack as Design, but the deliverable is a planning document (<code>plan.md</code>, outline, or PRD), not the final artifact.</td>
+            <td>Scope a multi-file build before you generate pages, decks, or media</td>
+          </tr>
+          <tr>
+            <td><strong>Design</strong></td>
+            <td>Heavy</td>
+            <td>Full charter: discovery, design system, skill, craft, and deck/media contracts. Generates and edits concrete project files.</td>
+            <td>Creating or changing pages, prototypes, live artifacts, slides, images, video, HyperFrames, audio, or dashboards</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="figure--full" id="fig-ch03-mode-dropdown">
+      <img src="../images/od-v015-02-mode-dropdown.png" alt="Open Design mode dropdown open on Design with Light Ask, Standard Plan, and Heavy Design options and a teaching card describing Design mode" loading="lazy" />
+      <figcaption>Figure 3.1b — Modes as cost contracts. Each mode shows a weight badge and a teaching card (typical usage, best for, try asking). Pick Ask to explore cheaply, Plan to lock structure, Design when you want files written. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <p>Start ambiguous work in Ask or Plan. Switch to Design only when you know what should land on disk. The mode chip on each sent message keeps the cost choice visible in the chat history.</p>
+    </div>
+
+    <figure class="figure--full" id="fig-ch03-template-picker">
+      <img src="../images/od-v015-03-template-picker.png" alt="Open Design template picker popover listing project types including Website clone, Slide deck, Prototype, Wireframe, Mobile app, Document, HyperFrames, WebGL, and Live artifact" loading="lazy" />
+      <figcaption>Figure 3.1c — The template picker. Choosing a project type binds a skill and seeds project metadata; it does not silently route by keyword. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3>Choosing a brand system</h3>
+
+    <p>As of June 2026, Open Design ships approximately 150 brand-grade DESIGN.md systems (per the Open Design README at github.com/nexu-io/open-design). These include systems named after well-known products — Linear, Stripe, Vercel, Apple, Airbnb, Tesla, Notion, Figma, and many others. Each is a machine-readable brand contract: colors, typography, spacing, component rules, and voice, expressed as text the agent reads before generating. Open Design bundles these systems in its own <code>design-systems/</code> directory as DESIGN.md files; the values come from Open Design's own bundled configuration, not from any brand's published guidelines.</p>
+
+    <p>For your first artifact, I recommend using one of the named systems rather than writing your own. The Linear brand system's defined dark palette and tight grid spacing make it a useful reference for studying how a DESIGN.md constrains a generated pricing page or dashboard. The Stripe brand system's high-contrast style makes it a clear study for documentation and landing page layouts. Pick the one whose structure matches what you're trying to learn — both are useful for understanding how a DESIGN.md shapes generation.</p>
+
+    <figure class="figure--full" id="fig-ch03-design-system-picker">
+      <img src="../images/od-v015-04-design-system-picker.png" alt="Open Design design system picker on the home composer listing bundled brand systems" loading="lazy" />
+      <figcaption>Figure 3.1d — Attaching a brand system from the composer. The picker binds a DESIGN.md before the first prompt ships. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <div class="callout warning">
+      <p>The bundled brand systems named after well-known companies are included for learning the structure of a DESIGN.md --- not as a license to publish artifacts that impersonate those companies' identities. Use them to study the format, then author your own brand system for anything you ship. Refer to Chapter 05 for house-brand authoring.</p>
+    </div>
+
+    <h3>Writing the first prompt</h3>
+
+    <p>The most important habit in the four-beat loop is specificity on the first prompt. A vague "build me a landing page" leaves the agent guessing at every structural decision. A specific prompt locks in structure, content, and interactive behavior, leaving the agent to focus on brand-compliant execution.</p>
+
+    <p>Here's the prompt from the chapter brief --- a concrete pricing page you can paste directly:</p>
+
+    <pre><code>Build a single-page pricing page using the Linear brand system:
+three tiers (Starter, Pro, Enterprise),
+monthly/annual toggle,
+dark theme,
+call-to-action button,
+FAQ section at the bottom.</code></pre>
+
+    <p>That prompt tells the agent five things: the artifact type (single-page pricing page), the brand system (Linear), the content structure (three tiers, toggle, FAQ), the visual mode (dark), and the interaction required (toggle). When the first generation lands, you'll know exactly which decisions were made by the agent and which are left for you to iterate.</p>
+
+    <div class="callout">
+      <p><strong>My take:</strong> I've run this loop across web pages, decks, and dashboards, and the single biggest quality lever isn't the model --- it's prompt specificity. Agents are good at following constraints; they're poor at inventing structure from nothing. Give them structure in the prompt, and they'll spend their capability on brand fidelity and visual quality. Leave structure vague, and you'll spend three iterations just converging on what the artifact should contain.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-03-3">
+    <h2 class="section-title"><span class="section-num">3.3</span> Watch It Stream</h2>
+
+<p class="section-en">The artifact streaming into the sandboxed preview via SSE</p>
+    <p class="section-intro">Submit your prompt and watch the preview pane. The artifact doesn't appear all at once --- it streams. Open Design's daemon pushes the agent's output over SSE (Server-Sent Events) as the model generates, and the streaming artifact parser reconstructs it into live HTML inside a sandboxed preview iframe in real time.</p>
+
+    <p>What you see while it streams isn't a loading spinner. It's the actual artifact being assembled token by token. Structure appears first --- usually the document skeleton, then layout blocks, then content, then colors and details. By the time the stream ends, you have a fully rendered, interactive artifact you can click around in immediately.</p>
+
+    <!-- Rights register: ch-03-shot-01 — Open Design UI, Apache-2.0; no third-party logos or brand assets present. Personal data redacted. -->
+    <figure class="figure--full" data-screenshot-id="ch-03-shot-01">
+      <img src="../images/ch-03-shot-01-paste-mqhecy9h-paste-mqheepi4-paste-mqhej7es.png" alt="Open Design UI showing a pricing page artifact streaming into the sandboxed preview pane, with partial HTML structure visible mid-generation as tokens arrive over SSE" loading="lazy"/>
+      <figcaption>Figure 3.2 — The artifact streaming into the sandboxed preview pane mid-generation. Structure appears before content; color and details land last. Official Open Design screenshot, reproduced under Apache-2.0.</figcaption>
+    </figure>
+
+    <h3>Understanding the sandbox</h3>
+
+    <p>The preview runs in a sandboxed <code>srcdoc</code> iframe. Per Open Design's documented sandbox configuration (v0.9.0), the <code>sandbox</code> attribute on the iframe is set to restrict access, meaning the generated HTML is isolated from your browser's main page context by design — it is not intended to access your filesystem, local storage, or other page context. This isolation is the safety architecture, not a limitation. The agent produces arbitrary code, and that code runs in a contained environment defined by those sandbox attributes.</p>
+
+    <p>You can interact with the rendered artifact directly: click buttons, toggle the monthly/annual switch, expand the FAQ items. Everything that works in the preview is real interactivity. The sandbox doesn't clip it --- it just keeps it contained.</p>
+
+    <!-- Rights register: fig-ch03-artifact-rendered — Open Design UI, Apache-2.0; Northwind SaaS landing page generated by agent, no third-party logos or brand assets present. Personal data redacted. -->
+    <figure class="figure--full" id="fig-ch03-artifact-rendered">
+      <img src="../images/fig-open-design-v0-9-0-showing-a-gen-i7zmzr-paste-mqhejj7b.png" alt="Open Design v0.9.0 showing a generated Northwind SaaS landing page artifact — hero section, features grid, and call-to-action — fully rendered in the sandboxed preview pane after the agent completed generation from a prompt and brand brief" loading="lazy" />
+      <figcaption>Figure 3.3 — A real generated "Northwind" SaaS landing page (prompt + brief → self-contained HTML artifact), fully rendered in the Open Design sandboxed preview. The artifact is interactive: buttons, navigation, and section links all work inside the preview iframe. Real screenshot of Open Design v0.9.0 (captured June 2026).</figcaption>
+    </figure>
+
+    <h3>The four-beat loop, beat one</h3>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Generate</strong>
+          <p>Agent produces HTML via prompt + brand system</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Preview</strong>
+          <p>Artifact streams into sandboxed iframe over SSE</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Iterate</strong>
+          <p>Follow-up prompt refines the artifact</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Export</strong>
+          <p>HTML, PDF, PPTX, MP4, ZIP, or Markdown</p>
+        </div>
+      </div>
+      <figcaption>Figure 3.4 — Inside each beat. Where Figure 3.1 shows the loop as a cycle, this view names the concrete work each beat does: <strong>generate</strong> produces HTML from your prompt and brand system, <strong>preview</strong> streams it into the sandbox, <strong>iterate</strong> refines it with a follow-up prompt, and <strong>export</strong> writes the final file.</figcaption>
+    </figure>
+
+    <p>You've just completed beat one. The artifact is in the preview. Now look at it critically --- not as a finished design, but as a first draft. The generate step rarely produces a final artifact. It produces a starting point the iterate step will improve.</p>
+
+    <!-- Rights register: ch-03-shot-02 — inline schematic; no screenshot used. -->
+    <figure class="figure--full" data-screenshot-id="ch-03-shot-02">
+      <div class="diagram">
+        <div style="border: 1px solid var(--border); background: var(--surface); border-radius: 6px; padding: 0; overflow: hidden; font-family: var(--body-font);">
+          <!-- Preview pane chrome -->
+          <div style="background: var(--code-bg); border-bottom: 1px solid var(--border); padding: 6px 12px; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 0.75em; color: var(--text-secondary); font-family: var(--mono-font);">Open Design — Preview</span>
+            <span style="margin-left: auto; font-size: 0.7em; color: var(--text-secondary);">Monthly <strong>Annual</strong></span>
+          </div>
+          <!-- Toggle row -->
+          <div style="text-align: center; padding: 16px 12px 8px; border-bottom: 1px solid var(--border);">
+            <span style="display: inline-block; border: 1px solid var(--border); border-radius: 20px; padding: 4px 16px; font-size: 0.8em; font-family: var(--mono-font); color: var(--text);">Monthly / Annual toggle</span>
+          </div>
+          <!-- Three plan columns -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border);">
+            <div style="background: var(--bg); padding: 16px 12px;">
+              <p style="margin: 0 0 4px; font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); font-family: var(--mono-font);">Starter</p>
+              <p style="margin: 0 0 8px; font-size: 1.3em; font-family: var(--display-font); color: var(--text);">$0</p>
+              <p style="margin: 0; font-size: 0.7em; color: var(--text-secondary);">Free forever</p>
+              <div style="margin-top: 10px; border: 1px solid var(--border); border-radius: 4px; padding: 5px 8px; text-align: center; font-size: 0.7em; color: var(--text-secondary); font-family: var(--mono-font);">Get started</div>
+            </div>
+            <div style="background: var(--surface); padding: 16px 12px; border-left: 2px solid var(--primary);">
+              <p style="margin: 0 0 4px; font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--primary); font-family: var(--mono-font);">Pro</p>
+              <p style="margin: 0 0 8px; font-size: 1.3em; font-family: var(--display-font); color: var(--text);">$12<span style="font-size: 0.5em; color: var(--text-secondary);">/mo</span></p>
+              <p style="margin: 0; font-size: 0.7em; color: var(--text-secondary);">For individuals</p>
+              <div style="margin-top: 10px; background: var(--primary); border-radius: 4px; padding: 5px 8px; text-align: center; font-size: 0.7em; color: var(--bg); font-family: var(--mono-font);">Start free trial</div>
+            </div>
+            <div style="background: var(--bg); padding: 16px 12px;">
+              <p style="margin: 0 0 4px; font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); font-family: var(--mono-font);">Enterprise</p>
+              <p style="margin: 0 0 8px; font-size: 1.3em; font-family: var(--display-font); color: var(--text);">Custom</p>
+              <p style="margin: 0; font-size: 0.7em; color: var(--text-secondary);">Talk to sales</p>
+              <div style="margin-top: 10px; border: 1px solid var(--border); border-radius: 4px; padding: 5px 8px; text-align: center; font-size: 0.7em; color: var(--text-secondary); font-family: var(--mono-font);">Contact us</div>
+            </div>
+          </div>
+          <!-- FAQ hint -->
+          <div style="padding: 10px 12px; font-size: 0.7em; color: var(--text-secondary); border-top: 1px solid var(--border); font-family: var(--mono-font);">▼ FAQ section &nbsp;·&nbsp; 4 items</div>
+        </div>
+      </div>
+      <figcaption>Figure 3.5 — Schematic of the completed first-generation pricing page artifact in the Open Design preview pane: three plan columns (Starter, Pro, Enterprise), a monthly/annual billing toggle, and a FAQ section below. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-03-4">
+    <h2 class="section-title"><span class="section-num">3.4</span> Iterate With One Prompt</h2>
+
+<p class="section-en">A single follow-up prompt changes the artifact and re-streams it</p>
+    <p class="section-intro">The first generation is rarely the one you ship. That's by design: generate, preview, <em>iterate</em>, export. The iterate step is where quality actually comes from. One well-targeted follow-up prompt can change the artifact dramatically --- tightening spacing, adding missing interactivity, or restyling a component that didn't land right.</p>
+
+    <h3>Reading the first generation critically</h3>
+
+    <p>Look at your pricing page with a precise eye. Common first-generation gaps in a pricing table:</p>
+
+    <ul>
+      <li>The toggle works, but the annual pricing numbers didn't update --- the agent generated static text instead of calculating the discount.</li>
+      <li>The FAQ items expand on click, but the animation is missing.</li>
+      <li>The Enterprise tier CTA says "Contact us" but isn't linked to a form or modal.</li>
+      <li>The type scale doesn't match the Linear system's tight heading hierarchy.</li>
+    </ul>
+
+    <p>Pick the most impactful gap and write one follow-up prompt targeting it specifically. Broad corrections ("make this better") produce broad, unpredictable changes. Targeted corrections ("fix the annual toggle calculation to show 20% savings, and add a smooth expand animation to FAQ items") produce exact improvements.</p>
+
+    <h3>The before/after iteration</h3>
+
+    <p>Here's a follow-up prompt for the most common gap --- the toggle not updating prices:</p>
+
+    <pre><code>The monthly/annual toggle doesn't update the tier prices.
+Fix it so switching to annual shows prices with a 20% discount
+applied and a crossed-out monthly price next to the annual one.
+Keep all other styling unchanged.</code></pre>
+
+    <p>After submitting that prompt, the artifact re-streams into the preview. The whole generate, preview, iterate, export cycle restarts from beat one, but this time you're iterating on an existing artifact rather than generating from scratch. The agent reads both the original prompt's intent and the follow-up correction.</p>
+
+    <div class="compare">
+      <div class="compare-bad">
+        <p><strong>Before iteration:</strong></p>
+        <p>Toggle switches label between "Monthly" and "Annual" but all three tier prices remain at their monthly values. Annual price shows no discount. The toggle is decorative.</p>
+      </div>
+      <div class="compare-good">
+        <p><strong>After iteration:</strong></p>
+        <p>Toggle switches to annual view and updates prices to show 20% discounted amounts. Monthly price appears in smaller crossed-out text. The savings are immediately visible on each tier card.</p>
+      </div>
+    </div>
+
+    <!-- Rights register: ch-03-shot-03 — inline schematic; no screenshot used. -->
+    <figure class="figure--full" data-screenshot-id="ch-03-shot-03">
+      <div class="compare">
+        <div class="compare-bad">
+          <p style="margin: 0 0 8px; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono-font); color: var(--text-secondary);">Before — toggle decorative</p>
+          <div style="border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--bg);">
+            <div style="padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 0.7em; font-family: var(--mono-font); color: var(--text-secondary); text-align: center;">
+              <span style="border: 1px solid var(--border); border-radius: 12px; padding: 2px 10px;">Monthly</span>
+              <span style="margin-left: 6px; border: 1px solid var(--border); border-radius: 12px; padding: 2px 10px; color: var(--text-secondary);">Annual</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border);">
+              <div style="background: var(--bg); padding: 10px 8px; text-align: center;">
+                <p style="margin: 0; font-size: 0.7em; color: var(--text-secondary); font-family: var(--mono-font);">Starter</p>
+                <p style="margin: 4px 0 0; font-size: 1em; font-family: var(--display-font); color: var(--text);">$0</p>
+              </div>
+              <div style="background: var(--surface); padding: 10px 8px; text-align: center;">
+                <p style="margin: 0; font-size: 0.7em; color: var(--primary); font-family: var(--mono-font);">Pro</p>
+                <p style="margin: 4px 0 0; font-size: 1em; font-family: var(--display-font); color: var(--text);">$12<span style="font-size: 0.6em; color: var(--text-secondary);">/mo</span></p>
+              </div>
+              <div style="background: var(--bg); padding: 10px 8px; text-align: center;">
+                <p style="margin: 0; font-size: 0.7em; color: var(--text-secondary); font-family: var(--mono-font);">Enterprise</p>
+                <p style="margin: 4px 0 0; font-size: 1em; font-family: var(--display-font); color: var(--text);">Custom</p>
+              </div>
+            </div>
+          </div>
+          <p style="margin: 6px 0 0; font-size: 0.7em; color: var(--text-secondary); font-family: var(--body-font);">Toggle switches label only. Prices unchanged.</p>
+        </div>
+        <div class="compare-good">
+          <p style="margin: 0 0 8px; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono-font); color: var(--text-secondary);">After — annual discounts applied</p>
+          <div style="border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--bg);">
+            <div style="padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 0.7em; font-family: var(--mono-font); color: var(--text-secondary); text-align: center;">
+              <span style="margin-right: 6px; border: 1px solid var(--border); border-radius: 12px; padding: 2px 10px; color: var(--text-secondary);">Monthly</span>
+              <span style="background: var(--primary); color: var(--bg); border-radius: 12px; padding: 2px 10px;">Annual</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border);">
+              <div style="background: var(--bg); padding: 10px 8px; text-align: center;">
+                <p style="margin: 0; font-size: 0.7em; color: var(--text-secondary); font-family: var(--mono-font);">Starter</p>
+                <p style="margin: 4px 0 0; font-size: 1em; font-family: var(--display-font); color: var(--text);">$0</p>
+              </div>
+              <div style="background: var(--surface); padding: 10px 8px; text-align: center;">
+                <p style="margin: 0; font-size: 0.7em; color: var(--primary); font-family: var(--mono-font);">Pro</p>
+                <p style="margin: 4px 0 0; font-size: 1em; font-family: var(--display-font); color: var(--text);">$9.60<span style="font-size: 0.6em; color: var(--text-secondary);">/mo</span></p>
+                <p style="margin: 2px 0 0; font-size: 0.65em; color: var(--text-secondary); font-family: var(--mono-font); text-decoration: line-through;">$12.00</p>
+              </div>
+              <div style="background: var(--bg); padding: 10px 8px; text-align: center;">
+                <p style="margin: 0; font-size: 0.7em; color: var(--text-secondary); font-family: var(--mono-font);">Enterprise</p>
+                <p style="margin: 4px 0 0; font-size: 1em; font-family: var(--display-font); color: var(--text);">Custom</p>
+              </div>
+            </div>
+          </div>
+          <p style="margin: 6px 0 0; font-size: 0.7em; color: var(--text-secondary); font-family: var(--body-font);">Annual prices show 20% discount with crossed-out monthly rate.</p>
+        </div>
+      </div>
+      <figcaption>Figure 3.6 — Before and after iterating on the toggle behavior: left shows static prices on annual view; right shows 20% discounted prices with crossed-out monthly rates after one targeted follow-up prompt. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+
+    <!-- Rights register: fig-ch03-preview — Open Design UI, Apache-2.0; generated artifact shown, no third-party personal data present. -->
+    <figure class="figure--full" id="fig-ch03-preview">
+      <img src="../images/fig-open-design-v0-9-0-artifact-in-t-d81ics-paste-mqhh3vix.png" alt="Open Design v0.9.0 artifact in the in-app preview pane showing the agent run summary on the left and the rendered artifact on the right, with Preview, Code, and Desktop toggle tabs visible at the top of the preview panel" loading="lazy" />
+      <figcaption>Figure 3.7 — The artifact in the in-app preview with the agent run summary and Preview/Code/Desktop toggles. The Preview tab shows the rendered interactive artifact; Code shows the generated HTML source; Desktop switches the viewport width for responsive testing. Real screenshot of Open Design v0.9.0 (captured June 2026).</figcaption>
+    </figure>
+
+    <div class="callout">
+      <p><strong>My take:</strong> Most people over-index on the generate step and under-invest in the iterate step. I've watched teams get a first generation they like about 60% of, declare it "close enough," and export it. The iterate step is cheap --- one prompt, ten seconds of streaming --- and it's where the gap between "agent output" and "something I'd actually show a client" closes. I'd rather spend two iterations getting the artifact right than spend an hour editing exported HTML by hand.</p>
+    </div>
+
+    <h3>How many iterations?</h3>
+
+    <p>There's no rule, but I've found the useful range is one to four follow-up prompts per artifact for a well-scoped piece like a pricing page. After four iterations you're usually fighting diminishing returns or discovering that the original structure needs to change --- which means starting the generate step over with a better initial prompt, not iterating further.</p>
+
+    <p>Inspect mode, introduced in v0.6.0 of Open Design, lets you click any element in the preview and see the computed styles applied to it. This is useful during iteration: if a heading isn't matching the type scale defined in the bundled DESIGN.md, Inspect mode tells you exactly which CSS property is wrong, so you can reference it precisely in your follow-up prompt.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-03-5">
+    <h2 class="section-title"><span class="section-num">3.5</span> Export and Verify</h2>
+
+<p class="section-en">Export to HTML and PDF, then confirm the output matches the preview</p>
+    <p class="section-intro">When the artifact looks right in the preview, the loop reaches its fourth beat: export. Open Design can export to six formats. For most web prototypes, HTML and PDF are the primary targets. Export your pricing page to both and verify each before treating the loop as complete.</p>
+
+    <h3>Exporting the artifact</h3>
+
+    <p>Trigger exports through the export button in the Open Design UI, or prompt your agent directly:</p>
+
+    <pre><code>Export the current pricing page artifact to HTML.</code></pre>
+
+    <pre><code>Export the current pricing page artifact to PDF, A4, portrait.</code></pre>
+
+    <p>The HTML export produces a single inlined file: all CSS, fonts, and JavaScript are bundled into one <code>.html</code> document with no external dependencies. This makes it portable --- anyone you send it to can open it in a browser without any build step.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Export Formats — As of June 2026, Open Design v0.9.0</caption>
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Use case</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HTML (inlined)</td>
+            <td>Web prototype delivery, stakeholder review</td>
+            <td>Single file, all assets inlined; no build step to open</td>
+          </tr>
+          <tr>
+            <td>PDF</td>
+            <td>Documentation, print handoffs, async review</td>
+            <td>Browser-print pipeline; respect print margins in your prompt</td>
+          </tr>
+          <tr>
+            <td>PPTX</td>
+            <td>Presentation decks in PowerPoint / Keynote</td>
+            <td>Agent-driven; slide structure must be in the artifact</td>
+          </tr>
+          <tr>
+            <td>MP4</td>
+            <td>Motion graphics, HyperFrames-rendered video</td>
+            <td>Requires a HyperFrames-compatible artifact; CPU-intensive</td>
+          </tr>
+          <tr>
+            <td>ZIP</td>
+            <td>Multi-file exports, asset bundles</td>
+            <td>Preserves separate asset files rather than inlining</td>
+          </tr>
+          <tr>
+            <td>Markdown</td>
+            <td>Documentation, content delivery</td>
+            <td><!-- TODO-VERIFY: Confirm Markdown export ships in v0.9.0 and is not behind a feature flag; verify against release notes and export dialog before publication lock -->Availability as of v0.9.0 has not been confirmed against the official export dialog; verify before relying on this format</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Verify the exported file, not just the preview</h3>
+
+    <p>This step is non-negotiable. Open the exported HTML file in a browser and the PDF in a PDF viewer. Walk through the same interactions you verified in the preview: toggle the pricing, expand the FAQ items, check that the CTA buttons render correctly.</p>
+
+    <div class="callout warning">
+      <p>The preview and the exported HTML can diverge. The preview renders in a live sandboxed <code>srcdoc</code> iframe where external resources --- fonts, images loaded from URLs, CDN scripts --- are fetched in real time. The HTML export inliner handles those resources differently, and some may not be included. Always verify the exported file offline, in a browser with no network access, before shipping. If something looks right in the preview but broken in the export, the export is the ground truth.</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Click the export button or prompt your agent to export to HTML. Open Design writes the file to your <code>.od/projects/&lt;id&gt;/exports/</code> directory.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Open the exported HTML file in your browser. Right-click the file and choose "Open with" your browser of choice, or drag it to the address bar. Do not use <code>localhost</code> for this test --- open the file directly from disk to simulate offline delivery.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Walk through every interactive element you built: the monthly/annual toggle, FAQ expansion, and any CTA buttons. Compare them against what you saw in the preview. If anything diverges, note the specific element and go back to the iterate step with a targeted fix.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>Export to PDF and open it. Confirm that the layout didn't collapse, fonts rendered, and the page count is what you expected. The PDF pipeline uses browser print, so any element using <code>overflow: hidden</code> without an explicit print style may clip unexpectedly.</p>
+      </div>
+    </div>
+
+    <!-- Rights register: ch-03-shot-04 — screenshot of the Open Design export dialog. -->
+    <figure class="figure--full" data-screenshot-id="ch-03-shot-04">
+      <img src="../images/evidence-mqhhtspg-lrl5.png" alt="Open Design export dialog showing format options and output path" loading="lazy" />
+      <figcaption>Figure 3.8 — The Open Design export dialog: five format options (HTML, PDF, PPTX, ZIP, MP4), an output-path field, and the Export button. HTML is selected by default for web prototype delivery.</figcaption>
+    </figure>
+
+    <p>You've now completed the full loop: generate, preview, iterate, export. The pricing page is in your hands as a shippable file. This same four steps --- not a variation of them, the exact same steps --- applies to every artifact type Open Design can produce: dashboards, presentation decks, mobile prototypes, and motion graphics.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-03-6">
+    <h2 class="section-title"><span class="section-num">3.6</span> When the First Loop Breaks</h2>
+
+<p class="section-en">Troubleshooting common first-loop failures</p>
+    <p class="section-intro">The first loop fails more often than the second. Most failures fall into five categories: the daemon isn't running, the MCP connection didn't take, the model produced text without a structured artifact, the preview stays blank, or the exported file diverges from what you saw. Each one has a clear cause and a fix.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>First-Loop Troubleshooting — Open Design v0.9.0</caption>
+        <thead>
+          <tr>
+            <th>Symptom</th>
+            <th>Cause</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>od mcp install</code> fails or command not found</td>
+            <td>The <code>od</code> CLI is not installed or not in <code>PATH</code></td>
+            <td>Re-run the installer from the Open Design README; verify <code>od --version</code> returns a version number</td>
+          </tr>
+          <tr>
+            <td>Agent reports no Open Design MCP tools available</td>
+            <td>Agent was not restarted after MCP install; or MCP server entry is in the wrong config file</td>
+            <td>Restart the agent CLI; verify the MCP entry was written to the correct config file for your agent (e.g., <code>~/.claude/settings.json</code> for Claude Code)</td>
+          </tr>
+          <tr>
+            <td>Preview pane stays blank after prompt submission</td>
+            <td>Model returned text output without artifact tags; skill not matched; or model capability too low</td>
+            <td>Check that a brand system is selected; try switching to a higher-capability model; explicitly name the output format in your prompt ("generate a single-page HTML artifact")</td>
+          </tr>
+          <tr>
+            <td><code>EADDRINUSE :7456</code> when starting the daemon</td>
+            <td>Another Open Design instance is already holding the port</td>
+            <td>Run <code>pnpm tools-dev stop</code> to kill the prior instance, then <code>pnpm tools-dev run web</code>. Or start on an alternate port: <code>OD_PORT=7458 pnpm tools-dev run web</code></td>
+          </tr>
+          <tr>
+            <td>Exported HTML looks different from the preview</td>
+            <td>The export inliner handles external assets differently than the live <code>srcdoc</code> iframe; fonts or images loaded via CDN URL may not be included in the export</td>
+            <td>Verify the export file offline. If assets are missing, add explicit inline instructions to your artifact prompt ("use only system fonts; no external CDN imports")</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The artifact tag failure mode</h3>
+
+    <p>The blank-preview failure deserves extra explanation because it surprises people. Open Design's streaming artifact parser looks for structured artifact tags in the model's response. If the model produces plain text --- a description of a pricing page instead of the HTML for one --- the parser has nothing to render, and the preview stays blank.</p>
+
+    <p>This happens most often when: the skill isn't matched (the agent doesn't know it's supposed to produce structured output), the model being used doesn't have enough capability to follow the output format, or the prompt is ambiguous enough that the model defaulted to an explanation instead of an implementation. The fix is almost always to make the prompt more specific and confirm a skill is active in the generation.</p>
+
+    <div class="callout warning">
+      <p>Node version mismatches remain the most common failure for from-source installs. Open Design pins to Node ~24 and pnpm 10.33.x (as of v0.9.0, released June 2, 2026). If you see <code>EBADENGINE</code> errors during install, the fix is to install the exact pinned Node version and re-run the install sequence.</p>
+    </div>
+
+    <p>If you hit <code>EBADENGINE</code>, the full fix sequence using <code>nvm</code>:</p>
+
+    <pre><code>$ nvm install 24
+$ nvm use 24
+$ corepack enable
+$ pnpm install
+$ pnpm tools-dev run web</code></pre>
+
+    <p>Or with <code>fnm</code>:</p>
+
+    <pre><code>$ fnm install 24
+$ fnm use 24
+$ corepack enable
+$ pnpm install
+$ pnpm tools-dev run web</code></pre>
+
+    <p>For the port conflict, stop the existing instance first:</p>
+
+    <pre><code>$ pnpm tools-dev stop
+$ pnpm tools-dev run web
+# Or use an alternate port:
+$ OD_PORT=7458 pnpm tools-dev run web</code></pre>
+
+    <h3>Daemon health check</h3>
+
+    <p>When in doubt, the quickest health check is: open <code>http://localhost:7456</code> in a browser. If it loads the Open Design UI, the daemon is running. If it doesn't respond, the daemon is down. Start there before debugging anything else --- every other failure in the loop depends on the daemon being healthy.</p>
+
+    <!-- Rights register: ch-03-shot-05 — inline schematic; no screenshot used. -->
+    <figure class="figure--full" data-screenshot-id="ch-03-shot-05">
+      <pre class="code-block" data-lang="bash" data-label="Terminal"><code>$ node daemon/cli.js --no-open
+
+  Open Design  v0.9.0
+
+  API server   →  http://localhost:7456/api
+  Web frontend →  http://localhost:7456
+  SSE endpoint →  http://localhost:7456/events
+
+  Daemon ready. Listening on port 7456.
+  MCP server active. Waiting for agent connections.</code></pre>
+      <figcaption>Figure 3.9 — Daemon startup terminal output for <code>node daemon/cli.js --no-open</code>. A healthy start confirms the API server, web frontend, and SSE endpoint are all serving on port 7456. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+
+    <h3>One more table: export formats quick-reference</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Export Format Quick-Reference — When to use which format</caption>
+        <thead>
+          <tr>
+            <th>You want to...</th>
+            <th>Use format</th>
+            <th>Watch for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Share an interactive web prototype with stakeholders</td>
+            <td>HTML (inlined)</td>
+            <td>External CDN assets won't be inlined; test offline</td>
+          </tr>
+          <tr>
+            <td>Hand off a layout to a non-technical reviewer</td>
+            <td>PDF</td>
+            <td>Print-layout clipping on overflow elements</td>
+          </tr>
+          <tr>
+            <td>Deliver slides as a deck file</td>
+            <td>PPTX</td>
+            <td>Requires a deck-type artifact with slide structure</td>
+          </tr>
+          <tr>
+            <td>Render a motion graphic to video</td>
+            <td>MP4</td>
+            <td>CPU-intensive; keep clips short during iteration</td>
+          </tr>
+          <tr>
+            <td>Bundle assets separately without inlining</td>
+            <td>ZIP</td>
+            <td>Recipient needs a server to serve the asset paths</td>
+          </tr>
+          <tr>
+            <td>Extract content as structured text</td>
+            <td>Markdown</td>
+            <td><!-- TODO-VERIFY: Confirm Markdown export ships in v0.9.0; verify against release notes and export dialog before publication lock -->Availability as of v0.9.0 unconfirmed; verify in your installed version before use</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="02.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 02</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Install and Architecture</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 02</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Install and Architecture</p>
+        </div>
+      </div>
+    </a>
+    <a href="04.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 04</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Skills System</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 04</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Skills System</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #b59664; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">The Skills System</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">How 100+ design skills shape what agents produce</p>
+        </div>
+        <a href="04.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

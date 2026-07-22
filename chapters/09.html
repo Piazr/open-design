@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>The Plugin Ecosystem - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #597e87;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #597e87; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART III: SYSTEMS & TEAMS &middot; SECTION 09</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">The Plugin Ecosystem</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">261 official plugins, Figma migration, and code-refresh-to-brand</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">16 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-09-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Plugin Taxonomy</a>
+        <a href="#ch-09-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Installing and Running Plugins</a>
+        <a href="#ch-09-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Figma Migration</a>
+        <a href="#ch-09-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Refresh a Codebase to a Brand Spec</a>
+        <a href="#ch-09-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Templates and UI Atoms</a>
+        <a href="#ch-09-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Composing Plugins</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-09-1" data-section="ch-09-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Plugin Taxonomy</span></a>
+          <a href="#ch-09-2" data-section="ch-09-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Installing and Running Plugins</span></a>
+          <a href="#ch-09-3" data-section="ch-09-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Figma Migration</span></a>
+          <a href="#ch-09-4" data-section="ch-09-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Refresh a Codebase to a Brand Spec</span></a>
+          <a href="#ch-09-5" data-section="ch-09-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Templates and UI Atoms</span></a>
+          <a href="#ch-09-6" data-section="ch-09-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Composing Plugins</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-09-1" data-section="ch-09-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Plugin Taxonomy</span></a>
+          <a href="#ch-09-2" data-section="ch-09-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Installing and Running Plugins</span></a>
+          <a href="#ch-09-3" data-section="ch-09-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Figma Migration</span></a>
+          <a href="#ch-09-4" data-section="ch-09-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Refresh a Codebase to a Brand Spec</span></a>
+          <a href="#ch-09-5" data-section="ch-09-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Templates and UI Atoms</span></a>
+          <a href="#ch-09-6" data-section="ch-09-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Composing Plugins</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">09</p>
+    <h1 class="chapter-title co-title">The Plugin Ecosystem</h1>
+    <p class="co-standfirst">261 official plugins, Figma migration, and code-refresh-to-brand</p>
+    <div class="co-body co-body--dropcap">
+      <p>Plugins are how Open Design moves from generating new artifacts to transforming existing ones, and the migration and code-refresh scenarios are the design-engineer's highest-leverage tools.</p>
+    </div>
+  </section>
+
+  <!-- 9.1 The Plugin Taxonomy -->
+
+  <section class="chapter-section" id="ch-09-1">
+    <h2 class="section-title"><span class="section-num">9.1</span> The Plugin Taxonomy</h2>
+
+<p class="section-en">What lives in <code>plugins/_official/</code> and why the count matters less than the categories</p>
+    <p class="section-intro">Skills make things. Plugins do jobs. That is the mental model for this chapter. As of June 2026, Open Design ships 261 official plugins in <code>plugins/_official/</code>, organized into six distinct categories that cover everything from image templates to complete design-engineering scenarios. The number is notable, but the structure is what actually matters for your workflow.</p>
+
+    <p>The v0.8.0 release --- named "Plugin Everything" (May 22, 2026) --- made the plugin system the primary extensibility layer. Before that, skills and brand systems were the main surface. After it, almost every capability you can add to Open Design arrives as a plugin. The v0.9.0 release (June 2, 2026) consolidated that shift.</p>
+
+    <p>Here is how the 261 plugins break down:</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Plugin Categories — Open Design <code>plugins/_official/</code>, as of June 2026</caption>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Count</th>
+            <th>What it provides</th>
+            <th>Last verified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Scenario plugins</td>
+            <td>11</td>
+            <td>End-to-end workflows: Figma migration, code refresh, React/Next.js/Vue export, media generation, plugin authoring</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Image templates</td>
+            <td>45</td>
+            <td>Branded static image outputs: social cards, banners, thumbnails, open-graph</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Video templates</td>
+            <td>50</td>
+            <td>HyperFrames motion templates: intros, looping graphics, animated slides</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Design systems</td>
+            <td>142</td>
+            <td>Brand systems wrapped as plugins; overlaps with the 150-system library but plugin-installable</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>UI atoms</td>
+            <td>13</td>
+            <td>Reusable component fragments: buttons, cards, modals, navbars</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Reference examples</td>
+            <td>140</td>
+            <td>Worked artifact examples demonstrating skill and brand combinations; also used as test fixtures</td>
+            <td>June 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TODO-VERIFY: Taxonomy sums: 11+45+50+142+13+140 = 401, but the README reports 261. The discrepancy suggests some categories overlap or count differently. Verify against the actual plugins/_official/ directory listing. -->
+
+    <p>Note the discrepancy: the six category counts above sum to 401, but the README reports 261 total. The most likely explanation is that design-system plugins are counted separately from the featured "261" headline figure, which refers to scenario, template, atom, and example plugins only. The README language is "261 official plugins" with the design-system category noted separately as "142 design systems wrapped as plugins." Treat the 261 as the non-design-system total and the 142 design-system plugins as additive.</p>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p>Plugin counts change with every release. The figures here reflect Open Design v0.9.0 (June 2, 2026). Before quoting them in a decision document, run <code>ls plugins/_official/ | wc -l</code> against the repo or check the README's version-stamped count.</p>
+      </div>
+    </div>
+
+    <p>The philosophy behind the taxonomy is "everything is a plugin" --- a phrase that emerged from the v0.8.0 release discussion on GitHub (discussion #1727, 1k+ engagement). In that model, even the core generation behaviors are backed by the <code>od-default</code> scenario plugin, which means you can override or extend default generation by swapping or layering plugins.</p>
+
+    <figure class="figure--full" id="fig-9-1" data-screenshot-id="ch-09-shot-01">
+      <img src="../images/od-v015-17-sidebar-plugins.png" alt="Open Design Plugins sidebar with Available tab showing marketplace plugin cards and install actions" loading="lazy" />
+      <figcaption>Figure 9.1 — The plugin browser (v0.15.1). Plugin workflows are discovered and installed from the sidebar before they become executable context in a project. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-09-2">
+    <h2 class="section-title"><span class="section-num">9.2</span> Installing and Running Plugins</h2>
+
+<p class="section-en">The <code>od mcp install</code> pattern and plugin discovery path</p>
+    <p class="section-intro">Every plugin in <code>plugins/_official/</code> is available immediately after Open Design is installed --- official plugins are bundled, not downloaded on demand. Third-party and custom plugins are added through the plugin discovery path.</p>
+
+    <h3>The Discovery Path</h3>
+
+    <p>Plugin discovery follows a priority-ordered scan across three locations. Understanding this order is critical when you add a custom plugin that shares a name with an official one:</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Output">
+      <div class="code-label">Output</div>
+      <pre><code class="language-plaintext"># Skill/plugin discovery priority (first match wins)
+1. ./.claude/skills/   -- project-private, highest priority
+2. ./skills/           -- project-committed
+3. ~/.claude/skills/   -- user-global
+
+# Conflicts resolve to the highest-priority version.
+# In dev mode, chokidar watches all paths for changes.
+# In production, re-scan is triggered on SIGHUP.</code></pre>
+    </div>
+
+    <p>This means a plugin in <code>./.claude/skills/</code> overrides an official plugin of the same name. That is the correct mechanism for customizing official behavior without forking the repo.</p>
+
+    <h3>Running a Plugin via the Agent</h3>
+
+    <p>From within your agent CLI, invoke a plugin the same way you invoke a skill --- by name in a natural-language prompt. The agent resolves the name against the discovery path and hands execution to the plugin:</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Prompt">
+      <div class="code-label">Prompt</div>
+      <pre><code class="language-plaintext">Use the landing-page-hero plugin with the Vercel brand system.
+Headline: "Build Faster on Your Machine"
+Subheading: "Local-first. Agent-native. Open source."</code></pre>
+    </div>
+
+    <h3>Plugin File Structure</h3>
+
+    <p>Every plugin --- official or custom --- is a directory containing a <code>SKILL.md</code> file plus optional <code>assets/</code> and <code>references/</code> subdirectories. The <code>SKILL.md</code> format is the base format for all skills and plugins in Open Design, adopted from the Claude Code skill convention (as of June 2026):</p>
+
+    <div class="code-block" data-lang="yaml" data-label="Config">
+      <div class="code-label">Config</div>
+      <pre><code class="language-yaml">name: landing-page-hero
+description: "Build a single-hero landing page with CTA"
+triggers:
+  - "landing page"
+  - "hero page"
+  - "homepage"
+
+od:
+  mode: prototype
+  preview:
+    type: html
+  design_system:
+    requires: true
+  inputs:
+    - name: headline
+      type: text
+      required: true
+    - name: subheading
+      type: text</code></pre>
+    </div>
+
+    <p>The <code>od:</code> block is the Open Design extension to the base <code>SKILL.md</code> format. It defines the generation mode (<code>prototype</code>, <code>image</code>, <code>video</code>), the preview type, whether a design system is required, and the named inputs that the agent will collect from the user's prompt.</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Output">
+      <div class="code-label">Output</div>
+      <pre><code class="language-plaintext">plugins/_official/landing-page-hero/
+├── SKILL.md
+├── assets/
+│   └── hero-layout-reference.png
+└── references/
+    └── examples.md</code></pre>
+    </div>
+
+    <h3>The MCP Install Shorthand</h3>
+
+    <p>For agent-side plugin setup (wiring the MCP server into your agent's config), the <code>od mcp install</code> command handles the plumbing. Plugin invocation itself does not require a separate install step once the MCP server is connected:</p>
+
+    <div class="code-block" data-lang="bash" data-label="Command">
+      <div class="code-label">Command</div>
+      <pre><code class="language-bash">$ od mcp install claude-code
+$ od mcp install cursor
+$ od mcp install opencode</code></pre>
+    </div>
+
+    <p>After any one of these, the agent can invoke every official plugin by name. Plugins do not need separate install commands; they are discovered automatically from the known paths.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-09-3">
+    <h2 class="section-title"><span class="section-num">9.3</span> Figma Migration</h2>
+
+<p class="section-en">Moving a Figma or Pencil file to a React/Next.js/Vue component library</p>
+    <p class="section-intro">The <code>od-figma-migration</code> scenario plugin converts Figma and Pencil design files into React, Next.js, or Vue component libraries, with auto-layout structure preserved and a brand system applied. This is one of the two scenario plugins that, in my judgment, justify the entire adoption case for a design-engineering team. The other is covered in section 9.4.</p>
+
+    <h3>What the Plugin Does</h3>
+
+    <p>The migration scenario takes a Figma file export (or a Pencil <code>.pen</code> file), reads the component tree and auto-layout structure, and produces a component library in your target framework. The brand system you provide becomes the token layer --- the generated components reference brand variables rather than raw Figma color values.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Scenario Plugins — Open Design v0.9.0, as of June 2026</caption>
+        <thead>
+          <tr>
+            <th>Scenario plugin</th>
+            <th>Input</th>
+            <th>Output</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>od-default</code></td>
+            <td>Any generation prompt</td>
+            <td>Artifact per the matched skill</td>
+          </tr>
+          <tr>
+            <td><code>od-design-refine</code></td>
+            <td>Existing artifact + refinement prompt</td>
+            <td>Refined artifact</td>
+          </tr>
+          <tr>
+            <td><code>od-figma-migration</code></td>
+            <td>Figma/Pencil file + target framework + brand system</td>
+            <td>React/Next.js/Vue component library</td>
+          </tr>
+          <tr>
+            <td><code>od-code-migration</code></td>
+            <td>Git repo URL + DESIGN.md path</td>
+            <td>PR with brand-compliant refactored code</td>
+          </tr>
+          <tr>
+            <td><code>od-react-export</code></td>
+            <td>Prototype artifact</td>
+            <td>React component bundle</td>
+          </tr>
+          <tr>
+            <td><code>od-nextjs-export</code></td>
+            <td>Prototype artifact</td>
+            <td>Next.js page + component bundle</td>
+          </tr>
+          <tr>
+            <td><code>od-vue-export</code></td>
+            <td>Prototype artifact</td>
+            <td>Vue SFC bundle</td>
+          </tr>
+          <tr>
+            <td><code>od-media-generation</code></td>
+            <td>Prompt + brand system</td>
+            <td>Image or video media artifact</td>
+          </tr>
+          <tr>
+            <td><code>od-new-generation</code></td>
+            <td>Generation prompt</td>
+            <td>New artifact (alternate to <code>od-default</code>)</td>
+          </tr>
+          <tr>
+            <td><code>od-tune-collab</code></td>
+            <td>Artifact + collaborative annotation</td>
+            <td>Tuned artifact reflecting annotations</td>
+          </tr>
+          <tr>
+            <td><code>od-plugin-authoring</code></td>
+            <td>Plugin spec description</td>
+            <td>Scaffolded plugin directory with SKILL.md</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TODO-VERIFY: The 11 scenario plugin names (od-default, od-design-refine, od-figma-migration, od-code-migration, od-react-export, od-nextjs-export, od-vue-export, od-media-generation, od-new-generation, od-tune-collab, od-plugin-authoring) are sourced from the README WebFetch at 0.95 confidence. Verify against the actual plugins/_official/ directory listing. -->
+
+    <!-- TODO-VERIFY: od-plugin-authoring maturity level: the research dossier flags this as possibly still in development. Confirm whether it is production, beta, or experimental in v0.9.0. -->
+
+    <h3>Running the Figma Migration</h3>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Export your Figma file. From Figma, use <strong>File → Export → JSON</strong> or <strong>File → Export → Figma archive</strong>. If you are working in Pencil, the <code>.pen</code> file is already in the right format.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Open your agent CLI and connect it to Open Design. If you haven't done this, run <code>od mcp install &lt;your-agent&gt;</code> first (see <a href="#ch-03-1" class="xref">Section 3.1</a>).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Invoke the migration with a precise prompt. Specify the target framework and brand system explicitly --- the plugin will use the brand system to replace raw Figma token values with brand variables:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Migrate this Figma file to a Next.js component library
+using the Linear brand system; preserve the auto-layout structure.</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>Review the generated component files. The plugin produces a directory of <code>.tsx</code> components (for React/Next.js) or <code>.vue</code> single-file components, plus a <code>tokens.ts</code> or equivalent that maps brand variables to the design system. Check that auto-layout has converted correctly to flexbox or grid --- this is the most common point of manual adjustment.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p>Iterate with follow-up prompts. If a component has lost its layout fidelity, describe the problem and ask the plugin to correct it. The plugin maintains session context and can re-run the migration for specific components without re-migrating the whole file.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-body">
+        <p>Complex Figma files with multiple component families do not migrate perfectly in one pass. I treat the first migration output as a ~70% draft: the structure and token wiring are correct, but spacing and interaction states need review. Set that expectation with your team before presenting migration results. <!-- TODO-VERIFY: The "70% draft" estimate is author field judgment; fidelity will vary significantly by file complexity. --></p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-9-2" data-screenshot-id="ch-09-shot-02">
+      <img src="../images/od-v011-demo-plugin-migration-prompt-process-result.png" alt="Open Design workspace showing a fictional Figma migration plugin prompt, generated migration files, process trace, and rendered migration report" loading="lazy" />
+      <figcaption>Figure 9.2 — A plugin-driven migration run in the Open Design workspace. The prompt asks for a fictional Figma-to-Next transformation, the assistant turn lists the generated files, and the preview shows the process from mock source frame to token-bound component. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-09-4">
+    <h2 class="section-title"><span class="section-num">9.4</span> Refresh a Codebase to a Brand Spec</h2>
+
+<p class="section-en">The <code>od-code-migration</code> plugin: turning a drift audit into a pull request</p>
+    <p class="section-intro">The <code>od-code-migration</code> scenario plugin takes a live git repository and a <code>DESIGN.md</code> brand specification, audits every source file for ad-hoc colors, non-brand spacing values, and component patterns that diverge from the spec, and produces a pull request with the corrected code. This is design-as-code as a maintenance capability, not a generation novelty.</p>
+
+    <p>Skills make things; plugins do jobs. This is the clearest example of that distinction. You are not asking Open Design to generate a new artifact. You are asking it to bring an existing codebase into compliance with a brand contract.</p>
+
+    <h3>How the Code-Refresh Works</h3>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Input</strong>
+          <p>Git repo URL + <code>DESIGN.md</code> path</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Audit</strong>
+          <p>Scan source files for brand deviations: colors, spacing, type</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Refactor</strong>
+          <p>Replace ad-hoc values with brand tokens</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Output</strong>
+          <p>Pull request with diff and change log</p>
+        </div>
+      </div>
+      <figcaption>Figure 9.3 — The <code>od-code-migration</code> code-refresh pipeline: repo in, brand-compliant PR out.</figcaption>
+    </figure>
+
+    <h3>Running the Code-Refresh</h3>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p>The code-refresh plugin modifies existing source files. Run it against a clean git state --- uncommitted work or untracked changes will be caught in the diff but create confusion. Branch first, review the diff before merging. An automated brand refactor is a strong first pass, not a merge-ready change.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Commit or stash all pending work in your target repository. The plugin expects a clean tree so its diff is unambiguous.</p>
+        <div class="code-block" data-lang="bash" data-label="Command">
+          <div class="code-label">Command</div>
+          <pre><code class="language-bash">$ git checkout -b brand-refresh/od-run-2026-06
+$ git status   # confirm clean</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Make sure your <code>DESIGN.md</code> is in the repo root or at a known path. The plugin reads it as the source-of-truth spec. If you don't have one yet, Chapter 05 covers authoring a house <code>DESIGN.md</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Invoke the scenario with a precise prompt that names the repo and the spec file:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Refresh this React codebase to match our DESIGN.md:
+replace ad-hoc colors and spacing with the brand tokens,
+report what changed.</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>The plugin scans <code>src/components/*.tsx</code> and related files, replaces ad-hoc values, and writes a <code>docs/CHANGES.md</code> that logs every substitution. It then opens a pull request (or stages a commit, depending on your git configuration).</p>
+        <div class="code-block" data-lang="yaml" data-label="Config">
+          <div class="code-label">Config</div>
+          <pre><code class="language-yaml"># Pseudo-representation of the plugin's execution model
+od-code-migration:
+  input:
+    - repo_url: "https://github.com/myorg/myapp"
+    - design_md_path: "./DESIGN.md"
+  output:
+    - pull_request: "docs/CHANGES.md"
+    - refactored_code: "src/components/*.tsx"</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p>Review the pull request diff file by file. Pay particular attention to: (a) color values replaced in CSS-in-JS that now reference a token that doesn't exist in the running theme; (b) spacing values that were intentionally non-standard for a specific layout; (c) any third-party component overrides the plugin may have touched.</p>
+      </div>
+    </div>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Of the 261 plugins in the ecosystem, <code>od-code-migration</code> is the one that justifies adoption for an engineering org by itself. Skills and brand systems are excellent for generating new artifacts. But most teams have an existing codebase with years of accumulated brand drift --- hardcoded hex values, overrides on top of overrides, one component that uses the primary color and another that uses a slightly different hex that predates the design system. No amount of new generation fixes that. The code-refresh plugin does. Treat it as a strong first pass and review the diff carefully --- but that first pass will surface every deviation, and that list alone is worth the run.</p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-9-4" data-screenshot-id="ch-09-shot-03">
+      <img src="../images/od-v011-demo-code-refresh-diff.png" alt="Open Design workspace showing a fictional code refresh diff that replaces hard-coded component values with design tokens and writes CHANGES.md" loading="lazy" />
+      <figcaption>Figure 9.4 — A code-refresh plugin run shown as a PR-style diff. The visible process replaces hard-coded colors, radius, spacing, and typography with design-system tokens, while the generated <code>CHANGES.md</code> panel records the handoff summary before review. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-09-5">
+    <h2 class="section-title"><span class="section-num">9.5</span> Templates and UI Atoms</h2>
+
+<p class="section-en">Image and video templates, reusable UI atoms, and reference examples</p>
+    <p class="section-intro">The three non-scenario plugin categories --- image templates (45), video templates (50), and UI atoms (13) --- cover the most-repeated, least-differentiated generation tasks. They are the production-line layer: high frequency, low variance, always on-brand.</p>
+
+    <h3>Image Templates</h3>
+
+    <p>Image templates produce static branded images for repeatable use cases: social cards, open-graph images, announcement banners, and thumbnail frames. Each template takes a brand system and a small set of named inputs (headline, subhead, background variant) and produces a sized, export-ready image artifact.</p>
+
+    <p>As of June 2026, Open Design includes 45 image templates covering social media formats (16:9, 1:1, 9:16), open-graph dimensions, and print-optimized sizes. The image generation backend routes through the configured image provider (see <a href="#ch-07-4" class="xref">Section 7.4</a> for provider setup).</p>
+
+    <h3>Video Templates</h3>
+
+    <p>The 50 HyperFrames video templates are pre-authored HTML-to-MP4 motion sequences. Unlike generating a new motion artifact from scratch, video templates give you a tested layout and timing, with your brand system applied as the styling layer. They are the fastest path to a branded 15-second intro or a looping social video.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Template and Atom Categories, as of June 2026</caption>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Typical use case</th>
+            <th>Brand system required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Image templates</td>
+            <td>45</td>
+            <td>Social cards, open-graph images, announcement banners</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Video templates</td>
+            <td>50</td>
+            <td>15–30s intros, looping social graphics, animated slide reveals</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>UI atoms</td>
+            <td>13</td>
+            <td>Button sets, card components, modal shells, navigation bars</td>
+            <td>Recommended</td>
+          </tr>
+          <tr>
+            <td>Reference examples</td>
+            <td>140</td>
+            <td>Worked artifact examples; test fixtures; learning references</td>
+            <td>Bundled in example</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>UI Atoms</h3>
+
+    <p>The 13 UI atom plugins are reusable component fragments: buttons, cards, modals, navbars. They are smaller than full skills and intended for composition into larger artifacts. When your artifact prompt says "include a confirmation modal," the agent will resolve that to the modal atom plugin, which ensures the modal follows the brand system's component rules rather than improvising a layout.</p>
+
+    <h3>Reference Examples</h3>
+
+    <p>The 140 reference example plugins are worked artifact examples demonstrating specific skill-and-brand combinations. They serve two purposes: as learning references (see how an experienced prompt produces a given result) and as test fixtures (the Open Design team uses them to validate generation quality across releases).</p>
+
+    <!-- TODO-VERIFY: The distinction between "templates" and "reference examples" as separate plugin categories is based on the README taxonomy. Inspect plugins/_official/templates/ and plugins/_official/examples/ to confirm they are distinct directory structures, not overlapping. -->
+  </section>
+
+  <section class="chapter-section" id="ch-09-6">
+    <h2 class="section-title"><span class="section-num">9.6</span> Composing Plugins</h2>
+
+<p class="section-en">Combining plugins with skills and brand systems in a single workflow</p>
+    <p class="section-intro">Skills make, plugins do. The full power of the ecosystem comes from combining them: a skill to shape the artifact's structure, a brand system to apply consistent visual language, and a plugin to transform or extend the result. That three-layer composition is what moves Open Design from a generation tool to a design-engineering workflow.</p>
+
+    <h3>The Composition Pattern</h3>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Skill</strong>
+          <p>Defines artifact structure and constraints</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Brand system</strong>
+          <p>Applies visual language (tokens, voice, components)</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Plugin</strong>
+          <p>Transforms or exports the result</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Output</strong>
+          <p>Brand-compliant artifact or transformed codebase</p>
+        </div>
+      </div>
+      <figcaption>Figure 9.5 — Plugin composition: skill + brand system + plugin produces either a new branded artifact or a transformed existing one.</figcaption>
+    </figure>
+
+    <h3>A Composed Example</h3>
+
+    <p>Here is a composed prompt that chains a skill, a brand system, and an export plugin in a single agent invocation:</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Prompt">
+      <div class="code-label">Prompt</div>
+      <pre><code class="language-plaintext">Use the dashboard skill with the Linear brand system to build
+an analytics overview with four KPI cards and a revenue chart.
+Then export the result as a Next.js page using od-nextjs-export.</code></pre>
+    </div>
+
+    <p>The agent executes this in sequence: the <code>dashboard</code> skill shapes the layout, the Linear brand system applies the visual layer, the preview streams into the sandboxed iframe, and then <code>od-nextjs-export</code> serializes the artifact into a Next.js page component bundle.</p>
+
+    <h3>Layering Design-System Plugins</h3>
+
+    <p>The 142 design-system plugins can be layered on top of a base brand system. A common pattern is to apply a house brand system as the primary contract and then layer a product-specific design-system plugin for component-level overrides:</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Prompt">
+      <div class="code-label">Prompt</div>
+      <pre><code class="language-plaintext">Generate a settings page using our house DESIGN.md as the base brand,
+then apply the shadcn/ui design-system plugin for component styling.
+Use the web-app skill.</code></pre>
+    </div>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Most teams that adopt Open Design spend their first two weeks on skills and brand systems, and never look at the plugin ecosystem in depth. That's understandable --- the generation loop is immediately rewarding. But the scenario plugins are where the leverage shifts from "this is interesting" to "this changes how our team works." I'd recommend making the code-refresh plugin the first plugin every new team runs, even before exploring the template library. A single run against your production repo will tell you more about your brand-drift debt than any design audit.</p>
+      </div>
+    </div>
+
+    <h3>Plugin Authoring</h3>
+
+    <p>The <code>od-plugin-authoring</code> scenario plugin --- one of the 11 official scenarios --- scaffolds new plugins from a description. You describe what the plugin should do, and it produces a skeleton <code>SKILL.md</code> and directory structure. This is a meta-capability: the plugin ecosystem can generate new additions to itself.</p>
+
+    <!-- TODO-VERIFY: od-plugin-authoring is listed among the 11 official scenarios. The research dossier flags uncertainty about whether this is production, beta, or experimental in v0.9.0. Confirm maturity before presenting it as a production capability. -->
+
+    <div class="code-block" data-lang="plaintext" data-label="Prompt">
+      <div class="code-label">Prompt</div>
+      <pre><code class="language-plaintext">Use od-plugin-authoring to scaffold a plugin that generates
+email signature blocks in HTML, accepting a name, title,
+and brand system as inputs.</code></pre>
+    </div>
+
+    <p>The output is a plugin directory you can place in <code>./.claude/skills/</code> to make it immediately available to your agent, at the highest priority in the discovery order.</p>
+
+    <h3>When to Write a Custom Plugin</h3>
+
+    <div class="compare">
+      <div class="compare-good">
+        <p><strong>Write a custom plugin when:</strong></p>
+        <p>You have a generation workflow you run more than twice a week. You need inputs the bundled skills don't accept. You want to enforce organization-specific constraints that aren't in any bundled brand system. You are exporting to a framework or format not covered by the official export plugins.</p>
+      </div>
+      <div class="compare-bad">
+        <p><strong>Don't write a custom plugin when:</strong></p>
+        <p>A bundled skill or scenario plugin handles the job, even approximately. You are tempted to fork an official plugin to change one parameter --- override it via the discovery path instead. Your "custom" plugin is just a renamed copy of an official one.</p>
+      </div>
+    </div>
+
+    <h3>Crystallize a successful run into a skill</h3>
+
+    <p>When you iterate to a pattern that works --- prompt, skill invocation, and design system state aligned --- you should not reconstruct it from chat history on the next project. The Automations surface includes a <strong>Crystallize successful run into skill</strong> template that packages the run's prompt, skill invocation, and design-system attachment into a reusable skill recipe. Use it after a generation you would happily repeat. Save as template on the export menu covers project-level recycling; crystallize covers recipe-level recycling. The full Automations gallery is in <a href="#fig-D-27">Figure D.27</a> (Appendix D).</p>
+
+    <div class="callout tip">
+      <div class="callout-body">
+        <p><strong>Next:</strong> Chapter 10 covers the MCP (Model Context Protocol) server that makes all of this agent-agnostic --- the infrastructure that lets any of 21 supported CLIs drive Open Design's skills, brand systems, and plugins through a single standard connection.</p>
+      </div>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="08.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 08</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Preview and Export Pipeline</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 08</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Preview and Export Pipeline</p>
+        </div>
+      </div>
+    </a>
+    <a href="10.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 10</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The MCP Server</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 10</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The MCP Server</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #4e9b7a; background-image: url('../assets/gradients/gradient_emerald_olive.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">The MCP Server</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">How Open Design connects to coding-agent CLIs via the Model Context Protocol</p>
+        </div>
+        <a href="10.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

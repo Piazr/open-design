@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Troubleshooting and FAQ - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #8d7ab5;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #8d7ab5; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">APPENDICES &middot; SECTION C</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Troubleshooting and FAQ</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Symptom-to-fix tables for the failures readers actually hit</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">11 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#appendix-C-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Install and Build Failures</a>
+        <a href="#appendix-C-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Daemon and MCP Connection</a>
+        <a href="#appendix-C-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Proxy, Preview, and Export</a>
+        <a href="#appendix-C-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Frequently Asked Questions</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#appendix-C-1" data-section="appendix-C-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Install and Build Failures</span></a>
+          <a href="#appendix-C-2" data-section="appendix-C-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Daemon and MCP Connection</span></a>
+          <a href="#appendix-C-3" data-section="appendix-C-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Proxy, Preview, and Export</span></a>
+          <a href="#appendix-C-4" data-section="appendix-C-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Frequently Asked Questions</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#appendix-C-1" data-section="appendix-C-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Install and Build Failures</span></a>
+          <a href="#appendix-C-2" data-section="appendix-C-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Daemon and MCP Connection</span></a>
+          <a href="#appendix-C-3" data-section="appendix-C-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Proxy, Preview, and Export</span></a>
+          <a href="#appendix-C-4" data-section="appendix-C-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Frequently Asked Questions</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Appendix</p>
+    <p class="co-no">C</p>
+    <h1 class="chapter-title co-title">Troubleshooting and FAQ</h1>
+    <p class="co-standfirst">Symptom-to-fix tables for the failures readers actually hit</p>
+    <div class="co-body co-body--dropcap">
+      <p>This appendix is the operational safety net for the whole book. Every table is organized symptom to fix: you look up what broke, read why, and apply the fix. The failures here are the ones readers actually hit, drawn from the official QUICKSTART.md, GitHub issue history, and repeated first-run patterns. Ninety percent of them trace back to two causes --- a version pin mismatch or a stopped daemon. Start there every time.</p>
+    </div>
+  </section>
+
+  <div class="callout warning">
+    <p>Version pins, command names, and per-CLI MCP configuration paths change with every Open Design release. This appendix reflects Open Design v0.9.0 (released June 2, 2026) and the MCP spec at 2025-11-25. Verify any command or path against the live repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a> before relying on it in a production setup.</p>
+  </div>
+
+  <!-- C.1 Install and Build Failures -->
+
+  <section class="chapter-section" id="appendix-C-1">
+    <h2 class="section-title"><span class="section-num">C.1</span> Install and Build Failures</h2>
+
+<p>The from-source install requires Node ~24 (enforced in <code>package.json#engines</code>) and pnpm 10.33.x (specifically 10.33.2, auto-selected by Corepack). As of June 2026, the most common first-run failure is a <code>better-sqlite3</code> native build error --- it accounts for a large share of issues filed in the repository. The fix is almost always a version mismatch or a missing build toolchain.</p>
+
+  <p>Before diagnosing anything else, confirm your Node version:</p>
+
+  <pre><code>$ node --version   # Must output v24.x.x
+$ pnpm --version   # Must output 10.33.x</code></pre>
+
+  <p>If either is wrong, switch to Node 24 using <code>nvm use 24</code> or <code>fnm use 24</code>, then run <code>corepack enable</code> to let Corepack re-pin pnpm. If you recently switched Node versions and the install was previously working, rebuild the native module before anything else:</p>
+
+  <pre><code>$ pnpm --filter @open-design/daemon rebuild better-sqlite3</code></pre>
+
+  <div class="callout">
+    <p><strong>My take:</strong> Ninety percent of first-run failures are version pins or a stopped daemon. Before reading the rest of this appendix, run <code>node --version</code> and <code>od status</code>. If those two checks pass, the real problem is almost always in the next section. I've set up Open Design on five different machines; the one that took the longest was the one where I skipped the version check first.</p>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Install and Build Failures (Open Design v0.9.0, June 2026)</caption>
+      <thead>
+        <tr>
+          <th>Symptom</th>
+          <th>Cause</th>
+          <th>Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Error: NODE_MODULE_VERSION 127 expected, 136 found</code> during <code>pnpm install</code></td>
+          <td><code>better-sqlite3</code> binary compiled against a different Node version's V8 headers (ABI mismatch)</td>
+          <td>Run <code>pnpm --filter @open-design/daemon rebuild better-sqlite3</code> after switching to Node 24 via <code>nvm use 24</code></td>
+        </tr>
+        <tr>
+          <td><code>gyp ERR! build error</code> or <code>make: g++: No such file</code></td>
+          <td>Missing C++ build toolchain required to compile <code>better-sqlite3</code> native module</td>
+          <td>macOS: <code>xcode-select --install</code>. Linux: <code>apt-get install build-essential python3</code>. Windows: install Visual Studio Build Tools with the C++ workload</td>
+        </tr>
+        <tr>
+          <td><code>ERR_PNPM_EXEC_PERMISSIONS_BLOCKED</code> or native script fails under pnpm 10.x</td>
+          <td>pnpm 10.x enforces a native script blocklist by default; <code>better-sqlite3</code> post-install script is blocked</td>
+          <td>Ensure you are on pnpm 10.33.x via Corepack (<code>corepack enable</code>); do not manually install a different pnpm major version. If blocked persists, add <code>allowedDeprecatedVersions</code> or check the pnpm release notes for your exact version</td>
+        </tr>
+        <tr>
+          <td><code>ENGINES_MISMATCH</code>: your Node version does not satisfy <code>~24</code></td>
+          <td>Node version outside the pinned range; <code>package.json#engines</code> enforces this</td>
+          <td>Install Node 24: <code>nvm install 24 &amp;&amp; nvm use 24</code> or equivalent with <code>fnm</code>. Then re-run <code>corepack enable &amp;&amp; pnpm install</code></td>
+        </tr>
+        <tr>
+          <td>Docker Compose starts but daemon is unreachable from the host on macOS</td>
+          <td>macOS Docker Desktop uses bridge networking by default; the daemon inside the container is not exposed to <code>localhost</code></td>
+          <td>Enable host networking in Docker Desktop (Preferences &gt; Resources &gt; Advanced &gt; Enable "Host networking") and add <code>network_mode: host</code> to the compose service. On Linux and Windows native, bridge networking works without this change</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- C.2 Daemon and MCP Connection -->
+  </section>
+
+  <section class="chapter-section" id="appendix-C-2">
+    <h2 class="section-title"><span class="section-num">C.2</span> Daemon and MCP Connection</h2>
+
+<p>The daemon runs on <code>localhost:7456</code> by default and serves the Express API with SSE streaming. <!-- TODO-VERIFY: Daemon default port is 7456 per architecture.md; confirm this has not changed in v0.9.0 --> If the daemon is not running, the preview stays blank, generations silently fail, and <code>od mcp install</code> may succeed without producing anything useful. Check daemon health before diagnosing anything at the agent or MCP layer.</p>
+
+  <pre><code>$ od status
+# Or query the health endpoint directly:
+$ curl http://localhost:7456/health</code></pre>
+
+  <p>MCP (Model Context Protocol) configuration is per-CLI: running <code>od mcp install claude-code</code> writes to Claude Code's config only. If you use multiple agent CLIs --- Claude Code plus OpenCode, for example --- you must run <code>od mcp install</code> for each. As of June 2026, Claude Code stores MCP servers in <code>~/.claude/settings.json</code> under <code>mcpServers</code>, while OpenCode uses <code>~/.config/opencode/opencode.jsonc</code> with a root <code>mcp</code> key and <code>type: "stdio"</code>.</p>
+
+  <div class="callout warning">
+    <p>Never disable the sandbox or expose the daemon port publicly to work around a connection problem. Both the Electron sandbox and the daemon's SSRF protection exist as load-bearing security controls. If an agent can't reach the daemon, the fix is always in the config --- not in loosening the security model. See <a href="#ch-08-1">section 08.1</a> for the full rationale.</p>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Daemon and MCP Connection Failures (Open Design v0.9.0, June 2026)</caption>
+      <thead>
+        <tr>
+          <th>Symptom</th>
+          <th>Cause</th>
+          <th>Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Preview window stays blank; no artifact appears after generation</td>
+          <td>Daemon is stopped or crashed; SSE stream is not reaching the frontend</td>
+          <td>Run <code>od status</code> or <code>curl http://localhost:7456/health</code>. If unresponsive, restart: <code>pnpm tools-dev restart</code>. Check stderr for <code>Cannot find module better-sqlite3</code> or <code>Port 7456 already in use</code></td>
+        </tr>
+        <tr>
+          <td><code>od mcp install claude-code</code> succeeds but Claude Code can't see the Open Design tools</td>
+          <td>MCP server was written to Claude Code's config but the agent session was not restarted; or the config path is wrong on the current platform</td>
+          <td>Restart Claude Code after running <code>od mcp install</code>. Verify the entry in <code>~/.claude/settings.json</code> under <code>mcpServers</code>. On Windows, confirm the path uses the correct drive letter and that the session runs in the same PowerShell or WSL environment where <code>od</code> is on <code>PATH</code></td>
+        </tr>
+        <tr>
+          <td>OpenCode doesn't recognize Open Design tools after <code>od mcp install opencode</code></td>
+          <td>OpenCode MCP config is in <code>~/.config/opencode/opencode.jsonc</code>; automatic registration sometimes doesn't update this file</td>
+          <td>Open <code>~/.config/opencode/opencode.jsonc</code> and confirm an entry exists under the <code>mcp</code> key with <code>"type": "stdio"</code> and <code>"command": "od"</code>. If missing, add it manually and restart OpenCode</td>
+        </tr>
+        <tr>
+          <td>Agent is not detected in Settings; "Rescan" button shows nothing</td>
+          <td>The CLI binary is not on <code>PATH</code> in the environment Open Design scans, or it was installed after Open Design started</td>
+          <td>Confirm the CLI is on <code>PATH</code> in the terminal Open Design was launched from. On Windows, ensure the session matches the environment (PowerShell vs WSL) where the CLI was installed. Click "Rescan" in Open Design Settings after confirming</td>
+        </tr>
+        <tr>
+          <td>Artifact never renders; generation completes but the preview panel is empty</td>
+          <td>The model didn't wrap its output in <code>&lt;artifact&gt;</code> tags; the streaming artifact parser received raw code instead of a wrapped artifact</td>
+          <td>Run the daemon in foreground mode (<code>pnpm tools-dev run daemon</code>) and check stderr for the system prompt and agent output. If tags are missing, explicitly invoke the skill in the prompt: use "Use the web-prototype skill with the Linear brand system to build..." instead of a bare instruction</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- C.3 Proxy, Preview, and Export -->
+  </section>
+
+  <section class="chapter-section" id="appendix-C-3">
+    <h2 class="section-title"><span class="section-num">C.3</span> Proxy, Preview, and Export</h2>
+
+<p>The BYOK (Bring Your Own Key) proxy routes model calls to Anthropic, OpenAI, Azure, Google, or a local Ollama instance. Misconfigured keys produce 401 or 403 errors that are easily misread as a daemon failure. The proxy also includes SSRF (server-side request forgery) protection that blocks certain private-IP targets --- this is intentional, not a bug.</p>
+
+  <p>Preview/export divergence is the other common failure at this layer. The preview uses a sandboxed <code>srcdoc</code> iframe that resolves asset URLs relative to the embedding page. The HTML export inlines content differently. An artifact that looks correct in the preview can break in the exported file when external images or fonts are involved. Always verify the exported file --- not just the preview --- before shipping. This is covered in depth in <a href="#ch-08-6">section 08.6</a>.</p>
+
+  <p>HyperFrames renders HTML-to-MP4 via frame capture and encode on your local CPU. As of June 2026, there is no GPU acceleration on most setups. A 15-second animation at 1080p can take several minutes on a mid-tier machine. <code>backdrop-filter: blur</code> effects are particularly expensive --- budget roughly 200ms per frame over 1920×1080. <!-- TODO-VERIFY: 200ms/frame figure is from HyperFrames performance docs; verify against current docs as this is hardware-dependent --> Use draft quality for iteration and full quality only for final renders.</p>
+
+  <div class="callout">
+    <p><strong>My take:</strong> Preview/export divergence is the failure mode I see readers dismiss too quickly. The preview is forgiving --- it runs inside a live browser context where external assets load fine. The exported HTML has to be self-contained, and that's where things break. I test every exported file by opening it with network access disabled. If it breaks, I know immediately instead of finding out after the artifact is in a stakeholder's inbox.</p>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Proxy, Preview, and Export Failures (Open Design v0.9.0, June 2026)</caption>
+      <thead>
+        <tr>
+          <th>Symptom</th>
+          <th>Cause</th>
+          <th>Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Model calls return 401 or 403; generations fail immediately</td>
+          <td>BYOK proxy has an invalid, expired, or missing API key for the configured model provider (Anthropic, OpenAI, Azure, or Google)</td>
+          <td>Verify the key is valid and has the correct permissions for the provider. Check the <code>.env</code> file (or the Settings UI) for the relevant provider key. Confirm the key has not expired or been rotated. <!-- TODO-VERIFY: Exact env var names for each provider (e.g., ANTHROPIC_API_KEY, OPENAI_API_KEY) --- verify against open-design .env.example --></td>
+        </tr>
+        <tr>
+          <td>BYOK proxy blocks a request with "SSRF protection: private IP blocked"</td>
+          <td>The proxy's SSRF protection rejected a target URL that resolved to a private IP (e.g., a local Ollama endpoint on an unusual address)</td>
+          <td>Use <code>localhost</code> or <code>127.0.0.1</code> for local Ollama; avoid IP ranges that trigger the blocklist. Do not disable SSRF protection --- it is a load-bearing security control</td>
+        </tr>
+        <tr>
+          <td>External images load in the preview but are broken or missing in the exported HTML file</td>
+          <td><code>srcdoc</code> iframe resolves relative URLs from the embedding page; the HTML inliner uses a different base and cannot fetch external assets at export time</td>
+          <td>Use absolute URLs for all external images in the artifact prompt, or ask the agent to inline images as data URIs. Verify the exported file by opening it with network disabled before sharing</td>
+        </tr>
+        <tr>
+          <td>PDF export produces blank pages or cuts off content</td>
+          <td>PDF is generated via browser print; fixed-height slides or absolute-positioned elements can cause content to fall outside the printable area</td>
+          <td>Ask the agent to use a reflowable layout for PDF targets. Check the artifact for <code>overflow: hidden</code> on containers and <code>position: fixed</code> elements --- these are common culprits. <!-- TODO-VERIFY: PDF blank page issue reported in GitHub issue #4067; check if fixed in v0.9.0 --></td>
+        </tr>
+        <tr>
+          <td>HyperFrames render takes more than 10 minutes for a short animation</td>
+          <td>Frame-capture-plus-encode is CPU-bound; complex CSS effects (especially <code>backdrop-filter: blur</code>) multiply per-frame render time significantly</td>
+          <td>Use draft quality during iteration. Remove or reduce <code>backdrop-filter: blur</code> while iterating --- it is the single most expensive CSS effect in HyperFrames renders. Render at full quality only for the final export. Keep iterative clips under 15 seconds</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- C.4 FAQ -->
+  </section>
+
+  <section class="chapter-section" id="appendix-C-4">
+    <h2 class="section-title"><span class="section-num">C.4</span> Frequently Asked Questions</h2>
+
+<p>These are the questions that come up repeatedly once the common failures are resolved. They are not troubleshooting items --- they are conceptual clarifications that affect how you use Open Design day to day.</p>
+
+  <h4 id="appendix-C.4.1">Is local-first the same as local inference?</h4>
+
+  <p>No. Local-first means your files, your database, and your orchestration run on your machine. The daemon is local. The <code>.od/</code> project directory is local. Whether inference is local depends on which model provider you configure. If you use the BYOK proxy to call Anthropic, OpenAI, Azure, or Google, model inference happens in the cloud. Only Ollama keeps inference fully local. Local-first controls where your data and control live --- not where computation happens. Choose a local model if inference privacy is your goal. See <a href="#ch-01">Chapter 01</a> for the full discussion.</p>
+
+  <h4 id="appendix-C.4.2">Can I use the bundled brand systems for production work?</h4>
+
+  <p>The 150 bundled brand systems are reference materials for learning the DESIGN.md schema and for prototyping. They are identified nominatively --- using names like Linear<!-- TODO-VERIFY: Legal wording is adequate nominative use; confirm with publication review --> or Stripe to describe the system's inspiration. They are not a license to ship artifacts that reproduce those companies' trademarked identities. Use the bundled systems to learn structure, then author your own DESIGN.md for production work. Chapter 05 covers this in detail.</p>
+
+  <h4 id="appendix-C.4.3">Which agent CLI should I use?</h4>
+
+  <p>As of June 2026, Open Design supports 21 coding-agent CLIs. <!-- TODO-VERIFY: 21 CLI count from README, June 2026; confirm against live repository --> For most readers, Claude Code is the default: it has the most complete MCP integration and the most thoroughly tested skill-invocation behavior. OpenCode (MIT license) is the right choice if vendor independence is a priority. Cursor works well for teams already in that ecosystem. The comparison in Chapter 11 covers all criteria in depth. Don't pick based on what's most familiar --- pick based on the constraint that matters most for your project: privacy, license, or team fit.</p>
+
+  <h4 id="appendix-C.4.4">What is the Apache-2.0 license for Open Design, and can I use it commercially?</h4>
+
+  <p>Open Design is licensed under Apache-2.0, which permits commercial use, modification, distribution, and private use, subject to including the license and notice files in any distribution. It does not grant trademark rights. Using Open Design commercially to generate artifacts for clients is permitted; shipping a product that reproduces a bundled brand system's trademarked identity is not. <!-- TODO-VERIFY: Apache-2.0 license confirmed as of June 2026 from repository README; verify license file contents for any additional notices --></p>
+
+  <h4 id="appendix-C.4.5">How do I keep my skills and plugins up to date?</h4>
+
+  <p>Skills, brand systems, and plugins ship with the Open Design repository. When a new version releases, pull the latest from the repository (<code>git pull origin main</code>) and re-run <code>pnpm install</code>. If you have authored custom skills or plugins, they live in your project directory and are not overwritten by upstream updates. If you have forked a bundled skill, you will need to merge upstream changes manually --- this is why Chapter 04 recommends layering on top of bundled skills rather than forking them outright.</p>
+
+  <div class="callout tip">
+    <p><strong>Next:</strong> This is the final appendix. For the full architectural context behind these failure modes, return to <a href="#ch-02">Chapter 02</a> (install and architecture), <a href="#ch-08">Chapter 08</a> (the preview and export pipeline), and <a href="#ch-10">Chapter 10</a> (the MCP server). For the skills and brand systems referenced in C.4, see <a href="#appendix-B">Appendix B</a>.</p>
+  </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="B.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Appendix B</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Skills, Brand Systems, and Plugins Index</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Appendix B</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Skills, Brand Systems, and Plugins Index</p>
+        </div>
+      </div>
+    </a>
+    <a href="D.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Appendix D</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">A Visual Tour of the Open Design UI</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Appendix D</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">A Visual Tour of the Open Design UI</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #60aeb8; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Appendix</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">A Visual Tour of the Open Design UI</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Screenshots from a local Open Design build, June 2026</p>
+        </div>
+        <a href="D.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

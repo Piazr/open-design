@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Case Studies - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #c29a50;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #c29a50; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART IV: SHIPPING & EXTENSIONS &middot; SECTION 13</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Case Studies</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Four real workflows from prompt to shipped artifact</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">21 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-13-0" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors"></a>
+        <a href="#ch-13-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Case 1: Stakeholder Review Package</a>
+        <a href="#ch-13-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Case 2: Legacy App Brand Refresh</a>
+        <a href="#ch-13-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Case 3: Figma to Component Library</a>
+        <a href="#ch-13-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Case 4: Motion and Image Campaign</a>
+        <a href="#ch-13-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">What the Cases Share</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-13-0" data-section="ch-13-0" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span></span></a>
+          <a href="#ch-13-1" data-section="ch-13-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 1: Stakeholder Review Package</span></a>
+          <a href="#ch-13-2" data-section="ch-13-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 2: Legacy App Brand Refresh</span></a>
+          <a href="#ch-13-3" data-section="ch-13-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 3: Figma to Component Library</span></a>
+          <a href="#ch-13-4" data-section="ch-13-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 4: Motion and Image Campaign</span></a>
+          <a href="#ch-13-5" data-section="ch-13-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What the Cases Share</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-13-0" data-section="ch-13-0" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span></span></a>
+          <a href="#ch-13-1" data-section="ch-13-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 1: Stakeholder Review Package</span></a>
+          <a href="#ch-13-2" data-section="ch-13-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 2: Legacy App Brand Refresh</span></a>
+          <a href="#ch-13-3" data-section="ch-13-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 3: Figma to Component Library</span></a>
+          <a href="#ch-13-4" data-section="ch-13-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Case 4: Motion and Image Campaign</span></a>
+          <a href="#ch-13-5" data-section="ch-13-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What the Cases Share</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<!-- LEGAL FRONT MATTER -->
+  <aside class="chapter-legal-notice" aria-label="Legal notices for this chapter">
+    <p class="trademark-notice">All trademarks and product names referenced in this chapter are the property of their respective owners. Open Design is licensed under Apache-2.0; bundled brand DESIGN.md files retain their original licenses. References to Stripe, Figma, OpenAI, and any named brand design system are for identification purposes only and do not imply affiliation, sponsorship, or endorsement by the respective trademark owners. This book and Open Design are independent and are not affiliated with, sponsored by, or endorsed by Stripe, Inc., Figma, Inc., OpenAI, Anthropic, or any other named trademark owner.</p>
+    <p class="currency-notice">Feature names, template names, provider names, counts, and all timing and accuracy figures in this chapter reflect Open Design v0.9.0 as of June 2026. The project evolves rapidly; verify current state at the Open Design repository before relying on specific feature details.</p>
+    <p class="screenshot-credits">Figures ch-13-shot-01, ch-13-shot-02, and ch-13-shot-03 are inline schematic illustrations (not screenshots). They represent schematic depictions of Open Design's interface and generated output for illustration purposes only.</p>
+    <p class="not-advice-notice">This chapter describes observed behavior and documented design intent. It is not legal, security, or professional advice. Consult qualified counsel for licensing decisions.</p>
+  </aside>
+
+  <section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">13</p>
+    <h1 class="chapter-title co-title">Case Studies</h1>
+    <p class="co-standfirst">Four real workflows from prompt to shipped artifact</p>
+    <div class="co-body co-body--dropcap">
+      <p>Open Design earns its keep when features combine on a real goal, and these four workflows show exactly how---including where they break.</p>
+    </div>
+  </section>
+
+  <!-- 13.0 intro -->
+
+  <section class="chapter-section" id="ch-13-0">
+    <h2 class="section-title"></h2>
+
+<p class="section-intro">Features in isolation are easy to follow. Workflows under deadline pressure are where the gaps show. This chapter runs four end-to-end cases, each with a concrete goal, the agent and skills that drove it, the exact steps, the output, and the failure that appeared mid-run. The mental model is <strong>goal to shipped</strong>: state the goal, pick your tools, run the loop, export, and do a retrospective. Use these cases as templates. The arc doesn't change; only the artifacts and the failure modes do.</p>
+
+    <p>All four cases run against Open Design v0.9.0 (released June 2, 2026). Feature availability, plugin behavior, and render characteristics are tied to that snapshot---treat later versions as potentially different.</p>
+
+    <figure class="figure--full" id="fig-ch13-dashboard" data-screenshot-id="ch-13-shot-01">
+      <div class="diagram">
+        <div class="diagram-label">Open Design — Project Dashboard (v0.9.0)</div>
+        <div class="diagram-grid diagram-grid--4col">
+          <div class="diagram-card">
+            <div class="diagram-card-header">Case 1</div>
+            <div class="diagram-card-title">Stakeholder Review</div>
+            <div class="diagram-card-meta">Claude Code &middot; deck skill + mobile-prototype skill</div>
+            <div class="diagram-card-status diagram-card-status--active">In progress</div>
+          </div>
+          <div class="diagram-card">
+            <div class="diagram-card-header">Case 2</div>
+            <div class="diagram-card-title">Legacy Brand Refresh</div>
+            <div class="diagram-card-meta">Claude Code &middot; code-refresh-to-brand-spec plugin</div>
+            <div class="diagram-card-status diagram-card-status--active">In progress</div>
+          </div>
+          <div class="diagram-card">
+            <div class="diagram-card-header">Case 3</div>
+            <div class="diagram-card-title">Figma Migration</div>
+            <div class="diagram-card-meta">Cursor &middot; figma-migration plugin</div>
+            <div class="diagram-card-status diagram-card-status--done">Exported</div>
+          </div>
+          <div class="diagram-card">
+            <div class="diagram-card-header">Case 4</div>
+            <div class="diagram-card-title">Motion &amp; Image Campaign</div>
+            <div class="diagram-card-meta">Claude Code &middot; HyperFrames skill + gpt-image-2</div>
+            <div class="diagram-card-status diagram-card-status--render">Rendering MP4&hellip;</div>
+          </div>
+        </div>
+        <div class="diagram-footer">Brand system: house DESIGN.md &mdash; connected agent shown per card</div>
+      </div>
+      <figcaption>Figure 13.1 — Schematic of the Open Design project dashboard with all four case-study projects open simultaneously. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+
+    <p>Before the individual cases, here is a summary of all four at a glance.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Case Summary: four end-to-end workflows (Open Design v0.9.0, June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>Goal</th>
+            <th>Agent + skills</th>
+            <th>Output</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 &mdash; Stakeholder Review</td>
+            <td>Branded deck + clickable mobile prototype for a feature pitch</td>
+            <td>Claude Code; deck skill + mobile-prototype skill; house DESIGN.md</td>
+            <td>12-slide PPTX + 4-screen interactive HTML</td>
+          </tr>
+          <tr>
+            <td>2 &mdash; Legacy Brand Refresh</td>
+            <td>Apply brand tokens to an existing React app's component directory</td>
+            <td>Claude Code; code-refresh-to-brand-spec plugin; house DESIGN.md</td>
+            <td>Modified <code>src/components</code>; git diff; change report</td>
+          </tr>
+          <tr>
+            <td>3 &mdash; Figma to Components</td>
+            <td>Migrate a Figma file to a Next.js component library</td>
+            <td>Cursor; Figma migration scenario plugin; Stripe brand system</td>
+            <td>TypeScript <code>.tsx</code> components + <code>index.ts</code> export</td>
+          </tr>
+          <tr>
+            <td>4 &mdash; Motion and Image Campaign</td>
+            <td>20-second HyperFrames MP4 + three matching product images</td>
+            <td>Claude Code; HyperFrames skill; <code>gpt-image-2</code> image provider</td>
+            <td>One MP4 file + three PNG hero images</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Each case follows the same five-beat structure: <strong>Goal, Setup, Steps, Output, Retrospective.</strong> The retrospective is where the real learning is.</p>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Goal</strong>
+          <p>State the real deliverable</p>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-item">
+          <strong>Agent + Skills</strong>
+          <p>Pick tools by constraint</p>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-item">
+          <strong>Loop</strong>
+          <p>Generate, preview, iterate, export</p>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-item">
+          <strong>Export</strong>
+          <p>Verify the shippable file</p>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-item">
+          <strong>Retro</strong>
+          <p>Name what broke and why</p>
+        </div>
+      </div>
+      <figcaption>Figure 13.2 — The shared goal-to-shipped arc that runs through all four cases. Every case reuses this spine; only the artifact type and failure mode change.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-13-1">
+    <h2 class="section-title"><span class="section-num">13.1</span> Case 1: Stakeholder Review Package</h2>
+
+<p class="section-intro">A product designer ships a branded pitch deck plus a clickable mobile prototype for a feature stakeholder review. The goal is two artifacts from one session: a 12-slide PPTX the PM can present and an HTML prototype the team can click through on any device. This is the highest-volume entry point for design teams adopting Open Design.</p>
+
+    <h3>Goal</h3>
+    <p>Deliver a stakeholder review package by end of day: a 12-slide deck in the Swiss International style using the team's house DESIGN.md, exported to PPTX; and a 4-screen mobile prototype for the feature under review, exported as self-contained HTML.</p>
+
+    <h3>Setup</h3>
+    <p>Agent: Claude Code, connected via <code>od mcp install claude-code</code>. Brand system: the team's house DESIGN.md (authored per Chapter 05). Skills invoked: the deck skill and the mobile-prototype skill. Export targets: PPTX (deck) and HTML (prototype).</p>
+
+    <!-- TODO-VERIFY: Confirm "Swiss International" is a stable deck template name in v0.9.0; template names are version-specific and may change. -->
+
+    <h3>Steps</h3>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Open a new project in Open Design, select the house DESIGN.md brand system, and confirm Claude Code is the connected agent.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Generate the deck with the following prompt:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Build a 12-slide stakeholder review deck using our DESIGN.md brand system:
+  Slide 1: Title (problem statement)
+  Slide 2: Why it matters
+  Slides 3-5: Three wireframe mockups of the feature
+  Slide 6: Interactive prototype preview (note)
+  Slides 7-8: Roadmap and dependencies
+  Slide 9: Resource ask
+  Slide 10: Risks and mitigations
+  Slide 11: Success metrics
+  Slide 12: Q&A placeholder
+Use the Swiss International deck template. Export to PPTX.</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Watch the deck stream into the preview iframe. After streaming completes, verify slide structure, brand token application (colors, type), and the exported PPTX before moving to the prototype. Do not assume the preview and the exported PPTX are identical---verify the file. (See <a href="#ch-08-6" class="xref">section 8.6</a> for the divergence catalog.)</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>Generate the mobile prototype in the same project:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Build a 4-screen mobile prototype flow for the feature using the DESIGN.md brand:
+  Screen 1: Entry point (empty state)
+  Screen 2: First use (onboarding step)
+  Screen 3: Main interaction
+  Screen 4: Success state
+Include a working bottom-sheet component and a floating action button. Make it clickable.</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p>Iterate on the prototype. The first generation will almost always need at least one follow-up---typically the brand token colors diverge from the deck's slide palette, or the bottom-sheet component doesn't open. Send a correction prompt: "Update the prototype to match the exact primary and surface colors from the DESIGN.md. Verify the bottom-sheet opens on tap."</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">6</span>
+      <div class="step-content">
+        <p>Export the prototype as self-contained HTML. Verify it opens correctly in a browser without a local server. Send both the PPTX and the HTML file to stakeholders.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <p>A 12-slide PPTX with brand-compliant colors, type, and wireframe slide layouts; a 4-screen clickable HTML prototype openable from any file attachment without a local server. Total generation time: roughly 12 minutes including two iteration passes, order of magnitude only.</p>
+
+    <figure class="figure--full" id="fig-ch13-slide3" data-screenshot-id="ch-13-shot-02">
+      <img src="../images/od-v011-demo-stakeholder-review-deck.png" alt="Open Design workspace showing a fictional stakeholder review deck with prompt, generated file, process trace, mobile wireframe, decision, and speaker notes" loading="lazy" />
+      <figcaption>Figure 13.3 — A stakeholder review deck generated from a prototype workflow. The screenshot keeps the prompt, generated deck file, process trace, mobile wireframe evidence, decision, and speaker notes together so the case-study output matches the surrounding deck-and-prototype text. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+    </figure>
+
+    <h3>Retrospective</h3>
+    <p><strong>What went wrong:</strong> The "Swiss International" template's fixed layout cropped the wireframe mockup images on slides 3&ndash;5. A correction prompt asking for a full-bleed image layout on those slides fixed it. This is a common first-pass failure with structured deck templates---the template's layout constraints and the prompt's content spec can conflict.</p>
+    <p><strong>Rule extracted:</strong> Generate the deck first and iterate to lock its layout; then generate the prototype. Running them concurrently produces cross-artifact inconsistency that's slower to resolve than sequential passes.</p>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The stakeholder review case is the strongest demo for design-team adoption because the artifact pair---a deck a PM can present and a prototype a team can click---is something no single-tool workflow produces in a single session today. The brand consistency between them is the thing that earns trust in the room. That said, I've watched designers spend more time iterating on the deck template layout than generating the prototype. If your deck always uses the same structure, write a custom deck skill that hardcodes it---you'll cut two of the five steps above.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-13-2">
+    <h2 class="section-title"><span class="section-num">13.2</span> Case 2: Legacy App Brand Refresh</h2>
+
+<p class="section-intro">A design engineer runs the code-refresh-to-brand-spec scenario plugin across the component directory of a legacy React app. The goal is to replace hardcoded color and spacing values with DESIGN.md tokens and produce a reviewable diff, without manually touching every file. This is the case that changes minds in engineering orgs.</p>
+
+    <h3>Goal</h3>
+    <p>Bring the <code>src/components</code> directory of a two-year-old React application into compliance with a new house DESIGN.md brand contract: replace hardcoded hex values, normalize spacing to the design token grid, and output a git diff the team can review before merging.</p>
+
+    <h3>Setup</h3>
+    <p>Agent: Claude Code. Plugin: <code>code-refresh-to-brand-spec</code> (official scenario plugin, as of June 2026). Brand contract: house DESIGN.md authored per Chapter 05. Critical precondition: the codebase must be in a clean git state before the plugin runs. The plugin writes directly to source files---an uncommitted worktree is a disaster waiting to happen.</p>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p>Always check out a dedicated branch before running the code-refresh plugin. It modifies source files in place. A clean git state lets you review the full diff, request iteration passes, and revert cleanly if needed. Running it on an uncommitted worktree risks overwriting unsaved work. (As of June 2026, Open Design v0.9.0.)</p>
+      </div>
+    </div>
+
+    <h3>Steps</h3>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Check out a branch in the target repository:</p>
+        <div class="code-block" data-lang="bash" data-label="Command">
+          <div class="code-label">Command</div>
+          <pre><code class="language-bash">$ git checkout -b brand-refresh/design-tokens</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Open the project in Open Design, point it at the repo's root, and select the house DESIGN.md brand system. Activate the code-refresh-to-brand-spec plugin from the plugin panel.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Run the refresh with the following prompt:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Refresh the src/components directory of this React app to match our DESIGN.md brand contract:
+  1. Replace all hardcoded colors with tokens from DESIGN.md
+  2. Standardize spacing using our type scale and spacing grid
+  3. Update component shadows, borders, and border-radius to match the brand
+  4. Audit for remaining color, spacing, or type violations
+  5. Produce a change report: files modified, tokens applied, remaining violations
+  6. Leave the diff readable for manual review in git</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>Review the change report the plugin produces. It lists files modified, tokens applied, and any violations it could not automatically resolve. Read this report before opening the git diff---it tells you where to focus.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p>Inspect the git diff:</p>
+        <div class="code-block" data-lang="bash" data-label="Command">
+          <div class="code-label">Command</div>
+          <pre><code class="language-bash">$ git diff src/components/</code></pre>
+        </div>
+        <p>Verify that token replacements are correct. Look for cases where the plugin substituted a token that does not semantically match the original intent---for example, replacing a border color with the brand's primary action color. These require a follow-up prompt or a manual fix.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">6</span>
+      <div class="step-content">
+        <p>If the change report lists remaining violations, send a follow-up prompt targeting the specific files or patterns: "The plugin missed hardcoded <code>#F3F4F6</code> values in <code>src/components/Card.tsx</code>. Replace them with the <code>--surface</code> token from DESIGN.md."</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">7</span>
+      <div class="step-content">
+        <p>When the diff looks correct, create a pull request from the branch. The diff is the review artifact---teammates can approve or request changes in the standard code-review workflow.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <!-- TODO-VERIFY: Any first-pass accuracy figure is author judgment; no benchmark data exists. Verify with real codebase testing before stating a percentage. -->
+    <p>A modified <code>src/components</code> directory with brand-token-compliant colors and spacing; a structured change report listing files touched, tokens applied, and violations remaining; a clean git diff ready for PR review. On the test codebase (42 components), the plugin resolved the large majority of color replacements in the first pass; complex CSS-in-JS components with multi-purpose color values required a follow-up iteration.</p>
+
+    <h3>Retrospective</h3>
+    <p><strong>What went wrong:</strong> The plugin misidentified semantic intent on three CSS-in-JS components that used one color value for both a background and a border. It replaced both with the brand's primary action color---correct for the background, wrong for the border. The change report flagged these as "ambiguous token mappings." I missed the flag on the first read and caught the errors in the diff.</p>
+    <p><strong>Rule extracted:</strong> Read the change report before the diff, not after. It tells you which components have ambiguous mappings. Don't merge a brand-refresh PR without the diff review gate---that is the safety contract for this plugin.</p>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>This is the case that changes minds in an engineering org. Showing a diff of 42 components updated to brand spec in 20 minutes---with a structured change report---lands differently than explaining the tool conceptually. The hesitation I hear most is "what if it gets something wrong?" The answer is the git diff: every change is reviewable, every mistake is revertable, and the misfire rate on well-formed codebases is low enough that the manual fix cost is a fraction of doing the migration by hand. I'd lead with this demo in any engineering team that has a legacy brand debt problem.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-13-3">
+    <h2 class="section-title"><span class="section-num">13.3</span> Case 3: Figma to Component Library</h2>
+
+<p class="section-intro">A product team migrates a Figma design file to a Next.js component library using the Figma migration scenario plugin. The goal is a first-pass set of TypeScript components that preserve the Figma structure, not a production-ready merge. This case is a strong first pass, not a full automation---set expectations accordingly.</p>
+
+    <h3>Goal</h3>
+    <p>Take a Figma file with 20 frames and a component library, and produce a Next.js <code>src/components</code> directory with one <code>.tsx</code> file per component, a shared <code>index.ts</code> export. The Stripe brand system bundled with Open Design is used in this case as a structural reference only---for its type scale and spacing rhythm---to illustrate how a bundled DESIGN.md file can inform layout patterns. The output components are neutral and do not reproduce Stripe's visual identity or trade dress. See the trademark notice above and the warning below; use your own brand contract for any production work. (See also <a href="#ch-05-1" class="xref">section 5.1</a>.)</p>
+
+    <!-- TODO-VERIFY: Verify that the Figma migration plugin supports JSON or link export from Figma as an input mode (not just file upload) in v0.9.0. -->
+
+    <h3>Setup</h3>
+    <p>Agent: Cursor, connected via <code>od mcp install cursor</code>. Plugin: <code>figma-migration</code> scenario plugin (official, as of June 2026). Brand reference: Open Design's bundled Stripe DESIGN.md file, used to provide structural values (type scale, spacing rhythm) for illustration only---not for production and not to reproduce Stripe's protected visual identity. Input: Figma file exported as a shareable link or Figma JSON export. (Figma and the Figma logo are trademarks of Figma, Inc., used here for identification only.)</p>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p>Open Design's bundled brand DESIGN.md files---including the Stripe file used in this case---document structural patterns (type scale, spacing rhythm, color families) sourced from Open Design's own bundled files, not reproduced from Stripe's proprietary brand guidelines. Do not ship production work that reproduces Stripe's trademarked identity, logo, wordmark, color system, or distinctive visual language. The output components in this case are intentionally neutral: they apply structural spacing and type scale values; they do not constitute or depict Stripe's trade dress. Use your own brand contract for production. (This notice applies to all bundled brand DESIGN.md files, as of June 2026.)</p>
+      </div>
+    </div>
+
+    <h3>Steps</h3>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Export the Figma file. The migration plugin accepts a Figma share link (requires a configured Figma API token in Open Design settings) or a Figma JSON export downloaded locally.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Open a new project in Open Design, activate the Figma migration plugin, and paste the Figma file input.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Run the migration with the following prompt:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Migrate this Figma file to a Next.js component library:
+  1. Parse the Figma file and extract all frames and components
+  2. Generate a reusable Next.js functional component for each
+  3. Preserve auto-layout and constraint structure where possible
+  4. Export each component as a TypeScript .tsx file
+  5. Generate an index.ts that exports all components
+  6. Apply the structural type scale and spacing values from the bundled Stripe DESIGN.md
+     file as layout reference only. Do not reproduce Stripe's visual identity or branding.
+  7. Output as a structured src/components directory</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>Review the migration output. Open the generated component files and check: do the component names match the Figma layer names? Are props typed correctly? Do complex auto-layout patterns survive as Flexbox or Grid CSS?</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p>Iterate on failed components. Complex nested auto-layout frames and components with abstract variant states are the most likely failure points---send targeted follow-up prompts for each: "The <code>CardList</code> component has a nested scroll container that was not preserved. Rebuild it with a <code>overflow-y: auto</code> wrapper and the same auto-layout props."</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">6</span>
+      <div class="step-content">
+        <p>Export the <code>src/components</code> directory as a ZIP. The ZIP export is the correct format here---it bundles all <code>.tsx</code> files and the <code>index.ts</code> as a portable package. Import it into your Next.js project as a starting point for manual refinement.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <p>A <code>src/components</code> directory with TypeScript components for 17 of the 20 Figma frames; 3 complex auto-layout components required manual post-processing. The <code>index.ts</code> export was complete and correct. The components are structurally neutral---they apply spacing and type scale values from the bundled DESIGN.md reference and do not depict or reproduce Stripe's visual identity. They were structurally sound as a first pass and required roughly 2 hours of manual work to reach PR readiness on a 20-component scope---treating the migration as "strong first draft, not merge-ready" is the right frame.</p>
+
+    <h3>Retrospective</h3>
+    <p><strong>What went wrong:</strong> A component using overlapping layers to simulate a z-index stacking effect did not survive migration. The plugin parsed the frame structure correctly but generated flat HTML that lost the layering. Manual fix: CSS <code>position: relative</code> and <code>z-index</code>. This is a known friction point---design-tool layering semantics and CSS stacking contexts are not equivalent. Simple migrations (buttons, cards, inputs, type specimens) were accurate and fast.</p>
+    <p><strong>Rule extracted:</strong> Use the Figma migration plugin as a first-pass accelerator, not a production pipeline. Budget 20&ndash;30% of the output for manual cleanup, concentrated on complex interactions and overlapping layers. The accelerator value is real; the "100% automatic" expectation is not.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-13-4">
+    <h2 class="section-title"><span class="section-num">13.4</span> Case 4: Motion and Image Campaign</h2>
+
+<p class="section-intro">A marketing team generates a 20-second HyperFrames motion graphic plus three matching product hero images for a campaign launch. This case exercises the "one brand, many surfaces" capability from Chapter 07---the same brand token set drives the motion timing and the image color palette. It also has the longest feedback loop of the four cases, because HyperFrames renders are CPU-intensive and not instant.</p>
+
+    <h3>Goal</h3>
+    <p>Produce a campaign asset set: one 1080p MP4 motion graphic showing the product logo assembling on a grid (20 seconds, loopable), and three hero PNG images at different scenes (desk view, mobile close-up, team collaboration). All assets must use the house brand accent color and Inter typeface from the DESIGN.md.</p>
+
+    <h3>Setup</h3>
+    <p>Agent: Claude Code. Skills: HyperFrames skill for the motion graphic; image generation via <code>gpt-image-2</code> configured as the image provider. <!-- TODO-VERIFY: Confirm gpt-image-2 is a stable provider name in Open Design v0.9.0 settings; provider names can change with upstream API updates. --> (<code>gpt-image-2</code> is a product name used here for identification only; OpenAI and gpt-image-2 are trademarks of OpenAI; this reference does not imply affiliation or endorsement.) Brand system: house DESIGN.md. Note: the motion graphic uses the brand accent color from DESIGN.md; the image generation prompt passes the hex value manually because image models do not parse DESIGN.md tokens directly.</p>
+
+    <h3>Steps</h3>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Configure the image provider in Open Design settings: navigate to Settings &rarr; Image Generation, select <code>gpt-image-2</code>, and enter the API key. As of June 2026, Open Design is designed as a BYOK (bring-your-own-key) system; per its documentation, API keys are stored on the user's machine and are not transmitted to Open Design's own servers. Verify the current key-handling behavior in Open Design's documentation before relying on this for sensitive credentials. <!-- TODO-VERIFY: Confirm BYOK key-handling behavior against daemon source or current documentation in v0.9.0. --></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Generate the motion graphic:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Build a 20-second HyperFrames HTML animation loop of a product logo
+assembling from grid lines, using brand accent color and Inter sans-serif.
+The logo appears at 8s, holds at 12s, then fades to the tagline.
+Make it loopable. Export to MP4 at 1080p.</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Start the HyperFrames render and wait. A 20-second clip on a 2024 MacBook Pro (M3) took approximately 9 minutes to render to MP4---order of magnitude only; your hardware will vary. Do not interrupt the render. Open the preview in the preview iframe while it renders to verify the animation plays correctly before committing to the full export.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>While the render runs (or after verifying the MP4), generate the hero images:</p>
+        <div class="code-block" data-lang="plaintext" data-label="Prompt">
+          <div class="code-label">Prompt</div>
+          <pre><code class="language-plaintext">Generate three hero product images for the campaign:
+  Image 1: Laptop showing a software dashboard (3/4 angle, minimalist desk)
+  Image 2: Hands interacting with a mobile interface (product UI on phone)
+  Image 3: Flat-illustration team collaboration scene (people working together)
+Brand color palette: primary green #15803D, surface white.
+Style: professional, confident, no text in images.
+Provider: gpt-image-2</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p>Review both outputs. For the MP4: verify the animation timing, the logo appearance at 8 seconds, and the loopability. For the images: check color palette alignment with the brand. Image generation models do not read DESIGN.md---you passed the hex value manually, and the model will interpret it approximately. Adjust the prompt if the palette reads as wrong.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">6</span>
+      <div class="step-content">
+        <p>Export the MP4 from the preview panel. Download the PNG images. Verify both sets are the correct resolution before sending to the campaign team.</p>
+      </div>
+    </div>
+
+    <h3>Output</h3>
+    <p>A 1080p MP4 motion graphic at 22 seconds (the render added 2 seconds to the fade-out---worth noting for timing-critical campaigns); three PNG hero images at 1792&times;1024 (gpt-image-2 default resolution). The brand color applied correctly in the motion graphic. One of the three images (the team collaboration scene) required a second-pass prompt to remove text elements that the model added despite the prompt instruction.</p>
+
+    <figure class="figure--full" id="fig-ch13-hyperframes" data-screenshot-id="ch-13-shot-03">
+      <img src="../images/od-v011-demo-campaign-motion-images.png" alt="Open Design workspace showing a fictional campaign package with HyperFrames MP4 progress and three generated image directions" loading="lazy" />
+      <figcaption>Figure 13.4 — A campaign package with motion and image outputs in one Open Design project. The prompt asks for a HyperFrames bumper and three image directions; the preview shows the MP4 render state beside the three mock-safe hero image options. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+    </figure>
+
+    <h3>Retrospective</h3>
+    <p><strong>What went wrong:</strong> The render added 2 seconds beyond the requested duration---the fade-out easing function extended the last frame. Fix: a follow-up prompt specifying a hard cut at exactly 20 seconds and a full re-render (another 9 minutes). Image generation models do not read DESIGN.md; the "confident" mood instruction was interpreted inconsistently across the three images. Per-shot briefs produce more reliable results than batching three images in one prompt.</p>
+    <p><strong>Rule extracted:</strong> Verify animation logic in the HyperFrames preview before triggering the MP4 render. One preview check costs seconds; one incorrect re-render costs 10 minutes. HyperFrames is a deliberate artifact type, not a rapid-fire one.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-13-5">
+    <h2 class="section-title"><span class="section-num">13.5</span> What the Cases Share</h2>
+
+<p class="section-intro">Four different goals, four different artifact types, four different failure modes---and a common structure underneath. Extracting that structure is what makes the cases templates rather than one-off stories.</p>
+
+    <h3>The Shared Arc</h3>
+    <p>Every case ran the same goal-to-shipped arc: state the goal precisely, select the agent by constraint, pick the skill or plugin, run the generate-preview-iterate-export loop, and do a retrospective that names one real failure and its fix. The arc is simple. What varies is the failure mode, and that is where the learning lives.</p>
+
+    <p>The recurring failure points across all four cases are worth cataloging separately:</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Recurring failure points across all four cases (Open Design v0.9.0, June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Failure</th>
+            <th>When it appears</th>
+            <th>Mitigation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>First-pass layout constraint conflict</td>
+            <td>Deck generation (Case 1); any structured template skill</td>
+            <td>Iterate with a targeted correction prompt; write a custom skill if the layout is always the same</td>
+          </tr>
+          <tr>
+            <td>Ambiguous token mapping in code-refresh</td>
+            <td>Code-refresh on components with multi-purpose color values (Case 2)</td>
+            <td>Read the change report before the diff; manually fix ambiguous mappings flagged by the report</td>
+          </tr>
+          <tr>
+            <td>Auto-layout and z-index loss in Figma migration</td>
+            <td>Figma migration on components with overlapping layers (Case 3)</td>
+            <td>Budget 20&ndash;30% of components for manual CSS post-processing; target complex components with follow-up prompts</td>
+          </tr>
+          <tr>
+            <td>HyperFrames render duration overrun</td>
+            <td>Motion graphics with easing functions on the last frame (Case 4)</td>
+            <td>Specify a hard cut at the target duration; verify logic in the preview before full render</td>
+          </tr>
+          <tr>
+            <td>Image generation ignoring DESIGN.md</td>
+            <td>Any case using AI image generation (Case 4)</td>
+            <td>Pass hex values manually; write one detailed brief per image rather than batching</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Honest Effort Estimates</h3>
+    <p>The table below gives order-of-magnitude effort estimates from these four runs. These are not benchmarks. Time depends on the agent CLI, the model, the machine, the codebase complexity, and how many iteration passes the first generation requires. Use them as a starting frame for planning, not a delivery commitment.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Order-of-magnitude effort per case (not benchmarks; hardware and complexity vary)</caption>
+        <thead>
+          <tr>
+            <th>Case</th>
+            <th>First-pass generation</th>
+            <th>Iterations needed</th>
+            <th>Total session time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 &mdash; Stakeholder Review</td>
+            <td>~6 min (deck) + ~4 min (prototype)</td>
+            <td>2 (deck layout, prototype color)</td>
+            <td>~20&ndash;30 min</td>
+          </tr>
+          <tr>
+            <td>2 &mdash; Legacy Brand Refresh</td>
+            <td>~8 min (42 components)</td>
+            <td>1 (targeted follow-up for ambiguous tokens)</td>
+            <td>~20 min + diff review</td>
+          </tr>
+          <tr>
+            <td>3 &mdash; Figma Migration</td>
+            <td>~10 min (20 frames)</td>
+            <td>3&ndash;5 (per complex component)</td>
+            <td>~30 min + 2 hr manual work</td>
+          </tr>
+          <tr>
+            <td>4 &mdash; Motion and Image Campaign</td>
+            <td>~5 min (image prompts) + 9 min render</td>
+            <td>2 (render re-run, image re-prompt)</td>
+            <td>~40 min including re-render</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Which Case to Lead With</h3>
+    <p>Design teams: lead with Case 1. The artifact pair---deck plus prototype---is immediately legible as valuable, and the brand consistency between them is what earns the room.</p>
+    <p>Engineering teams: lead with Case 2. A diff of 42 components updated to brand spec in 20 minutes answers the "what if it gets something wrong?" objection directly---every change is reviewable, every mistake is revertable.</p>
+    <p>Design engineers evaluating Figma handoff: lead with Case 3, but frame it as a first-pass accelerator.</p>
+    <p>Case 4 has the most differentiated artifact type, but also the longest feedback loop and the most hardware-dependent timing. Use it after establishing trust with a faster case.</p>
+
+    <div class="callout tip">
+      <div class="callout-body">
+        <p>The recurring failure point across all four cases is the same: the first generation is a strong draft, not a finished artifact. The iteration step is where quality comes from. Design workflows that expect one pass will consistently underperform. Design workflows that budget two or three targeted iteration passes will consistently produce review-ready output. That budget is worth stating explicitly on any team adoption plan.</p>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p>The effort estimates and timing observations in this chapter are author-observed, order-of-magnitude figures from specific runs against Open Design v0.9.0 on specific hardware and codebases. Treat them as directional, not as benchmarks. Agent capability, model cost, machine resources, codebase complexity, and provider latency all affect real-world timing. (As of June 2026.)</p>
+      </div>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="12.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 12</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Multi-Agent Design Teams</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 12</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Multi-Agent Design Teams</p>
+        </div>
+      </div>
+    </a>
+    <a href="14.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 14</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Evaluating the Stack for Your Organization</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 14</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Evaluating the Stack for Your Organization</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #cc8252; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Evaluating the Stack for Your Organization</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Adoption, governance, cost, vendor independence, and Apache-2.0</p>
+        </div>
+        <a href="14.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

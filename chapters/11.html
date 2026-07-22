@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Choosing Your Agent - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #7aa865;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #7aa865; background-image: url('../assets/gradients/gradient_emerald_olive.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART III: SYSTEMS & TEAMS &middot; SECTION 11</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Choosing Your Agent</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Claude Code, Cursor, Copilot, OpenCode, Codex, Gemini CLI, and Antigravity compared</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">18 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-11-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Comparison Criteria</a>
+        <a href="#ch-11-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Proprietary Agents</a>
+        <a href="#ch-11-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Open-Source Agents</a>
+        <a href="#ch-11-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">MCP Support Across Agents</a>
+        <a href="#ch-11-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Routing Table</a>
+        <a href="#ch-11-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Staleness and What to Recheck</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-11-1" data-section="ch-11-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Comparison Criteria</span></a>
+          <a href="#ch-11-2" data-section="ch-11-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Proprietary Agents</span></a>
+          <a href="#ch-11-3" data-section="ch-11-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Open-Source Agents</span></a>
+          <a href="#ch-11-4" data-section="ch-11-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>MCP Support Across Agents</span></a>
+          <a href="#ch-11-5" data-section="ch-11-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Routing Table</span></a>
+          <a href="#ch-11-6" data-section="ch-11-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Staleness and What to Recheck</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-11-1" data-section="ch-11-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Comparison Criteria</span></a>
+          <a href="#ch-11-2" data-section="ch-11-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Proprietary Agents</span></a>
+          <a href="#ch-11-3" data-section="ch-11-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Open-Source Agents</span></a>
+          <a href="#ch-11-4" data-section="ch-11-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>MCP Support Across Agents</span></a>
+          <a href="#ch-11-5" data-section="ch-11-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Routing Table</span></a>
+          <a href="#ch-11-6" data-section="ch-11-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Staleness and What to Recheck</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">11</p>
+    <h1 class="chapter-title co-title">Choosing Your Agent</h1>
+    <p class="co-standfirst">Claude Code, Cursor, Copilot, OpenCode, Codex, Gemini CLI, and Antigravity compared</p>
+    <div class="co-body co-body--dropcap">
+      <p>There is no single best agent for Open Design; there is the right agent for your constraints, and this chapter routes you to it.</p>
+    </div>
+  </section>
+  <div class="callout notice">
+    <div class="callout-header">Trademark and affiliation notice</div>
+    <div class="callout-body">
+      <p>This chapter names and compares products whose trademarks belong to their respective owners: Claude Code and Claude Design are trademarks of Anthropic; Cursor is a trademark of Anysphere; GitHub Copilot is a trademark of GitHub, Inc. (Microsoft); Gemini CLI and Antigravity are trademarks of Google LLC; Codex CLI is a trademark of OpenAI; OpenCode is maintained by the anomalyco community. All names are used here for identification and comparison only. Open Design and this publication are independent and are not affiliated with, sponsored by, or endorsed by any of these companies. This chapter is not legal, financial, or professional advice. Pricing and feature claims reflect June 11, 2026 and must be re-verified against primary sources before any purchasing or architectural decision.</p>
+    </div>
+  </div>
+
+  <section class="chapter-section" id="ch-11-1">
+    <h2 class="section-title"><span class="section-num">11.1</span> The Comparison Criteria</h2>
+
+<p class="section-intro">Before ranking anything, state what you are ranking on. That is the first discipline in any honest agent comparison, and it is especially important here because the agent-CLI market is genuinely volatile. What is accurate on June 11, 2026 may not be accurate by the end of the month. Route, don't rank is the mental model for this chapter: not "which agent is best," but "which agent fits your constraints."</p>
+
+    <p>The criteria used across every row in this chapter are:</p>
+
+    <ul>
+      <li><strong>Type:</strong> Proprietary hosted, open-source, or IDE-integrated. Determines lock-in surface and governance posture.</li>
+      <li><strong>MCP support:</strong> Whether the CLI connects to Open Design via the Model Context Protocol (MCP) and how the config is structured.</li>
+      <li><strong>Pricing and license:</strong> Monthly cost or license type. Proprietary tiers vs Apache-2.0 or MIT.</li>
+      <li><strong>Model access:</strong> Which underlying models the agent can route to, because model capability directly affects artifact quality.</li>
+      <li><strong>Design fit:</strong> Where the agent's specific features map onto Open Design workflows --- visual editing, local inference, CI/CD, or team governance.</li>
+      <li><strong>Staleness risk:</strong> How fast the facts in each row age, and what event triggers a re-check.</li>
+    </ul>
+
+    <div class="callout tip">
+      <div class="callout-body">
+        <p>All pricing, version numbers, and feature claims in this chapter are sourced from official documentation and verified on June 11, 2026. Re-verify against primary sources before committing a team to one agent. Every cell in the comparison tables carries a staleness signal. Section <a href="#ch-11-6" class="xref">11.6</a> gives you a structured recheck list.</p>
+      </div>
+    </div>
+
+    <p>One more framing note: all seven agents covered here confirm MCP support as of June 2026. That means any of them can drive Open Design through <code>od mcp install</code>. The question is not whether they connect; it is which trade-offs you can live with once they do.</p>
+
+    <p>In the desktop app, agent selection is not buried in a config file. The project composer and Settings → Execution mode expose the same detected-CLI grid: Local CLI routes through whichever binary you pick; BYOK routes through whichever provider key you configure. Rescan after installing a new CLI --- the grid does not update until you ask it to.</p>
+
+    <figure class="figure--full" id="fig-ch11-agent-picker">
+      <img src="../images/od-v015-12-project-agent-picker.png" alt="Open Design project composer agent picker showing Local CLI and BYOK tabs with detected coding-agent CLIs and model controls" loading="lazy" />
+      <figcaption>Figure 11.1 — The in-project agent picker (v0.15.1). Local CLI versus BYOK, detected agents, and per-session model tier in one popover. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-11-2">
+    <h2 class="section-title"><span class="section-num">11.2</span> The Proprietary Agents</h2>
+
+<p class="section-intro">Four of the seven headline agents are proprietary: Claude Code (Anthropic), Cursor (Anysphere), GitHub Copilot CLI (GitHub/Microsoft), and Google Antigravity. All four are rolling releases with subscription pricing, hosted inference, and single-vendor model access. The trade-off is capability ceiling versus lock-in surface.</p>
+
+    <h3>Claude Code</h3>
+    <p>Claude Code is Anthropic's terminal agent, built on the Claude model family. As of June 2026, it ships two tiers: Pro at $20/month giving Sonnet 4.6 access, and Max at $100–200/month giving Opus 4.7 access. Claude Code added persistent artifact storage in March 2026 and a hosted visual design tool (Claude Design) in April 2026. Claude Design generates visual prototypes, pitch decks, and UI mockups from a Claude Code session --- making it the most native integration between an agent CLI and a hosted design surface of any tool in this comparison.</p>
+    <p>The trade-off is total vendor lock-in. Authentication is OAuth-only through Anthropic. If Anthropic changes pricing, sunsets a model tier, or changes third-party OAuth access (as community reporting indicates happened with OpenCode in January 2026 — see <a href="#ch-11-3" class="xref">11.3</a>), Claude Code users have no fallback. For a team using Open Design, this means your agent and your design cloud are both Anthropic-dependent.</p>
+    <!-- TODO-VERIFY: Claude Design feature persistence — confirm hosted Claude Design features are still active post-June 2026 -->
+
+    <h3>Cursor</h3>
+    <p>Cursor is an IDE-first proprietary agent from Anysphere. Version 3.7, released June 5, 2026, introduced Design Mode: visual UI editing in the browser with voice input, multi-select, and canvas-level operations. As of June 2026, pricing is Free (Hobby), Pro at $20/month, and Ultra at $200/month. MCP support is available at Pro tier and above.</p>
+    <p>Cursor's Design Mode is its meaningful differentiator in this comparison. Where other CLIs operate in a terminal, Cursor lets a design engineer point at an element in the browser, describe the change verbally, and have the agent execute it visually. For artifact iteration workflows in Open Design, this changes the interaction model from prompt-driven to gesture-driven. The cost is IDE dependency: you get the full IDE or nothing; there is no headless Cursor CLI for CI/CD pipelines.</p>
+    <!-- TODO-VERIFY: Cursor Design Mode capabilities at Pro tier vs Ultra — confirm visual editing is available at $20/mo tier -->
+
+    <h3>GitHub Copilot CLI</h3>
+    <p>GitHub Copilot CLI is Microsoft's agent, built into the GitHub ecosystem. As of June 1, 2026, it moved from flat subscription pricing to usage-based billing, meaning costs are determined by the number of agent requests rather than a fixed monthly fee. A free plan remains available with limited agent credits. MCP support is confirmed via the built-in GitHub MCP server and <code>/mcp add</code> for external servers including Open Design.</p>
+    <p>Copilot's strongest fit is the GitHub-native team: pull request integration, code review agents, and GitHub Actions hooks come out of the box. For design workflows in Open Design, the integration gives you a path from generated artifact to PR and deployment without leaving the GitHub surface. The risk is billing opacity: usage-based models make it hard to predict monthly costs for design-heavy sessions that generate large artifacts repeatedly.</p>
+    <!-- TODO-VERIFY: Exact per-request credit cost under June 2026 usage-based billing — not confirmed from primary source -->
+
+    <h3>Antigravity</h3>
+    <p>Antigravity is Google's successor to Gemini CLI, launched at Google I/O in May 2026. Version 2.0 is built in Go, supports MCP, and replaces Gemini CLI for free, Pro, and Ultra Google accounts when Gemini CLI sunsets on June 18, 2026. Enterprise Gemini CLI license holders are not affected by the sunset and may continue.</p>
+    <p>Antigravity's positioning is multi-agent orchestration within the Google Cloud ecosystem. Pricing is in transition from preview to general availability as of June 11, 2026; exact Pro and Ultra tier costs were not confirmed from an official primary source at research time. Use Antigravity if your team is Google Cloud-native or uses Gemini models. Treat its pricing as unverified until Google posts a stable pricing page.</p>
+    <!-- TODO-VERIFY: Antigravity exact pricing tiers post-GA — not available from official source as of June 11, 2026 -->
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Proprietary Agent CLI Comparison — June 2026</caption>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Vendor</th>
+            <th>Version (June 2026)</th>
+            <th>MCP</th>
+            <th>Pricing</th>
+            <th>Design fit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Code</td>
+            <td>Anthropic</td>
+            <td>Rolling</td>
+            <td>Yes</td>
+            <td>Pro $20/mo; Max $100–200/mo</td>
+            <td>Hosted design integration (Claude Design, Artifacts); highest capability ceiling; full Anthropic lock-in</td>
+          </tr>
+          <tr>
+            <td>Cursor</td>
+            <td>Anysphere</td>
+            <td>v3.7 (June 5, 2026)</td>
+            <td>Yes (Pro+)</td>
+            <td>Free; Pro $20/mo; Ultra $200/mo</td>
+            <td>Visual Design Mode for gesture-driven UI editing; IDE-integrated; no headless CLI</td>
+          </tr>
+          <tr>
+            <td>GitHub Copilot CLI</td>
+            <td>GitHub / Microsoft</td>
+            <td>Rolling</td>
+            <td>Yes</td>
+            <td>Usage-based from June 1, 2026; free tier available</td>
+            <td>Best for GitHub-native teams; PR and Actions integration; billing opacity risk</td>
+          </tr>
+          <tr>
+            <td>Antigravity</td>
+            <td>Google</td>
+            <td>2.0 (May 2026)</td>
+            <td>Yes</td>
+            <td><!-- TODO-VERIFY: exact tiers TBD, preview→GA transition -->Pricing TBD; preview→GA June 2026</td>
+            <td>Google Cloud native; replaces Gemini CLI; multi-agent orchestration; pricing unconfirmed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Claude Code is the clearest win on capability and the clearest loss on vendor independence. The Claude Design integration genuinely changes what a design session looks like --- but if Anthropic raises Max pricing or restructures OAuth tomorrow, you are stranded. I run Claude Code daily, but I also keep a second agent configured precisely because of that exposure. Route, don't rank: Claude Code wins for capability, but it is not safe as a sole agent.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-11-3">
+    <h2 class="section-title"><span class="section-num">11.3</span> The Open-Source Agents</h2>
+
+<p class="section-intro">Three of the seven agents are open source: OpenCode (MIT), Codex CLI (Apache-2.0), and Gemini CLI (Apache-2.0, sunsets June 18, 2026). Open-source agents give you license portability, community maintenance, and the option to self-host or fork. The trade-off is that community-maintained tools depend on that community staying active, and as the loss of OpenCode's Claude OAuth login in January 2026 demonstrated, upstream vendor changes can break integrations at any time.</p>
+
+    <h3>OpenCode</h3>
+    <p>OpenCode is the direct open-source alternative to Claude Code, maintained by the anomalyco organization since a rebrand and repo migration in early 2026. As of June 10, 2026, it is at v1.17.3 under an MIT license and carries approximately 162,000 GitHub stars (per the repository page on that date; star counts change daily). OpenCode supports MCP fully, including local and remote server configuration.</p>
+    <p>In January 2026, OpenCode's Claude subscription OAuth login stopped working. OpenCode's GitHub issue tracker (issue #18827) and community blog reports document the event and attribute it to a change in third-party OAuth access; the precise technical and business reasoning has not been confirmed from an official primary source. <!-- TODO-VERIFY: Confirm primary source for January 2026 OpenCode OAuth loss before lock — current basis is GitHub issues + community blogs, confidence 0.92 --> OpenCode's community responded by migrating to approximately 75+ alternative model providers (as of June 10, 2026), including Ollama for fully local inference. As of June 2026, OpenCode is the only agent in this comparison that is designed to support local model inference out of the box — making it well-suited for teams with local-inference requirements. It is also the strongest vendor-independence hedge: MIT license, multi-provider, self-hostable. Evaluate whether any specific compliance or privacy requirement is actually satisfied by consulting qualified security or legal counsel.</p>
+    <p>The cost is configuration overhead. Where Claude Code ships one model and one billing relationship, OpenCode requires you to select and configure a provider. The Zen and Black plans (OpenCode's hosted tiers) have not published stable pricing at research time.</p>
+    <!-- TODO-VERIFY: OpenCode Zen/Black/Go pricing tiers — not confirmed from official source as of June 11, 2026 -->
+
+    <h3>Codex CLI</h3>
+    <p>Codex CLI is OpenAI's lightweight terminal agent. Version 0.139.0, released June 9, 2026, ships under Apache-2.0 and includes improved MCP schema handling. Codex is minimal by design: it runs in the terminal, executes coding tasks, and routes through OpenAI model APIs. There is no IDE, no visual surface, and no hosted design integration.</p>
+    <p>For Open Design workflows, Codex is a clean choice for OpenAI-API-native teams who want a lightweight, auditable agent with an open license. The Apache-2.0 license means a commercial organization can fork, audit, or redistribute it without restriction. The limitation is that it follows OpenAI model availability and pricing, which is itself a concentration risk --- just with OpenAI instead of Anthropic.</p>
+
+    <h3>Gemini CLI</h3>
+    <p>Gemini CLI v0.46.0 is an Apache-2.0 terminal agent from Google with MCP support. It is transitional: Google announced on May 19, 2026 that Gemini CLI will sunset on June 18, 2026 for free, Pro, and Ultra accounts. Enterprise license holders may continue. The repo will likely be archived post-sunset.</p>
+    <p>Do not adopt Gemini CLI for a new Open Design setup. If your team is already using it, migrate to Antigravity --- which Google explicitly positions as the Gemini CLI successor --- before June 18, 2026. The migration path from Gemini CLI to Antigravity is documented in the official Google Developers Blog announcement.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Open-Source Agent CLI Comparison — June 2026</caption>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>License</th>
+            <th>Version (June 2026)</th>
+            <th>MCP</th>
+            <th>Local model support</th>
+            <th>Lock-in risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>OpenCode</td>
+            <td>MIT</td>
+            <td>v1.17.3 (June 10, 2026)</td>
+            <td>Yes</td>
+            <td>Yes (Ollama and 75+ providers)</td>
+            <td>Low; multi-provider, self-hostable; Claude OAuth login stopped working Jan 2026 (per community reporting)</td>
+          </tr>
+          <tr>
+            <td>Codex CLI</td>
+            <td>Apache-2.0</td>
+            <td>v0.139.0 (June 9, 2026)</td>
+            <td>Yes (improved schema v0.139.0)</td>
+            <td>No (OpenAI API required)</td>
+            <td>Medium; OpenAI API dependency; auditable codebase</td>
+          </tr>
+          <tr>
+            <td>Gemini CLI</td>
+            <td>Apache-2.0</td>
+            <td>v0.46.0</td>
+            <td>Yes</td>
+            <td>No</td>
+            <td>Sunsets June 18, 2026 (free/Pro/Ultra); do not adopt for new setups</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-11-4">
+    <h2 class="section-title"><span class="section-num">11.4</span> MCP Support Across Agents</h2>
+
+<p class="section-intro">All seven agents in this comparison confirmed MCP (Model Context Protocol) support as of June 11, 2026. MCP is the open standard — originally at the 2025-11-25 spec, with a 2026-07-28 revision in release-candidate — that makes Open Design agent-agnostic. Chapter 10 covers the MCP server in depth; this section focuses on the per-agent configuration differences that matter when you run <code>od mcp install</code>.</p>
+
+    <p>MCP support is confirmed, but the configuration format differs significantly across agents. Cursor requires a GUI step in addition to the config file. GitHub Copilot adds a built-in GitHub MCP server that is always present and uses <code>/mcp add</code> for custom servers. OpenCode's config lives in <code>~/.config/opencode/config.json</code> and supports both local stdio and remote SSE transports. Codex CLI v0.139.0 improved MCP schema handling specifically to address schema validation failures that were blocking tool discovery.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>MCP Configuration Across Agents — June 2026</caption>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>MCP confirmed</th>
+            <th>Config format</th>
+            <th>Open Design install command</th>
+            <th>Notable friction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Code</td>
+            <td>Yes</td>
+            <td>JSON (project or global scope)</td>
+            <td><code>od mcp install claude-code</code></td>
+            <td>None; tightest integration, official support</td>
+          </tr>
+          <tr>
+            <td>Cursor</td>
+            <td>Yes (Pro+)</td>
+            <td>JSON + GUI step in Settings</td>
+            <td><code>od mcp install cursor</code></td>
+            <td>GUI step required; free-tier users excluded</td>
+          </tr>
+          <tr>
+            <td>GitHub Copilot CLI</td>
+            <td>Yes</td>
+            <td><code>/mcp add</code> CLI command</td>
+            <td><code>od mcp install copilot</code></td>
+            <td>Built-in GitHub MCP server always active; may require scoping</td>
+          </tr>
+          <tr>
+            <td>Antigravity</td>
+            <td>Yes</td>
+            <td>Config file (JSON)</td>
+            <td><code>od mcp install antigravity</code></td>
+            <td>Post-GA config format may differ from Gemini CLI</td>
+          </tr>
+          <tr>
+            <td>OpenCode</td>
+            <td>Yes</td>
+            <td>JSON (<code>~/.config/opencode/config.json</code>)</td>
+            <td><code>od mcp install opencode</code></td>
+            <td>Both local stdio and remote SSE supported; verify provider config first</td>
+          </tr>
+          <tr>
+            <td>Codex CLI</td>
+            <td>Yes (improved v0.139.0)</td>
+            <td>Config file (JSON)</td>
+            <td><code>od mcp install codex</code></td>
+            <td>Schema validation issues in pre-0.139.0 versions; upgrade before connecting</td>
+          </tr>
+          <tr>
+            <td>Gemini CLI</td>
+            <td>Yes</td>
+            <td>Config file (JSON)</td>
+            <td><code>od mcp install gemini</code></td>
+            <td>Transitional only; sunset June 18, 2026 — migrate to Antigravity</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The practical implication: all seven agents reach Open Design, but some require more setup effort than others. For a new team, Claude Code and OpenCode have the smoothest documented paths. Cursor's GUI step is a one-time friction. Codex CLI's schema improvements in v0.139.0 removed a common failure mode, but you must be on that version or later.</p>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p><strong>MCP config formats are not portable across agents.</strong> A config you wrote for Claude Code does not transfer to OpenCode or Cursor without editing. Keep per-agent config files separate and under version control. When you add a new agent to your Open Design setup, run <code>od mcp install &lt;agent&gt;</code> rather than copying a config file from another agent's directory.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-11-5">
+    <h2 class="section-title"><span class="section-num">11.5</span> The Routing Table</h2>
+
+<p class="section-intro">Route, don't rank. The agents in this chapter are not ordered from best to worst; they are routed by constraint. The table below maps each common constraint to the agent that fits it best, with a one-line reason. Read down the "Your constraint" column until you find yours, then follow the recommendation across.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Routing by Constraint — June 2026</caption>
+        <thead>
+          <tr>
+            <th>Your constraint</th>
+            <th>Recommended agent</th>
+            <th>Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Maximum capability and hosted design surface (Claude Design, Artifacts)</td>
+            <td>Claude Code (Max tier)</td>
+            <td>Opus 4.7 access and Claude Design integration are unmatched; accept full Anthropic lock-in</td>
+          </tr>
+          <tr>
+            <td>Visual editing by pointing and drawing in the browser</td>
+            <td>Cursor (Pro or Ultra)</td>
+            <td>Design Mode (v3.7) is the only gesture-driven visual editing surface among these agents</td>
+          </tr>
+          <tr>
+            <td>Already in GitHub; want PR and Actions integration</td>
+            <td>GitHub Copilot CLI</td>
+            <td>Built-in GitHub MCP, PR-level agent access, free entry tier; watch usage-based billing</td>
+          </tr>
+          <tr>
+            <td>Google Cloud stack or Gemini model requirement</td>
+            <td>Antigravity</td>
+            <td>Official Gemini CLI successor; multi-agent support; confirm pricing before committing</td>
+          </tr>
+          <tr>
+            <td>Vendor independence or local model inference (local-inference posture)</td>
+            <td>OpenCode</td>
+            <td>MIT license, approximately 75+ providers (as of June 2026), Ollama for fully local inference; survives any single vendor's pricing or sunset. Whether local inference satisfies a specific compliance or privacy requirement depends on your environment — verify with qualified counsel or a security review.</td>
+          </tr>
+          <tr>
+            <td>OpenAI API native; prefer lightweight terminal tool with open license</td>
+            <td>Codex CLI</td>
+            <td>Apache-2.0, minimal footprint, OpenAI model routing; no IDE dependency</td>
+          </tr>
+          <tr>
+            <td>Already running Gemini CLI</td>
+            <td>Antigravity (migrate before June 18, 2026)</td>
+            <td>Gemini CLI sunsets June 18 for free/Pro/Ultra; Antigravity is the official migration path</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>A few routing notes that do not fit cleanly in the table:</p>
+
+    <p><strong>Budget-first teams</strong> have two real options: GitHub Copilot's free tier and OpenCode's multi-provider flexibility. Copilot free is limited in agent credits; OpenCode requires selecting a provider but can use pay-as-you-go APIs at very low cost for light sessions. Neither is as capable as Claude Max or Cursor Ultra, but both connect to Open Design fully.</p>
+
+    <p><strong>Teams with local-inference requirements</strong> --- where keeping design artifacts and model inference on local infrastructure is a priority --- have one real option in this comparison: OpenCode plus Ollama. Local-first Open Design already controls where your files live; adding OpenCode with Ollama keeps the inference local as well. Nothing else in this comparison is designed to offer that combination. Whether a specific governance or compliance policy is actually satisfied by this architecture depends on your context; consult qualified counsel or a security review for hard requirements.</p>
+
+    <p><strong>Teams who want to run Open Design in a CI/CD pipeline</strong> without a human in the loop need a headless CLI. Cursor is excluded here (IDE-only). Claude Code, Codex CLI, and OpenCode all support headless execution. GitHub Copilot's usage-based billing model makes it harder to bound pipeline costs.</p>
+
+    <div class="callout">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>For a team adopting Open Design today, pair at least two agents: one proprietary for raw capability and one open-source for vendor-independence. Claude Code plus OpenCode is the combination I actually run. Claude Code handles the high-quality iterations where model capability matters; OpenCode is configured and ready to take over if Anthropic's OAuth, pricing, or model availability changes. Agent-agnosticism is only meaningful if you exercise it. Running two agents keeps that escape hatch open. The downside is real: it doubles setup work and config maintenance. A small team might reasonably pick one and accept the risk. But for any team treating Open Design as a production workflow, the two-agent hedge pays for itself the first time a vendor changes terms.</p>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Open-Source vs Proprietary Summary — June 2026</caption>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>License</th>
+            <th>Lock-in risk</th>
+            <th>Local model support</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Code</td>
+            <td>Proprietary</td>
+            <td>High — single vendor (Anthropic)</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Cursor</td>
+            <td>Proprietary</td>
+            <td>High — single vendor (Anysphere); IDE dependency</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>GitHub Copilot CLI</td>
+            <td>Proprietary</td>
+            <td>High — GitHub/Microsoft ecosystem; usage billing</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Antigravity</td>
+            <td>Proprietary</td>
+            <td>High — Google ecosystem; pricing unconfirmed</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>OpenCode</td>
+            <td>MIT</td>
+            <td>Low — multi-provider, forkable</td>
+            <td>Yes (Ollama)</td>
+          </tr>
+          <tr>
+            <td>Codex CLI</td>
+            <td>Apache-2.0</td>
+            <td>Medium — OpenAI API dependency; auditable codebase</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Gemini CLI</td>
+            <td>Apache-2.0</td>
+            <td>Transitional — sunsets June 18, 2026</td>
+            <td>No</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-11-6">
+    <h2 class="section-title"><span class="section-num">11.6</span> Staleness and What to Recheck</h2>
+
+<p class="section-intro">This is the chapter in this book that ages fastest. Agent-CLI pricing, versions, and feature sets churn monthly. The mental model of route, don't rank assumes a stable set of constraints; if the agents themselves change, the routes change too. This section is a structured watch-list: what to recheck, what event triggers the recheck, and where to look.</p>
+
+    <p>The four highest-risk claims in this chapter, as of June 11, 2026:</p>
+    <ol>
+      <li><strong>Gemini CLI sunset (June 18, 2026).</strong> If you are reading this after June 18, Gemini CLI is gone for free, Pro, and Ultra users. The Antigravity migration is the official path. Enterprise license holders are the exception.</li>
+      <li><strong>Antigravity pricing.</strong> Antigravity moved from preview to general availability in mid-2026. Exact Pro and Ultra tier pricing was not confirmed from an official source at research time. This affects the routing table for Google Cloud teams.</li>
+      <li><strong>GitHub Copilot usage-based billing.</strong> Effective June 1, 2026. Per-request credit costs for agent-heavy sessions (such as iterating on Open Design artifacts) were not detailed from a primary source. The routing table treats Copilot as "watch billing" until exact rates are confirmed.</li>
+      <li><strong>OpenCode model tiers.</strong> OpenCode's Zen and Black hosted plans have not published stable pricing. OpenCode is routed as the vendor-independence choice; this recommendation is stable regardless of tier pricing, but the cost-comparison row may need updating.</li>
+    </ol>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Staleness Watch — June 2026</caption>
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>What is changing</th>
+            <th>Recheck trigger</th>
+            <th>Where to check</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Gemini CLI</td>
+            <td>Sunsetting June 18, 2026 for free/Pro/Ultra</td>
+            <td>After June 18, 2026</td>
+            <td>Google Developers Blog and <code>github.com/google-gemini/gemini-cli</code> for archive status</td>
+          </tr>
+          <tr>
+            <td>Antigravity</td>
+            <td>Pricing from preview to GA; feature parity with Gemini CLI</td>
+            <td>First official Antigravity pricing page goes live</td>
+            <td>Google I/O 2026 materials and official Antigravity documentation</td>
+          </tr>
+          <tr>
+            <td>GitHub Copilot CLI</td>
+            <td>Usage-based billing effective June 1, 2026; credit costs per agent request</td>
+            <td>Any GitHub Copilot pricing announcement</td>
+            <td><code>github.com/features/copilot/plans</code> and GitHub billing settings</td>
+          </tr>
+          <tr>
+            <td>OpenCode</td>
+            <td>Zen/Black plan pricing; model provider list (75+ as of June 2026)</td>
+            <td>Official pricing announcement on opencode.ai</td>
+            <td><code>opencode.ai/docs</code> and <code>github.com/anomalyco/opencode</code> releases</td>
+          </tr>
+          <tr>
+            <td>Claude Code</td>
+            <td>Max tier pricing ($100–200/mo); Claude Design feature set</td>
+            <td>Any Anthropic pricing or Claude Design announcement</td>
+            <td><code>claude.com/pricing</code> and <code>anthropic.com/news</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Beyond the table, there is a structural pattern worth naming. The proprietary agents (Claude Code, Cursor, Copilot, Antigravity) have all made significant changes to their pricing model or feature set between January and June 2026. Claude Code gained Artifacts persistent storage and Claude Design. Cursor shipped Design Mode. Copilot moved to usage-based billing. Antigravity launched as a new product. The pace is roughly one major pricing or feature event per quarter per agent.</p>
+
+    <p>The open-source agents have a different kind of volatility. The loss of OpenCode's Claude OAuth login in January 2026 was an external event, not a roadmap decision by the OpenCode team. Gemini CLI's sunset was a product decision from Google. The Apache-2.0 source continues to exist post-sunset, so community forks are possible --- but the community must step in for that to be real.</p>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p><strong>Do not treat any agent ranking in this chapter as durable.</strong> The agent-CLI market is in active consolidation and competition. Re-verify pricing, version, and MCP support against each vendor's primary documentation before committing a team to one agent or publishing internal guidance that names specific tiers or prices. The claims in this chapter are accurate as of June 11, 2026; they are not guaranteed accurate 60 days later.</p>
+      </div>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="10.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 10</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The MCP Server</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 10</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The MCP Server</p>
+        </div>
+      </div>
+    </a>
+    <a href="12.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 12</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Multi-Agent Design Teams</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 12</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Multi-Agent Design Teams</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #a9b158; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Multi-Agent Design Teams</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Orchestrating parallel agents for a single design goal</p>
+        </div>
+        <a href="12.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

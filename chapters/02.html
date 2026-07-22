@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Install and Architecture - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #e98e52;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #e98e52; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART I: FOUNDATIONS &middot; SECTION 02</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Install and Architecture</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Desktop app, daemon, SQLite, Electron, and Docker</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">20 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-02-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Three Ways to Install</a>
+        <a href="#ch-02-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">First Run</a>
+        <a href="#ch-02-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Daemon</a>
+        <a href="#ch-02-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Where Your Work Lives</a>
+        <a href="#ch-02-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Frontend and the Sandboxed Preview</a>
+        <a href="#ch-02-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Electron Shell and Docker Option</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-02-1" data-section="ch-02-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Three Ways to Install</span></a>
+          <a href="#ch-02-2" data-section="ch-02-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>First Run</span></a>
+          <a href="#ch-02-3" data-section="ch-02-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Daemon</span></a>
+          <a href="#ch-02-4" data-section="ch-02-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Where Your Work Lives</span></a>
+          <a href="#ch-02-5" data-section="ch-02-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Frontend and the Sandboxed Preview</span></a>
+          <a href="#ch-02-6" data-section="ch-02-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Electron Shell and Docker Option</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-02-1" data-section="ch-02-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Three Ways to Install</span></a>
+          <a href="#ch-02-2" data-section="ch-02-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>First Run</span></a>
+          <a href="#ch-02-3" data-section="ch-02-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Daemon</span></a>
+          <a href="#ch-02-4" data-section="ch-02-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Where Your Work Lives</span></a>
+          <a href="#ch-02-5" data-section="ch-02-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Frontend and the Sandboxed Preview</span></a>
+          <a href="#ch-02-6" data-section="ch-02-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Electron Shell and Docker Option</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">02</p>
+    <h1 class="chapter-title co-title">Install and Architecture</h1>
+    <p class="co-standfirst">Desktop app, daemon, SQLite, Electron, and Docker</p>
+    <div class="co-body co-body--dropcap">
+      <p>Installing Open Design is choosing one of three paths, and understanding the daemon-plus-iframe architecture is what makes everything later make sense.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 2.1 — Three Ways to Install
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <section class="chapter-section" id="ch-02-1">
+    <h2 class="section-title"><span class="section-num">2.1</span> Three Ways to Install</h2>
+
+<p class="section-en">Desktop app, from source, or Docker Compose — pick based on what you intend to do</p>
+    <p class="section-intro">Open Design ships three installation paths. The one you choose sets the ceiling on what you can do: the desktop app hands you a running system in minutes; the from-source path lets you modify skills and plugins; Docker Compose gets you a server deployment. Knowing the tradeoff upfront prevents the most common first-run frustration.</p>
+
+    <p>As of June 2026, Open Design is at v0.9.0 (released June 2, 2026). All three paths install the same version of the daemon and frontend; they differ only in packaging and environment control.</p>
+
+    <!-- Table 1: Choose Your Install Path -->
+    <div class="table-wrapper">
+      <table>
+        <caption>Choose Your Install Path (Open Design v0.9.0, June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Best for</th>
+            <th>Trade-off</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Prebuilt desktop app</strong></td>
+            <td>Product designers, first-time users, anyone who wants a running Open Design in under five minutes without touching Node</td>
+            <td>You cannot modify skills or plugins; updates come as app releases</td>
+          </tr>
+          <tr>
+            <td><strong>From source (pnpm)</strong></td>
+            <td>Design engineers who intend to author custom skills, fork plugins, or contribute to the repo</td>
+            <td>Requires Node ~24 and pnpm 10.33.x; native module builds fail silently on version mismatch</td>
+          </tr>
+          <tr>
+            <td><strong>Docker Compose</strong></td>
+            <td>Teams deploying Open Design to a shared server, CI pipelines, or headless environments without Electron</td>
+            <td>No Electron shell; the UI is served in the browser only; requires Docker and the <code>deploy/</code> directory</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Start with the prebuilt desktop app even if you are a design engineer who eventually wants to modify skills. The most common first-run failure is a native module build error caused by a Node or pnpm version mismatch, and the desktop app skips that entirely. Get comfortable with the tool first. Switch to from-source when you have a concrete reason to modify something. The exception is if you are onboarding a whole team onto a shared instance --- Docker Compose is worth the setup cost there.</p>
+      </div>
+    </div>
+
+    <h3 id="ch-02-1-desktop">Desktop App</h3>
+    <p>Download the prebuilt installer from <a href="https://open-design.ai">open-design.ai</a>. <!-- TODO-VERIFY: Confirm download URL is open-design.ai and not a different domain --> Run it like any desktop application. The daemon starts automatically on first launch; the Electron shell wraps the frontend and communicates with the daemon via sidecar IPC. No terminal required.</p>
+
+    <h3 id="ch-02-1-source">From Source with pnpm</h3>
+    <p>The from-source path requires exactly Node ~24 and pnpm 10.33.x. <code>corepack enable</code> ensures pnpm is at the right version before you install. <!-- TODO-VERIFY: Confirm pnpm version pin is 10.33.x and Node pin is ~24 in package.json --></p>
+
+    <div class="code-block" data-lang="bash" data-label="Command">
+      <div class="code-label">Command</div>
+      <pre><code class="language-bash">$ git clone https://github.com/nexu-io/open-design.git
+$ cd open-design
+$ corepack enable
+$ pnpm install
+$ pnpm tools-dev run web</code></pre>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-body">
+        <p><strong>Native build failures on version mismatch.</strong> Open Design pins Node ~24 and pnpm 10.33.x (as of June 2026). The <code>better-sqlite3</code> package compiles a native binary at install time. If your Node version doesn't match the pin, the build fails --- sometimes silently --- and the daemon crashes at startup with a module-not-found or ABI-mismatch error. Check your Node version with <code>node --version</code> before running <code>pnpm install</code>. Use <code>nvm</code> or <code>fnm</code> to switch if needed.</p>
+      </div>
+    </div>
+
+    <h3 id="ch-02-1-docker">Docker Compose</h3>
+    <p>If you're deploying Open Design to a server or shared machine, Docker Compose handles the daemon, frontend, and SQLite volume in one command. The <code>deploy/</code> directory at the repo root contains the Compose configuration.</p>
+
+    <div class="code-block" data-lang="bash" data-label="Command">
+      <div class="code-label">Command</div>
+      <pre><code class="language-bash">$ cd deploy
+$ docker compose up -d</code></pre>
+    </div>
+
+    <p>Docker Compose brings up the daemon and serves the frontend at <code>http://localhost:7456</code> by default. <!-- TODO-VERIFY: Confirm default port for Docker Compose deployment --> There is no Electron shell in this mode; you access Open Design through any browser. The SQLite database persists in a named volume so your projects survive container restarts.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-02-2">
+    <h2 class="section-title"><span class="section-num">2.2</span> First Run</h2>
+
+<p class="section-en">Launch, verify, and confirm the daemon is healthy before generating anything</p>
+    <p class="section-intro">The daemon owns the truth. Before you can generate an artifact, the daemon must be running and healthy. These steps apply to the from-source path; desktop app users can skip to step 4 --- the app handles steps 1 through 3 automatically.</p>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p><strong>Start the dev daemon.</strong> Run <code>pnpm tools-dev run web</code> from the repo root. You should see the daemon and the Next.js dev server both starting in the same terminal output. The daemon serves the API and the frontend on port 7456 by default. <!-- TODO-VERIFY: Confirm daemon serves API and frontend on port 7456 --></p>
+        <div class="code-block" data-lang="bash" data-label="Command">
+          <div class="code-label">Command</div>
+          <pre><code class="language-bash">$ pnpm tools-dev run web
+# Expected: daemon and frontend serving on :7456</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p><strong>Verify the daemon health endpoint.</strong> Open a second terminal and hit the daemon's health route. A 200 response with a JSON status confirms the daemon is up and the SQLite database has been initialized.</p>
+        <div class="code-block" data-lang="bash" data-label="Command">
+          <div class="code-label">Command</div>
+          <pre><code class="language-bash">$ curl -s http://localhost:7456/health
+# Expected output:
+{"status":"ok","version":"0.9.0"}</code></pre>
+        </div>
+        <!-- TODO-VERIFY: Confirm /health endpoint exists on daemon and response shape -->
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p><strong>Open the frontend.</strong> Navigate to <code>http://localhost:7456</code> in your browser. You should see the Open Design dashboard with no projects yet. If the preview area stays blank or the dashboard shows a connection error, the daemon isn't reachable --- check the terminal output for startup errors.</p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-ch02-home">
+      <img src="../images/od-v015-01-home.png" alt="Open Design v0.15.1 home surface with hero prompt composer, template strip, and recent projects" loading="lazy" />
+      <figcaption>Figure 2.1 — The Open Design home surface (v0.15.1). One composer with template, mode, agent, design-system, and working-directory levers; a template strip; recent projects; and a community rail. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026). For the older v0.9.0 artifact-tile layout, see archival figures in Appendix D.</figcaption>
+    </figure>
+
+    <p>Once you have more than a handful of runs in flight, the <strong>Projects</strong> sidebar becomes the supervision surface. As of v0.15.1 it is a kanban board with a dedicated <strong>Needs input</strong> column --- paused agent turns that explicitly wait for a human reply rather than failing silently in the background. The full board layout is shown in <a href="#fig-D-07">Figure D.7</a>.</p>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p><strong>Create your first project.</strong> Click "New Project" in the dashboard. Open Design creates a project directory under <code>~/.od/projects/&lt;uuid&gt;/</code> and writes a new row to <code>~/.od/app.sqlite</code>. The daemon owns both; the frontend is showing you what the daemon holds.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p><strong>Connect a coding-agent CLI.</strong> Chapter 03 covers this in full. For now, confirm the MCP (Model Context Protocol) settings panel is reachable from the project sidebar --- that's where you'll register your agent in the next chapter.</p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-ch02-settings">
+      <img src="../images/od-v015-21-settings-dialog.png" alt="Open Design settings dialog open on Execution mode with Local CLI and BYOK tabs and a list of detected coding-agent CLIs" loading="lazy" />
+      <figcaption>Figure 2.2 — Settings → Execution mode (v0.15.1). Local CLI versus BYOK, Rescan for newly installed agents, and per-CLI model plus reasoning controls. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-settings-open">
+      <img src="../images/od-v015-27-settings-open.png" alt="Open Design Settings dialog open on General with navigation rail for Execution mode, Instructions, Memory, and Design Jury" loading="lazy" />
+      <figcaption>Figure 2.2c — The Settings shell (v0.15.1). Execution mode, Instructions, Memory, and Design Jury share one dialog reachable from the gear menu. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3 id="ch-02-2-knowledge">Instructions, Memory, and Design Jury</h3>
+
+    <p>Settings also separate three knowledge layers that older releases buried or omitted. Treat them as different contracts with the agent:</p>
+
+    <ul>
+      <li><strong>Instructions / Rules</strong> — fixed global rules injected into every chat. Stable policy, not facts.</li>
+      <li><strong>Memory</strong> — saved facts categorised as User, Project, Reference, or Rule, with a master toggle and per-item edit/delete. Extracted from chats and injected when relevant.</li>
+      <li><strong>Design Jury</strong> — optional five-panel scored review that streams alongside generation so you can interrupt before shipping. Covered in depth in <a href="#ch-08" class="xref">Chapter 08</a>.</li>
+    </ul>
+
+    <figure class="figure--full" id="fig-ch02-instructions">
+      <img src="../images/od-v015-22-settings-instructions.png" alt="Open Design Settings showing Instructions / Rules panel for global rules followed in every chat" loading="lazy" />
+      <figcaption>Figure 2.2a — Instructions / Rules. Fixed instructions for every chat; distinct from Memory. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-memory">
+      <img src="../images/od-v015-23-settings-memory.png" alt="Open Design Settings Memory panel with saved memories and User, Project, Reference, and Rule category filters" loading="lazy" />
+      <figcaption>Figure 2.2b — Memory. Categorised saved facts with a master toggle. Use Memory for preferences and project context; use Instructions for immutable rules. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3 id="ch-02-2-settings-map">The rest of Settings</h3>
+
+    <p>As of v0.15.1 the Settings dialog carries a left navigation rail with every configuration surface in one place. The knowledge layers above are the ones you touch most often during generation; the table below is a complete map of the rail so you know where to look when the environment changes.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Settings navigation rail (Open Design v0.15.1, July 2026)</caption>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Job</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Execution mode</strong></td>
+            <td>Choose Local CLI vs BYOK, rescan for newly installed agents, and set per-CLI model tiers</td>
+          </tr>
+          <tr>
+            <td><strong>Instructions / Rules</strong></td>
+            <td>Fixed global rules injected into every chat</td>
+          </tr>
+          <tr>
+            <td><strong>Memory</strong></td>
+            <td>Saved facts by category (User, Project, Reference, Rule) with a master toggle</td>
+          </tr>
+          <tr>
+            <td><strong>Design Jury</strong></td>
+            <td>Optional five-panel scored review streamed beside generation (<a href="#ch-08" class="xref">Chapter 08</a>)</td>
+          </tr>
+          <tr>
+            <td><strong>Media providers</strong></td>
+            <td>Configure image and video generation providers and their API keys</td>
+          </tr>
+          <tr>
+            <td><strong>External MCP</strong></td>
+            <td>Register third-party MCP servers the agent may call during a run</td>
+          </tr>
+          <tr>
+            <td><strong>Connectors</strong></td>
+            <td>Composio-backed external data sources for Live artifacts (<a href="#ch-10" class="xref">Chapter 10</a>)</td>
+          </tr>
+          <tr>
+            <td><strong>MCP server</strong></td>
+            <td>Copy-paste config that exposes Open Design tools to agent CLIs (<a href="#ch-10" class="xref">Chapter 10</a>)</td>
+          </tr>
+          <tr>
+            <td><strong>Appearance</strong></td>
+            <td>Theme, density, and UI chrome preferences</td>
+          </tr>
+          <tr>
+            <td><strong>Notifications</strong></td>
+            <td>Desktop and in-app alert preferences</td>
+          </tr>
+          <tr>
+            <td><strong>Pets</strong></td>
+            <td>Optional companion settings (delight layer, not load-bearing)</td>
+          </tr>
+          <tr>
+            <td><strong>Design systems</strong></td>
+            <td>Gallery of installed brand systems and quick attach controls (<a href="#ch-05" class="xref">Chapter 05</a>)</td>
+          </tr>
+          <tr>
+            <td><strong>Project locations</strong></td>
+            <td>Default folders and paths for new projects and exports</td>
+          </tr>
+          <tr>
+            <td><strong>Language</strong></td>
+            <td>Application locale</td>
+          </tr>
+          <tr>
+            <td><strong>Privacy</strong></td>
+            <td>Telemetry, sharing, and data-handling toggles</td>
+          </tr>
+          <tr>
+            <td><strong>About</strong></td>
+            <td>Version, updates, and license information</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="figure--full" id="fig-ch02-media-providers">
+      <img src="../images/od-v015-28-settings-media-providers.png" alt="Open Design Settings Media providers panel listing image and video generation providers with API key fields" loading="lazy" />
+      <figcaption>Figure 2.2d — Media providers. Wire image and video backends before you ask the agent for rich media in a Heavy Design run. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-external-mcp">
+      <img src="../images/od-v015-29-settings-external-mcp.png" alt="Open Design Settings External MCP panel for registering third-party MCP servers" loading="lazy" />
+      <figcaption>Figure 2.2e — External MCP. Register servers beyond Open Design's own MCP surface; see <a href="#ch-10" class="xref">Chapter 10</a> for the full integration model. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-connectors">
+      <img src="../images/od-v015-30-settings-connectors-panel.png" alt="Open Design Settings Connectors panel with Composio API key entry and connector activation controls" loading="lazy" />
+      <figcaption>Figure 2.2f — Connectors in Settings. Same Composio-backed wiring as the Integrations sidebar, reachable without leaving configuration. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-mcp-server">
+      <img src="../images/od-v015-31-settings-mcp-server.png" alt="Open Design Settings MCP server panel showing copy-paste mcpServers configuration for agent CLIs" loading="lazy" />
+      <figcaption>Figure 2.2g — MCP server. Copy the <code>mcpServers</code> block into Claude Code, Cursor, or any supported CLI; one daemon, many brains. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-design-systems-settings">
+      <img src="../images/od-v015-35-settings-design-systems.png" alt="Open Design Settings Design systems panel showing a gallery of installed brand systems" loading="lazy" />
+      <figcaption>Figure 2.2h — Design systems in Settings. Quick view of installed brand contracts; authoring and presets live in the sidebar surface covered in <a href="#ch-05" class="xref">Chapter 05</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-project-locations">
+      <img src="../images/od-v015-36-settings-project-locations.png" alt="Open Design Settings Project locations panel for default project and export paths" loading="lazy" />
+      <figcaption>Figure 2.2i — Project locations. Set default folders before your first client engagement so artifacts land where your backup scripts expect them. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-appearance">
+      <img src="../images/od-v015-32-settings-appearance.png" alt="Open Design Settings Appearance panel with theme and density controls" loading="lazy" />
+      <img src="../images/od-v015-37-settings-language.png" alt="Open Design Settings Language panel with application locale selector" loading="lazy" />
+      <figcaption>Figure 2.2j — Appearance and Language. Chrome preferences and locale; both also reachable from the gear menu shortcut. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-notifications-pets">
+      <img src="../images/od-v015-33-settings-notifications.png" alt="Open Design Settings Notifications panel with desktop and in-app alert toggles" loading="lazy" />
+      <img src="../images/od-v015-34-settings-pets.png" alt="Open Design Settings Pets panel with optional companion controls" loading="lazy" />
+      <figcaption>Figure 2.2k — Notifications and Pets. Alert routing plus an optional delight layer that does not affect generation. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch02-privacy-about">
+      <img src="../images/od-v015-38-settings-privacy.png" alt="Open Design Settings Privacy panel with telemetry and data-handling toggles" loading="lazy" />
+      <img src="../images/od-v015-39-settings-about.png" alt="Open Design Settings About panel showing version and update information" loading="lazy" />
+      <figcaption>Figure 2.2l — Privacy and About. Data-handling toggles and version metadata for support tickets. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <p>The full visual tour of every Settings panel --- including Execution mode and Design Jury --- is in <a href="#appendix-D.7">Appendix D.7</a>.</p>
+
+    <!-- Troubleshooting table -->
+    <h3 id="ch-02-2-trouble">When the First Run Breaks</h3>
+    <p>Native build errors and version mismatches account for most first-run failures. Here are the patterns I encounter most often.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>First-Run Troubleshooting (Open Design v0.9.0, June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Symptom</th>
+            <th>Cause</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Error: <code>Cannot find module 'better-sqlite3'</code> or ABI mismatch at startup</td>
+            <td>Node version doesn't match the pin (~24); native module compiled against the wrong ABI</td>
+            <td>Run <code>node --version</code>; switch to Node 24 with <code>nvm use 24</code>; delete <code>node_modules</code> and run <code>pnpm install</code> again</td>
+          </tr>
+          <tr>
+            <td>pnpm install hangs or fails with unsupported engine error</td>
+            <td>pnpm version isn't 10.33.x; <code>corepack enable</code> not run first</td>
+            <td>Run <code>corepack enable</code>, then <code>pnpm --version</code> to confirm 10.33.x, then retry install</td>
+          </tr>
+          <tr>
+            <td>Dashboard shows "daemon unreachable" or blank preview area</td>
+            <td>Daemon process failed to start, or is not serving on the expected port</td>
+            <td>Check terminal for startup errors; confirm daemon is running on port 7456; restart with <code>pnpm tools-dev run web</code></td>
+          </tr>
+          <tr>
+            <td>Docker Compose: frontend loads but projects don't persist after restart</td>
+            <td>SQLite volume not mounted; container using an ephemeral filesystem</td>
+            <td>Check <code>deploy/docker-compose.yml</code> for a named volume attached to the SQLite path; verify with <code>docker volume ls</code></td>
+          </tr>
+          <tr>
+            <td>Desktop app: "update required" banner on first launch</td>
+            <td>App installer is older than the current release; auto-updater requires internet access</td>
+            <td>Allow the auto-update to complete, or download the latest installer from <a href="https://open-design.ai">open-design.ai</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-02-3">
+    <h2 class="section-title"><span class="section-num">2.3</span> The Daemon</h2>
+
+<p class="section-en">The Express process that owns orchestration, storage, and streaming</p>
+    <p class="section-intro">The daemon owns the truth. It is a long-lived Node 24 Express process that owns three things: the SQLite database, the project files on disk, and the agent orchestration loop. The frontend and the preview iframe are both just windows onto what the daemon holds. Understanding this split resolves most confusion about where state lives and why a browser refresh doesn't lose your work.</p>
+
+    <p>The daemon exposes an HTTP API consumed by the Next.js frontend. For artifact generation, it uses Server-Sent Events (SSE) to stream tokens from the agent back to the browser in real time. SSE is unidirectional --- the daemon pushes; the frontend listens --- which keeps the streaming path simple and resilient to browser tab-switching.</p>
+
+    <!-- Architecture flow diagram -->
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Agent CLI</strong>
+          <p>Claude Code, Cursor, or any of the 21 supported CLIs. Sends prompts and receives completions via MCP.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Daemon (Express)</strong>
+          <p>Node 24. Owns orchestration, the SQLite database, and project files. Streams artifact tokens over SSE.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Frontend (Next.js 16)</strong>
+          <p>React 18 + TypeScript. Reads daemon state via HTTP. Receives artifact stream over SSE and passes it to the preview.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Preview (srcdoc iframe)</strong>
+          <p>Sandboxed. The streaming artifact parser writes tokens into the iframe as they arrive. Safe from the host page.</p>
+        </div>
+      </div>
+      <figcaption>Figure 2.3 — Request flow: agent prompt through daemon SSE to the sandboxed preview iframe. The daemon holds all persistent state; the frontend and iframe are display layers only.</figcaption>
+    </figure>
+
+    <h3 id="ch-02-3-sse">SSE and the Streaming Artifact Parser</h3>
+    <p>When the daemon receives an artifact generation request, it opens an SSE stream to the client. Tokens arrive as <code>data:</code> events. The frontend's streaming artifact parser assembles them progressively --- which is why you see the artifact appear word by word in the preview before generation is complete.</p>
+
+    <p>This matters for troubleshooting: if the preview stops mid-generation, the SSE connection dropped. This is almost always a network proxy or a browser extension killing long-lived connections. Disable proxy-caching extensions or set a generous SSE timeout if you're behind a corporate proxy. <!-- TODO-VERIFY: Confirm SSE event format and streaming artifact parser behavior --></p>
+
+    <h3 id="ch-02-3-sqlite">better-sqlite3 and Synchronous Storage</h3>
+    <p>The daemon uses <code>better-sqlite3</code> for all persistent state. Unlike the async SQLite drivers, <code>better-sqlite3</code> runs synchronously --- writes block until committed, reads return immediately. This keeps the daemon's internal state machine simple: no callback hell, no partial-write races, no connection pool. For a single-user local daemon, synchronous SQLite is exactly the right call.</p>
+
+    <p>The tradeoff is that every write to <code>~/.od/app.sqlite</code> is a blocking operation on the daemon's event loop. In practice this is not a problem for interactive use, but if you write a plugin that writes frequently to the database in a tight loop, you'll feel it. Batch writes where you can.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-02-4">
+    <h2 class="section-title"><span class="section-num">2.4</span> Where Your Work Lives</h2>
+
+<p class="section-en">The .od directory layout and what to back up</p>
+    <p class="section-intro">Open Design stores everything under <code>~/.od/</code>. Two things matter here: the project directories under <code>~/.od/projects/</code> hold your artifact files; <code>~/.od/app.sqlite</code> is the index that makes sense of them. Back up both or you lose either the files or the ability to navigate them.</p>
+
+    <div class="file-tree">
+      <pre><code>~/.od/
+├── projects/
+│   ├── &lt;project-uuid-1&gt;/
+│   │   ├── artifacts/      # Generated HTML, PDF, PPTX, MP4, ZIP, MD files
+│   │   ├── previews/       # Cached preview snapshots
+│   │   └── exports/        # Final exported files
+│   └── &lt;project-uuid-2&gt;/
+│       └── ...
+├── app.sqlite              # All project metadata: names, histories, settings
+├── config.json             # Daemon configuration: ports, model provider keys
+└── logs/                   # Daemon logs, one file per day</code></pre>
+    </div>
+    <!-- TODO-VERIFY: Confirm exact .od/ directory structure against repo source code, especially artifacts/previews/exports subdirectory names -->
+
+    <h3 id="ch-02-4-backup">What to Back Up</h3>
+    <p>The daemon owns the truth, and the truth lives in two places. Backing up one without the other leaves you in an inconsistent state.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Backup Priority for .od Contents</caption>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Contains</th>
+            <th>Backup priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>~/.od/app.sqlite</code></td>
+            <td>All project metadata, artifact history, settings, and the index linking UUIDs to project names</td>
+            <td>Critical. Losing this makes the project directories orphaned and unnavigable through the UI</td>
+          </tr>
+          <tr>
+            <td><code>~/.od/projects/</code></td>
+            <td>All generated artifact files, previews, and exports</td>
+            <td>Critical. Losing this means no exportable files even if the database is intact</td>
+          </tr>
+          <tr>
+            <td><code>~/.od/config.json</code></td>
+            <td>Daemon port, model provider API keys (if stored here), and runtime settings</td>
+            <td>Important. Losing it requires reconfiguring your agent connections and provider keys</td>
+          </tr>
+          <tr>
+            <td><code>~/.od/logs/</code></td>
+            <td>Daemon logs for debugging</td>
+            <td>Low. Useful for debugging but not needed for recovery</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="ch-02-4-portability">Portability Between Machines</h3>
+    <p>To move an Open Design installation to a new machine, copy the entire <code>~/.od/</code> directory. Because the daemon indexes projects by UUID, not by absolute path, the projects should be navigable on the new machine once you start the daemon. <!-- TODO-VERIFY: Confirm .od/app.sqlite uses relative paths internally, not absolute paths, making it portable --> If you're using Docker Compose, the named volume is the equivalent of <code>~/.od/</code>; export it with <code>docker volume export</code>.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-02-5">
+    <h2 class="section-title"><span class="section-num">2.5</span> The Frontend and the Sandboxed Preview</h2>
+
+<p class="section-en">Next.js 16, React 18, and the srcdoc iframe that keeps generated code isolated</p>
+    <p class="section-intro">The frontend is a Next.js 16 application built on React 18 and TypeScript. It talks to the daemon over HTTP and receives the artifact stream over SSE. The most important design decision in the entire preview system is the choice to render generated artifacts inside a sandboxed <code>srcdoc</code> iframe --- not in the React component tree directly. That choice is what Open Design documents as isolating agent-generated HTML, JavaScript, and CSS from the host page's browser session, cookies, and DOM. (This describes documented design intent for v0.9.0; it is not a security guarantee — see the not-security-advice note in front matter.)</p>
+
+    <h3 id="ch-02-5-sandbox">Why srcdoc, Not innerHTML</h3>
+    <p>A naive implementation would parse the generated HTML and inject it into a DOM node with <code>innerHTML</code>. The problem: any JavaScript in the generated artifact would execute in the same origin as the Open Design frontend. A generated artifact with a <code>document.cookie</code> access or a <code>localStorage.clear()</code> call would run against your real session.</p>
+
+    <p>The <code>srcdoc</code> iframe solves this by giving the artifact its own isolated document. Open Design's sandbox configuration omits <code>allow-same-origin</code> while including <code>allow-scripts</code>; in this configuration, the browser prevents scripts inside the iframe from accessing the parent frame's DOM or storage. The streaming artifact parser writes tokens into the iframe's document as they arrive from the daemon, so you see the artifact build in real time. (This describes the sandbox configuration as documented for v0.9.0; sandbox attributes may be adjusted in future versions — verify current behavior against the repo.)</p>
+
+    <!-- RIGHTS-REGISTER: ch-02-shot-01 — official Open Design screenshot (01-entry-view.png), reproduced under Apache-2.0. Original copyright: Open Design authors (github.com/nexu-io/open-design). No modification beyond cropping/scaling. -->
+    <figure class="figure--full" data-screenshot-id="ch-02-shot-01">
+      <img src="../images/ch-02-shot-01.png" alt="Official Open Design entry view showing the project dashboard and frontend interface at v0.9.0, with the project sidebar on the left and the main canvas area on the right" loading="lazy"/>
+      <figcaption>Figure 2.4 — The Open Design frontend (entry view). Official Open Design screenshot reproduced under Apache-2.0; source: <code>docs/screenshots/01-entry-view.png</code> in the Open Design repository. Original copyright: Open Design authors.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <div class="callout-body">
+        <p>The sandbox is not a restriction on what the artifact can do --- it's a restriction on what the artifact is configured to do <em>to the host page</em>. Generated CSS animations, interactive JavaScript, and complex layouts all work inside the iframe. What the v0.9.0 sandbox configuration prevents is cross-frame access to the host page's DOM and storage. Keep the sandbox on, and verify the sandbox attributes haven't been relaxed if you're building on a fork.</p>
+      </div>
+    </div>
+
+    <h3 id="ch-02-5-nextjs">The Next.js 16 Frontend</h3>
+    <p>As of June 2026, the frontend runs on Next.js 16 with React 18. The App Router is used throughout. The frontend is a display layer --- it does not hold authoritative state. If you close the browser tab and reopen it, the project list and artifact history are still there because the daemon and its SQLite database didn't change. The daemon owns the truth; the frontend renders it.</p>
+
+    <p>This separation has a practical consequence: you can restart the frontend server without losing work. The daemon continues running and holds all state. When the frontend reconnects, it reads the current state from the daemon. This also means you can have multiple browser tabs showing different projects simultaneously, each connected to the same daemon --- they stay in sync because they're all reading from the same source.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-02-6">
+    <h2 class="section-title"><span class="section-num">2.6</span> The Electron Shell and Docker Option</h2>
+
+<p class="section-en">Desktop packaging with sandboxed renderer, and server deployment with Compose</p>
+    <p class="section-intro">The prebuilt desktop app wraps the frontend and daemon in an Electron shell. Electron handles process management, auto-update, native OS integration, and the sandboxed renderer that adds a second layer of isolation on top of the srcdoc iframe. If Electron is the wrong fit for your deployment --- shared servers, headless CI, Docker-native infrastructure --- the Docker Compose path gives you the same daemon and frontend without it.</p>
+
+    <h3 id="ch-02-6-electron">The Electron Shell</h3>
+    <p>Electron hosts the Next.js frontend in a sandboxed renderer process. The renderer communicates with the daemon via sidecar IPC --- a lightweight inter-process channel that the Electron main process manages. This means the daemon is a separate Node process from the Electron main process, not a thread inside it. If the daemon crashes, the Electron shell can report it and offer a restart without the whole app exiting. <!-- TODO-VERIFY: Confirm daemon is a sidecar subprocess in Electron packaging, not embedded in the main process --></p>
+
+    <p>The Electron sandboxed renderer disables Node.js integration in the browser context, so the frontend JavaScript cannot make arbitrary filesystem calls even though it's running inside a desktop app. Open Design's desktop packaging is designed with two sandbox boundaries between agent-generated code and your filesystem: the srcdoc iframe boundary, and the Electron renderer boundary. (This describes documented design intent for v0.9.0; it is not a security warranty — see the not-security-advice note in front matter.) <!-- TODO-VERIFY: Confirm sandbox renderer and sidecar IPC architecture against actual Electron package config --></p>
+
+    <figure class="figure--full" id="fig-ch02-architecture" data-screenshot-id="ch-02-shot-02">
+      <div class="diagram">
+        <div class="flow">
+          <div class="flow-item">
+            <strong>Electron Shell</strong>
+            <p>Optional desktop wrapper. Sandboxed renderer process + sidecar IPC. Handles auto-update and native OS integration.</p>
+            <p><em>Absent in Docker Compose and from-source browser paths.</em></p>
+          </div>
+          <div class="flow-arrow">↓ hosts</div>
+          <div class="flow-item">
+            <strong>Next.js 16 Frontend</strong>
+            <p>React 18 + TypeScript. Display layer only — holds no authoritative state. Served at <code>localhost:7456</code>.</p>
+          </div>
+          <div class="flow-arrow">↓ HTTP + SSE · localhost:7456</div>
+          <div class="flow-item">
+            <strong>Node 24 Daemon (Express)</strong>
+            <p>The single source of truth. Owns the <code>better-sqlite3</code> database, project files on disk, and agent orchestration. Streams artifact tokens to the frontend over SSE.</p>
+          </div>
+          <div class="flow-arrow">↓ writes</div>
+          <div class="flow-item">
+            <strong>SQLite (<code>~/.od/app.sqlite</code>)</strong>
+            <p>All project metadata, artifact history, and settings. Synchronous writes via <code>better-sqlite3</code>. Persistent volume in Docker Compose.</p>
+          </div>
+        </div>
+      </div>
+      <figcaption>Figure 2.5 — Open Design architecture: the Next.js web frontend is hosted inside the optional Electron shell and communicates with the local Node daemon (Express + SQLite) over <code>localhost:7456</code>. The Electron shell is absent in Docker Compose and browser-only deployments. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+
+    <h3 id="ch-02-6-docker">When to Use Docker Compose</h3>
+    <p>Docker Compose is the right choice when you need Open Design accessible to multiple people without installing Electron on each machine, or when you're deploying to a Linux server. The Compose file in <code>deploy/</code> runs the daemon and frontend as separate services with a shared SQLite volume.</p>
+
+    <!-- Table: Electron vs Docker decision -->
+    <div class="table-wrapper">
+      <table>
+        <caption>Electron Shell vs Docker Compose: When to Use Each</caption>
+        <thead>
+          <tr>
+            <th>Constraint</th>
+            <th>Use Electron shell</th>
+            <th>Use Docker Compose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Single developer, local machine</td>
+            <td>Yes — zero overhead, native OS integration</td>
+            <td>Unnecessary; adds Docker maintenance cost</td>
+          </tr>
+          <tr>
+            <td>Shared team deployment on a server</td>
+            <td>No — Electron requires a display server</td>
+            <td>Yes — headless, browser-accessible</td>
+          </tr>
+          <tr>
+            <td>CI/CD pipeline with artifact generation</td>
+            <td>No</td>
+            <td>Yes — composable with existing Docker tooling</td>
+          </tr>
+          <tr>
+            <td>Need auto-update from open-design.ai</td>
+            <td>Yes — built into the desktop app</td>
+            <td>No — requires manual image pulls</td>
+          </tr>
+          <tr>
+            <td>Air-gapped or proxy-heavy corporate network</td>
+            <td>Possible, with download caching</td>
+            <td>Yes — once image is pulled, fully offline</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="ch-02-6-architecture">Architecture in One View</h3>
+    <p>At this point you have a mental model of the full system. The daemon owns the truth: it owns the SQLite database, the files, and the agent orchestration. The frontend and the preview iframe are windows. The Electron shell is optional packaging. Docker Compose is an alternative runtime environment. All of these serve the same daemon core.</p>
+
+    <!-- Full architecture flow diagram -->
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Electron Shell</strong>
+          <p>Optional. Sandboxed renderer + sidecar IPC. Native OS integration and auto-update.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Next.js 16 Frontend</strong>
+          <p>React 18, TypeScript. Display layer only. Reads state from daemon via HTTP; receives artifact stream via SSE.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Express Daemon (Node 24)</strong>
+          <p>Owns orchestration, better-sqlite3 database, and project files. Streams artifacts over SSE.</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>srcdoc iframe</strong>
+          <p>Sandboxed preview. Streaming artifact parser writes tokens in real time. Isolated from host page.</p>
+        </div>
+      </div>
+      <figcaption>Figure 2.6 — Full Open Design architecture from Electron shell to sandboxed preview. The daemon is the single source of truth; everything else is a layer over it.</figcaption>
+    </figure>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The daemon-as-truth-owner design is the part of Open Design's architecture that most people underestimate on first use. I've seen teams try to back up just the project files and wonder why the UI can't find them after a machine migration. The daemon owns the truth means the SQLite database is the first thing you back up, not the last. The files are useless without the index, and the index is useless without the files. Treat them as a single unit.</p>
+      </div>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="01.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 01</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Local-First Design Machine</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 01</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Local-First Design Machine</p>
+        </div>
+      </div>
+    </a>
+    <a href="03.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 03</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Your First Artifact</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 03</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Your First Artifact</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #deb056; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Your First Artifact</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">The complete generate-preview-iterate-export loop</p>
+        </div>
+        <a href="03.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

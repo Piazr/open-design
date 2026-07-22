@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>The MCP Server - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #4e9b7a;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #4e9b7a; background-image: url('../assets/gradients/gradient_emerald_olive.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART III: SYSTEMS & TEAMS &middot; SECTION 10</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">The MCP Server</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">How Open Design connects to coding-agent CLIs via the Model Context Protocol</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">15 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-10-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">What MCP Is</a>
+        <a href="#ch-10-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Open Design's MCP Server</a>
+        <a href="#ch-10-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Connecting an Agent</a>
+        <a href="#ch-10-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Resources, Tools, and Prompts</a>
+        <a href="#ch-10-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The BYOK Proxy</a>
+        <a href="#ch-10-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Supported CLIs</a>
+        <a href="#ch-10-7" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Integrations beyond MCP: Connectors and Skills</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-10-1" data-section="ch-10-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What MCP Is</span></a>
+          <a href="#ch-10-2" data-section="ch-10-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Open Design's MCP Server</span></a>
+          <a href="#ch-10-3" data-section="ch-10-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Connecting an Agent</span></a>
+          <a href="#ch-10-4" data-section="ch-10-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Resources, Tools, and Prompts</span></a>
+          <a href="#ch-10-5" data-section="ch-10-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The BYOK Proxy</span></a>
+          <a href="#ch-10-6" data-section="ch-10-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Supported CLIs</span></a>
+          <a href="#ch-10-7" data-section="ch-10-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Integrations beyond MCP: Connectors and Skills</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-10-1" data-section="ch-10-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What MCP Is</span></a>
+          <a href="#ch-10-2" data-section="ch-10-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Open Design's MCP Server</span></a>
+          <a href="#ch-10-3" data-section="ch-10-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Connecting an Agent</span></a>
+          <a href="#ch-10-4" data-section="ch-10-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Resources, Tools, and Prompts</span></a>
+          <a href="#ch-10-5" data-section="ch-10-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The BYOK Proxy</span></a>
+          <a href="#ch-10-6" data-section="ch-10-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Supported CLIs</span></a>
+          <a href="#ch-10-7" data-section="ch-10-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Integrations beyond MCP: Connectors and Skills</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">10</p>
+    <h1 class="chapter-title co-title">The MCP Server</h1>
+    <p class="co-standfirst">How Open Design connects to coding-agent CLIs via the Model Context Protocol</p>
+    <div class="co-body co-body--dropcap">
+      <p>Open Design speaks MCP, so any of the supported coding-agent CLIs can drive it — which is exactly why it is not locked to one vendor's agent. This chapter explains what MCP is, how Open Design exposes its server, how to connect any supported CLI with a single command, what the server exposes to those agents, and how the BYOK proxy routes inference without leaking your keys or your network. CLI counts, adapter priorities, and vendor details in this chapter reflect Open Design v0.9.0 (released June 2, 2026) and the agent-CLI ecosystem as of June 2026; this market changes monthly — verify current state at the primary sources before committing a team to any agent.</p>
+    </div>
+  </section>
+
+  <!-- 10.1 -->
+
+  <section class="chapter-section" id="ch-10-1">
+    <h2 class="section-title">What MCP Is</h2>
+
+<p>
+    MCP (Model Context Protocol) is an open standard that lets an AI agent connect to external tools and data sources. Think of it as a USB-C spec for AI: the same socket, regardless of which device you plug in. Open Design is the device; your coding-agent CLI is the charger.
+  </p>
+  <p>
+    The protocol uses <strong>JSON-RPC 2.0</strong> for message transport. A host (the application, Open Design in this case) runs a server; a client (the agent CLI) connects and issues requests; the server responds with structured data. The three layers are fixed by the spec:
+  </p>
+
+  <figure>
+    <div class="flow">
+      <div class="flow-item">
+        <strong>Agent CLI (MCP Client)</strong>
+        <p>Sends requests, receives resources, tools, and prompts</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>Open Design Daemon (MCP Host + Server)</strong>
+        <p>Exposes resources, tools, prompts over JSON-RPC 2.0</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>BYOK Proxy</strong>
+        <p>Routes inference to anthropic / openai / azure / google / ollama / senseaudio</p>
+      </div>
+    </div>
+    <figcaption>Figure 10.1 — The MCP connection: agent CLI as client, Open Design daemon as host/server, BYOK proxy as optional inference router. All communication uses JSON-RPC 2.0.</figcaption>
+  </figure>
+
+  <p>
+    MCP was created by Anthropic and, per the governance announcement in December 2025, donated to the Agentic AI Foundation (under the Linux Foundation). The spec is published at <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a> under open governance; the governance announcement describes the intent that any vendor may implement it. (This book describes that governance structure as documented — it is not legal advice on IP ownership or licensing freedom; consult qualified counsel for those determinations.) As of June 2026, the stable spec version is <strong>2025-11-25</strong>; a 2026-07-28 revision is in release candidate.
+  </p>
+
+  <!-- TODO-VERIFY: Confirm 2026-07-28 RC has not yet become stable before publication. -->
+
+  <div class="callout warning">
+    <p>The MCP spec version in this chapter (2025-11-25) is stable as of June 2026. A 2026-07-28 revision is in release candidate. Check <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a> before relying on any version-specific behavior.</p>
+  </div>
+
+  <p>
+    The standard defines three primitives that any MCP server can expose to connected clients. Open Design implements all three. Here is what they mean in context:
+  </p>
+
+  <table>
+    <caption>MCP Primitives — as defined in spec 2025-11-25 and used by Open Design (verified June 2026)</caption>
+    <thead>
+      <tr>
+        <th>Primitive</th>
+        <th>What it exposes</th>
+        <th>Example in Open Design</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Resources</strong></td>
+        <td>Structured data the agent can read (files, database records, context)</td>
+        <td>Active project contents, artifact history, brand-system DESIGN.md files</td>
+      </tr>
+      <tr>
+        <td><strong>Tools</strong></td>
+        <td>Functions the agent can call (side-effecting actions)</td>
+        <td><code>write_file</code>, <code>delete_file</code>, <code>delete_project</code>, generation loop trigger</td>
+      </tr>
+      <tr>
+        <td><strong>Prompts</strong></td>
+        <td>Reusable prompt templates the agent can invoke by name</td>
+        <td>Skill-defined prompt templates for artifact types (web prototype, deck, motion)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TODO-VERIFY: Confirm that Open Design explicitly exposes all three MCP primitives (resources, tools, prompts) in v0.9.0 daemon source; changelog confirms tools but resources and prompts are inferred from the spec surface. -->
+
+  <p>
+    The governance story matters to designers as much as it matters to engineers. MCP is a standard, not a product. When you connect Open Design via MCP, you are not depending on a proprietary plug-in that any one vendor can revoke. One server, many brains — and that relationship is defined by an open spec, not a proprietary API key.
+  </p>
+
+  <!-- 10.2 -->
+  </section>
+
+  <section class="chapter-section" id="ch-10-2">
+    <h2 class="section-title">Open Design's MCP Server</h2>
+
+<p>
+    Open Design's daemon runs an MCP server alongside its Express HTTP layer. The MCP server listens for agent connections, authenticates them, and routes their requests to the daemon's generation, file, and project subsystems. You do not start it separately; it starts with the daemon.
+  </p>
+  <p>
+    As of v0.9.0 (released June 2, 2026), the MCP server gained three new tools: <code>write_file</code>, <code>delete_file</code>, and <code>delete_project</code>, and resolved a long-standing limitation around project directory exposure. The release notes call this "MCP clients can now do real workspace work" — which is a terse way of saying agents can now manage files and projects programmatically, not just read from them.
+  </p>
+
+  <div class="callout">
+    <p><strong>Skill injection via MCP:</strong> When an agent connects, Open Design injects the active skill into the agent's context using one of three strategies: native skill loading (preferred, for Claude Code and OpenCode which scan a skills directory), prompt injection (universal fallback that concatenates <code>SKILL.md</code> and references into the system prompt), or file-placed workflow (for Cursor and similar agents that read instruction files from the working directory). The agent receives the skill context before it generates anything.</p>
+  </div>
+
+  <p>
+    One server, many brains: a single daemon instance runs the MCP server; each connected agent is a separate client session against the same server. You can have Claude Code, Cursor, and OpenCode all connected simultaneously, each working on a different project or variation in the same Open Design instance.
+  </p>
+
+  <!-- TODO-VERIFY: Confirm single MCP server architecture (one server instance per daemon, not per agent connection) by reviewing architecture.md or daemon startup code. -->
+
+  <!-- 10.3 -->
+  </section>
+
+  <section class="chapter-section" id="ch-10-3">
+    <h2 class="section-title">Connecting an Agent</h2>
+
+<p>
+    The <code>od mcp install &lt;agent&gt;</code> command writes the MCP configuration to the CLI's expected config directory, registers the Open Design daemon as a connected server, and optionally injects the active skill context. As of June 2026, every supported agent has its own adapter with its own config format — the install command abstracts that difference.
+  </p>
+
+  <figure class="figure--full" id="fig-ch10-integrations">
+    <img src="../images/od-v011-integrations-use-everywhere.png" alt="Open Design Integrations page with the Use Everywhere tab active, showing CLI, MCP, HTTP, and skills/headless connection paths" loading="lazy" />
+    <figcaption>Figure 10.2 — The "Use Everywhere" integrations page. Open Design exposes the same local system through CLI, MCP, HTTP, and skills/headless entry points, so the app UI is not the only way to drive the daemon. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+  </figure>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p>Confirm the Open Design daemon is running. The install command will fail silently if it cannot reach the daemon socket.</p>
+      <pre><code>$ od status
+daemon: running (v0.9.0)
+mcp-server: listening
+projects: 3</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p>Install the MCP connection for your chosen agent. Substitute the agent ID from the supported CLIs table in <a href="#ch-10-6">section 10.6</a>.</p>
+      <pre><code>$ od mcp install claude-code</code></pre>
+      <p>The command writes to the Claude Code config directory, registers the daemon as an MCP server, and confirms the connection.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p>Use <code>--print</code> to preview the config without writing it. Useful when you want to verify the configuration before applying it, or when connecting to a remote daemon.</p>
+      <pre><code>$ od mcp install claude-code --print</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">4</span>
+    <div class="step-content">
+      <p>Install for multiple agents if you are exercising the agent-agnosticism. Each agent gets its own adapter configuration.</p>
+      <pre><code>$ od mcp install cursor
+$ od mcp install opencode
+$ od mcp install codex</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">5</span>
+    <div class="step-content">
+      <p>To remove a connection, use <code>--uninstall</code>.</p>
+      <pre><code>$ od mcp install cursor --uninstall</code></pre>
+    </div>
+  </div>
+
+  <p>
+    Per-CLI config formats differ. Claude Code uses its native <code>.claude/</code> config directory with a first-class MCP section. Cursor Agent writes to <code>.cursorrules</code>. Codex uses its own config directory and has known version-specific variance. The <code>od mcp install</code> command handles all of these; you do not need to know which format each agent expects.
+  </p>
+
+  <!-- Rights register: fig-ch10-int-mcp — Open Design UI, Apache-2.0; MCP server tab shown, no personal data present. -->
+  <figure class="figure--full" id="fig-ch10-int-mcp">
+    <img src="../images/od-v011-integrations-mcp.png" alt="Open Design Integrations page with the MCP tab active, showing external MCP server controls and forwarding status" loading="lazy" />
+    <figcaption>Figure 10.3 — The MCP tab manages external MCP servers and forwarding behavior from the same integrations surface. The visible state is deliberately empty: no private servers, paths, or credentials are shown. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+  </figure>
+
+  <!-- 10.4 -->
+  </section>
+
+  <section class="chapter-section" id="ch-10-4">
+    <h2 class="section-title">Resources, Tools, and Prompts</h2>
+
+<p>
+    Once connected, the agent can see everything the MCP server exposes. This is the full surface area of Open Design as seen by a connected agent — not a UI, but a structured protocol surface the agent can query and call.
+  </p>
+
+  <table>
+    <caption>Open Design MCP Server — Resources, Tools, and Prompts (v0.9.0, verified June 2026)</caption>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Name</th>
+        <th>What it does</th>
+        <th>Added</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Tool</td>
+        <td><code>write_file</code></td>
+        <td>Write a file to the active project workspace</td>
+        <td>v0.9.0</td>
+      </tr>
+      <tr>
+        <td>Tool</td>
+        <td><code>delete_file</code></td>
+        <td>Delete a file from the active project workspace</td>
+        <td>v0.9.0</td>
+      </tr>
+      <tr>
+        <td>Tool</td>
+        <td><code>delete_project</code></td>
+        <td>Delete a project and its associated workspace</td>
+        <td>v0.9.0</td>
+      </tr>
+      <tr>
+        <td>Tool</td>
+        <td>Generation loop trigger</td>
+        <td>Start an artifact generation run with a skill, brand, and prompt</td>
+        <td>Pre-v0.9.0</td>
+      </tr>
+      <tr>
+        <td>Resource</td>
+        <td>Active project contents</td>
+        <td>Structured read access to the current project's files and metadata</td>
+        <td>Pre-v0.9.0</td>
+      </tr>
+      <tr>
+        <td>Resource</td>
+        <td>Brand system DESIGN.md</td>
+        <td>Read access to the selected brand contract for context injection</td>
+        <td>Pre-v0.9.0</td>
+      </tr>
+      <tr>
+        <td>Prompt</td>
+        <td>Skill-defined templates</td>
+        <td>Named prompt templates per skill (web prototype, deck, motion, dashboard)</td>
+        <td>Pre-v0.9.0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TODO-VERIFY: Confirm the complete tool list from Open Design v0.9.0 daemon source. The changelog confirms write_file, delete_file, delete_project, and generation loop; resources and prompts are inferred from MCP standard and partial changelog references. -->
+
+  <p>
+    The v0.9.0 addition of <code>write_file</code> and <code>delete_file</code> is more significant than it sounds. Before that release, MCP clients could drive generation but could not do independent file work inside the project workspace. Now a connected agent can fetch an artifact, rewrite a specific file within it, and clean up intermediate files — all without leaving the agent session or switching to the Open Design UI.
+  </p>
+
+  <!-- 10.5 -->
+  </section>
+
+  <section class="chapter-section" id="ch-10-5">
+    <h2 class="section-title">The BYOK Proxy</h2>
+
+<p>
+    Open Design does not bundle an inference provider. You bring your own key (BYOK), configure a provider, and the daemon proxy routes calls to the model on your behalf. The proxy endpoint pattern is:
+  </p>
+
+  <pre><code>POST /api/proxy/{provider}/stream
+
+# Where {provider} is one of:
+# anthropic | openai | azure | google | ollama | senseaudio</code></pre>
+
+  <p>
+    Each route accepts a <code>baseUrl</code>, <code>apiKey</code>, and <code>model</code> in the request body. The proxy supports Anthropic, OpenAI, Azure OpenAI, Google Gemini, Ollama, LM Studio, vLLM, and any OpenAI-compatible endpoint. Per the Open Design v0.9.0 security documentation, your key is stored in <code>config.toml</code> with mode 0600, designed to be accessible only by the daemon process owner.
+  </p>
+
+  <table>
+    <caption>BYOK Proxy Providers — inference location and notes (Open Design v0.9.0, verified June 2026)</caption>
+    <thead>
+      <tr>
+        <th>Provider route</th>
+        <th>Inference location</th>
+        <th>Key storage</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>anthropic</code></td>
+        <td>Anthropic cloud</td>
+        <td><code>config.toml</code> (0600)</td>
+        <td>Supports all Claude models; recommended for Claude Code pairing</td>
+      </tr>
+      <tr>
+        <td><code>openai</code></td>
+        <td>OpenAI cloud</td>
+        <td><code>config.toml</code> (0600)</td>
+        <td>Also accepts any OpenAI-compatible endpoint via <code>baseUrl</code></td>
+      </tr>
+      <tr>
+        <td><code>azure</code></td>
+        <td>Azure OpenAI cloud</td>
+        <td><code>config.toml</code> (0600)</td>
+        <td>Useful for enterprise tenants with Azure OpenAI deployments</td>
+      </tr>
+      <tr>
+        <td><code>google</code></td>
+        <td>Google cloud</td>
+        <td><code>config.toml</code> (0600)</td>
+        <td>Gemini models; note the Gemini CLI agent adapter is P2 (see §10.6) — this Google provider route is unaffected regardless of the CLI's status</td>
+      </tr>
+      <tr>
+        <td><code>ollama</code></td>
+        <td>Your machine</td>
+        <td>No key needed</td>
+        <td>The only provider where inference is fully local; required for full local-first privacy</td>
+      </tr>
+      <tr>
+        <td><code>senseaudio</code></td>
+        <td>SenseAudio cloud</td>
+        <td><code>config.toml</code> (0600)</td>
+        <td>Audio-specific inference; used for TTS and audio generation artifacts</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TODO-VERIFY: Confirm senseaudio provider route exists in v0.9.0 README source; it is cited in research dossier but the use-case (TTS/audio) is inferred from the provider name. -->
+
+  <div class="callout warning">
+    <p><strong>SSRF and key exposure risk:</strong> Per the Open Design v0.9.0 README and architecture documentation, the BYOK proxy is designed to include per-target SSRF protection, configured to block requests to internal IPs, link-local addresses, and CGNAT ranges at the daemon edge. This is a documented design intent, not a security guarantee; review the source and your deployment configuration before relying on this protection. The underlying risk is real: an attacker who can send requests to the proxy could attempt to make the daemon call internal network services or exfiltrate your API keys. Keep the daemon bound to <code>localhost</code>. Do not expose the proxy on a public or LAN interface without additional authentication. Your <code>baseUrl</code> values are validated against these blocks at request time per the documented behavior.</p>
+  </div>
+
+  <p>
+    The local-first vs local-inference distinction reappears here. Open Design is local-first: your files, your project workspace, and the daemon orchestration all run on your machine. But inference is local only when you choose the <code>ollama</code> provider. Every other provider sends the generation request to a cloud model. If inference privacy is your goal, configure Ollama and a local model before connecting an agent.
+  </p>
+
+  <!-- 10.6 -->
+  </section>
+
+  <section class="chapter-section" id="ch-10-6">
+    <h2 class="section-title">Supported CLIs</h2>
+
+<p>
+    As of Open Design v0.9.0 (released June 2, 2026), the daemon ships adapters for a growing list of coding-agent CLIs. The v0.9.0 release added Aider, Trae CLI, and DeepSeek Reasonix — three new agents that reflect how fast this market is expanding. New entries appear in each minor release; this table reflects the snapshot at publication. <!-- TODO-VERIFY: Reconcile exact CLI count before export — README lists 15 in platform compatibility table; agent-adapters.md lists 16 in the full adapter table; run `od mcp install --help` against live v0.9.0 to confirm final count. -->
+  </p>
+
+  <table>
+    <caption>Supported Agent CLIs — Open Design v0.9.0, adapter priorities as of June 2026. License types are as documented in each project's public repository at that date; verify against primary sources before use.</caption>
+    <thead>
+      <tr>
+        <th>CLI</th>
+        <th>Vendor</th>
+        <th>License / type</th>
+        <th>Priority</th>
+        <th><code>od mcp install</code> ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Claude Code</td>
+        <td>Anthropic</td>
+        <td>Proprietary</td>
+        <td>P0</td>
+        <td><code>claude-code</code></td>
+      </tr>
+      <tr>
+        <td>Cursor</td>
+        <td>Anysphere</td>
+        <td>Proprietary</td>
+        <td>P0</td>
+        <td><code>cursor</code></td>
+      </tr>
+      <tr>
+        <td>GitHub Copilot CLI</td>
+        <td>GitHub / Microsoft</td>
+        <td>Proprietary</td>
+        <td>P1</td>
+        <td><code>copilot</code></td>
+      </tr>
+      <tr>
+        <td>OpenCode</td>
+        <td>anomalyco</td>
+        <td>MIT</td>
+        <td>P0</td>
+        <td><code>opencode</code></td>
+      </tr>
+      <tr>
+        <td>OpenAI Codex CLI</td>
+        <td>OpenAI</td>
+        <td>Apache-2.0</td>
+        <td>P1</td>
+        <td><code>codex</code></td>
+      </tr>
+      <tr>
+        <td>Gemini CLI</td>
+        <td>Google</td>
+        <td>Apache-2.0</td>
+        <td>P2 (sunset — see note below)</td>
+        <td><code>gemini</code></td>
+      </tr>
+      <tr>
+        <td>Google Antigravity</td>
+        <td>Google</td>
+        <td>Proprietary</td>
+        <td>P1</td>
+        <td><code>antigravity</code></td>
+      </tr>
+      <tr>
+        <td>Cline</td>
+        <td>Cline</td>
+        <td>Apache-2.0</td>
+        <td>P1</td>
+        <td><code>cline</code></td>
+      </tr>
+      <tr>
+        <td>Trae CLI</td>
+        <td>ByteDance</td>
+        <td>Proprietary</td>
+        <td>P1</td>
+        <td><code>trae</code></td>
+      </tr>
+      <tr>
+        <td>Kimi CLI</td>
+        <td>Moonshot AI</td>
+        <td>Proprietary</td>
+        <td>P2</td>
+        <td><code>kimi</code></td>
+      </tr>
+      <tr>
+        <td>Aider</td>
+        <td>Paul Gauthier</td>
+        <td>Apache-2.0</td>
+        <td>P1</td>
+        <td><code>aider</code></td>
+      </tr>
+      <tr>
+        <td>DeepSeek Reasonix</td>
+        <td>DeepSeek</td>
+        <td>Proprietary</td>
+        <td>P2</td>
+        <td><code>deepseek</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The remaining adapters (Pi Agent, Mistral Vibe CLI, Hermes, Qwen, Qoder, Kiro, Kilo, OpenClaw, VS Code + Copilot, and others added in subsequent releases) follow the same install pattern with their respective IDs. All listed adapters support MCP; what differs is the config format each CLI expects and how Open Design's adapter bridges the gap.
+  </p>
+
+  <p>
+    A note on Gemini CLI: as of June 2026, per Open Design's adapter documentation, the Gemini CLI adapter is classified P2 and treated as sunset in Open Design's priority scheme. The <code>gemini</code> adapter remains in the codebase for users on older configurations, but do not start a new project with it. Verify the current sunset status and timeline directly with Google before publication. The Google Antigravity adapter is the current Google-family successor in Open Design's adapter list.
+  </p>
+
+  <div class="callout warning">
+    <p><strong>CLI market churn:</strong> The agent-CLI market changes monthly. As of June 2026 per Open Design's adapter documentation, the Gemini CLI adapter is P2 and described as sunset; verify the current status directly with Google before relying on it. OpenCode (anomalyco) is MIT-licensed and open source; for details on its history and current feature set, see the project repository at github.com/anomalyco/opencode. Google Antigravity was in active development as of June 2026; check its current roadmap and pricing directly with Google. Adapter priority levels (P0/P1/P2) may shift between releases. Re-verify any CLI's version, pricing, and MCP support status against its primary source before committing a team to it.</p>
+  </div>
+
+  <p>
+    Chapter 11 compares the headline agents in depth — use the comparison there to choose which CLIs to actually invest in. This chapter's job is to confirm that the connection is the same for all of them and that swapping agents is a one-command operation.
+  </p>
+
+  <!-- My Take #1 -->
+  <div class="callout">
+    <p><strong>My take:</strong> Agent-agnosticism via MCP is Open Design's strongest strategic feature, and most teams adopt it without actually using it. I run two agents against the same Open Design instance: one proprietary for the work that demands capability, one open-source (OpenCode, MIT) as a vendor-independence hedge. The only way to know that the escape hatch works is to use it occasionally. If you have only ever connected Claude Code and a vendor sunsets, changes pricing, or revokes a capability, you will spend a difficult afternoon re-establishing a workflow that a second <code>od mcp install opencode</code> would have prevented. The caution: MCP support is broad but per-CLI config formats still differ; expect some setup friction per agent, and test the connection on a throwaway project before relying on it in production work.</p>
+  </div>
+
+  <!-- My Take #2 -->
+  <div class="callout">
+    <p><strong>My take:</strong> The v0.9.0 addition of <code>write_file</code> and <code>delete_file</code> to the MCP tool surface is the most underreported capability in this release. Before it, MCP was read-and-generate: the agent could read context and trigger generation, but file management stayed in the UI. Now a connected agent can manage workspace files programmatically. The practical payoff is in multi-step workflows where an agent needs to assemble, iterate, and clean up files as part of a longer generation loop — without the human touching the UI between steps. I'd call this the foundation of genuinely autonomous design workflows. The caution: file deletion via an agent is permanent; the same discipline you apply to any agentic file-write applies here. Review what the agent is doing before you trust it to manage workspace state.</p>
+  </div>
+
+  <!-- 10.7 -->
+  </section>
+
+  <section class="chapter-section" id="ch-10-7">
+    <h2 class="section-title">Integrations beyond MCP: Connectors and Skills</h2>
+
+<p>
+    MCP connects agents to Open Design. Connectors connect Open Design to external data. The Integrations surface --- reachable from the sidebar and the home header's <em>Use everywhere</em> link --- documents CLI, MCP, HTTP, and headless paths alongside connector and skill management. As of v0.15.1 the sidebar groups these as <em>Connectors</em> (external services) and the in-page tabs expose Composio-backed connector setup plus a Skills manager for installed recipes.
+  </p>
+
+  <figure class="figure--full" id="fig-ch10-connectors-sidebar">
+    <img src="../images/od-v015-18-sidebar-connectors.png" alt="Open Design sidebar Connectors entry in the integrations rail beside Plugins and Design systems" loading="lazy" />
+    <figcaption>Figure 10.4 — Integrations in the sidebar (v0.15.1). Connectors sit beside Plugins and Design systems so external data wiring is a first-class destination, not a hidden settings panel. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+  </figure>
+
+  <p>
+    The <em>Connectors</em> tab is backed by Composio --- a connector runtime that abstracts OAuth and API-key management for hundreds of external services. Paste a Composio API key at the top of the tab; the key is stored locally and never transmitted to Open Design's servers. Once configured, a searchable grid of service tiles appears. Activating a connector makes its data surface available to any <em>Live artifact</em> you generate: a dashboard wired to Notion, Airtable, or Slack reads live data instead of placeholders. That is what separates a live artifact from a prototype.
+  </p>
+
+  <figure class="figure--full" id="fig-ch10-connectors-tab">
+    <img src="../images/od-v015-19-integrations-connectors.png" alt="Open Design Integrations Connectors tab with Composio API key field and searchable connector grid" loading="lazy" />
+    <figcaption>Figure 10.5 — The Connectors tab. Composio key entry and a searchable service grid for wiring live data into artifacts. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+  </figure>
+
+  <p>
+    The Skills manager on the same Integrations surface lists installed recipes, discovery paths, and headless invocation entry points. It complements the skill-authoring model in <a href="#ch-04" class="xref">Chapter 04</a>: skills define generation structure; the manager shows which recipes are active in your environment and how to invoke them outside the Electron window.
+  </p>
+
+  <figure class="figure--full" id="fig-ch10-skills-tab">
+    <img src="../images/od-v015-20-integrations-skills.png" alt="Open Design Integrations Skills tab showing installed skill recipes and invocation controls" loading="lazy" />
+    <figcaption>Figure 10.6 — The Skills tab on Integrations. Installed recipes and programmatic invocation paths beside CLI and MCP entry points. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+  </figure>
+
+  <!-- Closing tip -->
+  <div class="callout tip">
+    <p><strong>Next:</strong> Chapter 11 compares the seven headline agent CLIs — Claude Code, Cursor, GitHub Copilot, OpenCode, OpenAI Codex CLI, Gemini CLI, and Google Antigravity — against a consistent set of criteria: type, MCP support, pricing and license, model access, and best-fit design use case. The routing table there routes by constraint, not by ranking. That is where you choose your brain; this chapter is where you connect it.</p>
+  </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="09.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 09</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Plugin Ecosystem</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 09</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Plugin Ecosystem</p>
+        </div>
+      </div>
+    </a>
+    <a href="11.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 11</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Choosing Your Agent</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 11</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Choosing Your Agent</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #7aa865; background-image: url('../assets/gradients/gradient_emerald_olive.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Choosing Your Agent</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Claude Code, Cursor, Copilot, OpenCode, Codex, Gemini CLI, and Antigravity compared</p>
+        </div>
+        <a href="11.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

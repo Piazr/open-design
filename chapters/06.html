@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Web and Mobile Prototypes - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #a68bfc;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #a68bfc; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART II: WORKING IN OPEN DESIGN &middot; SECTION 06</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Web and Mobile Prototypes</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Generating interactive single-page and multi-screen UIs</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">15 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-06-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Web Prototypes</a>
+        <a href="#ch-06-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Mobile App Prototypes</a>
+        <a href="#ch-06-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Adding Interactivity and State</a>
+        <a href="#ch-06-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Live Dashboards</a>
+        <a href="#ch-06-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">From Mockup to Interactive Prototype</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-06-1" data-section="ch-06-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Web Prototypes</span></a>
+          <a href="#ch-06-2" data-section="ch-06-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Mobile App Prototypes</span></a>
+          <a href="#ch-06-3" data-section="ch-06-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Adding Interactivity and State</span></a>
+          <a href="#ch-06-4" data-section="ch-06-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Live Dashboards</span></a>
+          <a href="#ch-06-5" data-section="ch-06-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>From Mockup to Interactive Prototype</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-06-1" data-section="ch-06-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Web Prototypes</span></a>
+          <a href="#ch-06-2" data-section="ch-06-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Mobile App Prototypes</span></a>
+          <a href="#ch-06-3" data-section="ch-06-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Adding Interactivity and State</span></a>
+          <a href="#ch-06-4" data-section="ch-06-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Live Dashboards</span></a>
+          <a href="#ch-06-5" data-section="ch-06-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>From Mockup to Interactive Prototype</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">06</p>
+    <h1 class="chapter-title co-title">Web and Mobile Prototypes</h1>
+    <p class="co-standfirst">Generating interactive single-page and multi-screen UIs</p>
+    <div class="co-body co-body--dropcap">
+      <p>Open Design's prototype artifacts are self-contained interactive HTML, which makes them instantly previewable, exportable, and reviewable.</p>
+    </div>
+  </section>
+
+  <!-- Section 6.1 -->
+
+  <section class="chapter-section" id="ch-06-1">
+    <h2 class="section-title"><span class="section-num">6.1</span> Web Prototypes</h2>
+
+<p class="section-en">Generate a single-page web prototype and understand viewport handling</p>
+    <p class="section-intro">A web prototype in Open Design is a single self-contained HTML document: styles inlined, scripts bundled, no CDN calls, no build step. You write a prompt, the agent selects a prototype skill, and the daemon streams the artifact into the sandboxed preview. One file comes out the other side. That's the mental model to hold --- self-contained HTML from prompt to export.</p>
+
+    <p>As of June 2026, Open Design ships around 15 prototype-family skills including <code>web-prototype</code>, <code>saas-landing</code>, <code>pricing-page</code>, <code>docs-page</code>, <code>blog-post</code>, and <code>email-marketing</code> (out of 100+ skills total as of June 2026). <!-- TODO-VERIFY: exact prototype skill count; verify against skills directory in github.com/nexu-io/open-design v0.9.0 --> Each carries its own SKILL.md frontmatter that declares its mode, preview type, and required brand tokens.</p>
+
+    <p>The default viewport is responsive web at high fidelity. You can explicitly target a narrower breakpoint by naming it in your prompt: "mobile viewport", "1440px desktop", "tablet landscape". If you don't specify, the skill targets the widest responsive canvas.</p>
+
+    <h3>A concrete web prototype walkthrough</h3>
+
+    <p>Here's a generation prompt for a SaaS landing page:</p>
+
+    <pre><code>Build a modern SaaS landing page with a dark hero section,
+gradient headline, three feature cards below, and a
+'Get Early Access' CTA button. Use the Vercel design system.</code></pre>
+
+    <p>That prompt is enough. The agent resolves it to the <code>saas-landing</code> skill (or <code>web-prototype</code> if no better match exists), loads the Vercel DESIGN.md brand contract, and starts streaming HTML into the preview.</p>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Open a new project in Open Design. The daemon creates a project directory at <code>.od/projects/&lt;id&gt;/</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>In your agent CLI, describe the page you want. Include at minimum: a layout description and a named brand system. The more concrete the layout description, the less iteration you'll need.</p>
+        <pre><code>Build a modern SaaS landing page with a dark hero section,
+gradient headline, three feature cards below, and a
+'Get Early Access' CTA button. Use the Vercel design system.</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Watch the artifact stream into the sandboxed preview. The streaming artifact parser renders HTML incrementally as the model generates it. The closing <code>&lt;/artifact&gt;</code> tag triggers a save to <code>.od/projects/&lt;id&gt;/artifacts/</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>Review the preview in the sandbox. If the layout is off or the brand application looks wrong, write a follow-up prompt now. Don't export until the preview matches your intent.</p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-06-01" data-screenshot-id="ch-06-shot-01">
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Prompt</strong>
+          <p>Agent receives brand name + layout description</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Skill resolved</strong>
+          <p><code>saas-landing</code> selected; DESIGN.md tokens loaded</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Brand applied</strong>
+          <p>Colors, typography, spacing injected before first token</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Streaming artifact</strong>
+          <p>HTML rendered incrementally into sandboxed iframe</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Preview live</strong>
+          <p>Dark hero, gradient headline, feature cards visible on close of <code>&lt;/artifact&gt;</code></p>
+        </div>
+      </div>
+      <figcaption>Figure 6.1 — SaaS landing page artifact streaming into the preview with brand tokens applied before first paint. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+
+    <div class="callout">
+      <p><strong>My take:</strong> Self-contained HTML is the unsung hero feature of Open Design. I've watched review cycles collapse when a prototype is a single file anyone can open in any browser. No server, no build, no "you need Node 24" --- just open the file. The opposite is a prototype that requires a dev environment to view, which means most stakeholders never open it. Self-contained HTML removes that friction entirely.</p>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Prototype Artifact Types (as of June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Viewport default</th>
+            <th>Best skill</th>
+            <th>Last verified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Web landing page</td>
+            <td>Responsive, 1440px wide</td>
+            <td><code>saas-landing</code></td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Generic single-page web</td>
+            <td>Responsive, 1440px wide</td>
+            <td><code>web-prototype</code></td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Mobile app screen</td>
+            <td>375px (iPhone 15 Pro frame)</td>
+            <td><code>mobile-app</code></td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Live dashboard</td>
+            <td>1280px, sidebar layout</td>
+            <td><code>dashboard</code></td>
+            <td>June 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-06-2">
+    <h2 class="section-title"><span class="section-num">6.2</span> Mobile App Prototypes</h2>
+
+<p class="section-en">Generate a multi-screen mobile prototype with device framing</p>
+    <p class="section-intro">Mobile prototypes differ from web prototypes in two ways: they render inside a device frame, and they support multi-screen flows. The agent builds every screen of a flow inside one self-contained HTML document, switching between screens via navigation controls, not separate files. The device frame itself --- an iPhone 15 Pro or Pixel 8 Pro SVG --- sits in <code>skills/mobile-app/assets/frames/</code> and wraps the canvas without being regenerated on each run.</p>
+
+    <p>As of June 2026, the <code>mobile-app</code> and <code>mobile-onboarding</code> skills include pixel-accurate frames for iPhone 15 Pro (black and white) and Pixel 8 Pro (obsidian and porcelain). <!-- TODO-VERIFY: exact frame filenames and device models; verify against skills/mobile-app/assets/frames/ in github.com/nexu-io/open-design --> The frame is a shared asset the skill reuses across all mobile artifacts; the agent doesn't redraw it on each generation, which keeps file size in check.</p>
+
+    <h3>Generating a multi-screen mobile flow</h3>
+
+    <pre><code>Build a 3-screen mobile onboarding flow using the Notion
+brand system: welcome screen, permissions request screen,
+and first-task detail screen. Include a working bottom-sheet
+navigation component. Frame in iPhone 15 Pro.</code></pre>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Describe all screens in a single prompt. Name each screen explicitly ("welcome screen", "permissions screen", "first-task screen"). The agent builds the full multi-screen flow as one artifact.</p>
+        <pre><code>Build a 3-screen mobile onboarding flow using the Notion
+brand system: welcome screen, permissions request screen,
+and first-task detail screen. Include a working bottom-sheet
+navigation component. Frame in iPhone 15 Pro.</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Review the preview. The device frame wraps the canvas. Navigate between screens using the controls the skill generates (typically Previous / Next buttons or swipe emulation via arrow keys). If a screen is missing or the brand application is off, iterate before exporting.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>To swap the device frame, add the frame name to your follow-up prompt: "Reframe this in Pixel 8 Pro obsidian." The agent swaps the SVG wrapper without regenerating the screen content.</p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-06-02" data-screenshot-id="ch-06-shot-02">
+      <img src="../images/ch-06-shot-02.png" alt="Open Design preview showing a 3-screen mobile onboarding flow framed in an iPhone 15 Pro device frame, with Notion brand typography and spacing applied" loading="lazy"/>
+      <figcaption>Figure 6.2 — Multi-screen mobile onboarding artifact with welcome, permissions, and first-task screens inside a single self-contained HTML file, framed in iPhone 15 Pro. Official Open Design screenshot, reproduced under Apache-2.0.</figcaption>
+    </figure>
+
+    <div class="file-tree">
+      <pre><code>skills/mobile-app/
+├── SKILL.md
+├── example.html
+├── assets/
+│   ├── frames/
+│   │   ├── iphone-15-pro-black.svg
+│   │   ├── iphone-15-pro-white.svg
+│   │   ├── pixel-8-pro-obsidian.svg
+│   │   └── pixel-8-pro-porcelain.svg
+│   └── template.html
+└── references/
+    └── mobile-ui-patterns.md</code></pre>
+    </div>
+
+    <p>The SKILL.md frontmatter declares this skill as mode <code>prototype</code> with preview type <code>html</code>:</p>
+
+    <pre><code>---
+name: mobile-app
+description: Multi-screen mobile UI prototype with device framing
+mode: prototype
+preview: html
+entry: index.html
+example_prompt: "Build a 3-screen onboarding flow with welcome,
+  permissions, and first-task screens. Frame in iPhone 15 Pro."
+design_system:
+  required:
+    - color
+    - typography
+    - spacing
+---</code></pre>
+
+    <!-- TODO-VERIFY: Exact SKILL.md frontmatter fields and values for mobile-app skill; verify against docs/skills-protocol.md and actual SKILL.md in github.com/nexu-io/open-design -->
+
+    <div class="callout warning">
+      <p>Device frame models in <code>assets/frames/</code> are version-sensitive. The iPhone 15 Pro frames ship in v0.9.0; a future release may add or rename frames (e.g., iPhone 16 Pro). If you name a specific frame that doesn't exist, the skill falls back to the default frame. Always verify the frame renders as expected in the preview before exporting.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-06-3">
+    <h2 class="section-title"><span class="section-num">6.3</span> Adding Interactivity and State</h2>
+
+<p class="section-en">How interactivity lives inside self-contained HTML</p>
+    <p class="section-intro">Generated prototypes aren't static mockups. Buttons navigate, tabs switch, modals open, and forms validate --- all inside the same self-contained HTML file, client-side, with no backend. The streaming artifact parser renders interactive HTML as the model generates it, and the sandbox preserves that interactivity in the preview. This distinction matters: what you see in the sandbox is what you get when you export.</p>
+
+    <p>Interactivity in generated artifacts uses vanilla JavaScript or a lightweight framework inlined into the HTML. Buttons have event listeners, tabs manage <code>aria-selected</code> state, modals show and hide on click. The key point is that this is client-side state --- it lives in memory and resets on page reload. Open Design doesn't provide a persistence layer for prototype state.</p>
+
+    <!-- TODO-VERIFY: Exact client-side state mechanism (localStorage, IndexedDB, or in-memory only); inspect actual generated HTML from a live prototype run in v0.9.0 -->
+
+    <h3>Static mockup vs interactive prototype</h3>
+
+    <p>The difference shows up clearly in how you prompt. A static mockup prompt doesn't ask for behaviors; an interactive prototype prompt names them explicitly.</p>
+
+    <figure>
+      <div class="compare">
+        <div class="compare-bad">
+          <p><strong>Static mockup prompt:</strong></p>
+          <pre><code>Build a settings page with three tabs:
+Profile, Notifications, and Security.</code></pre>
+          <p>Result: three tab labels rendered as visual elements. Clicking them does nothing.</p>
+        </div>
+        <div class="compare-good">
+          <p><strong>Interactive prototype prompt:</strong></p>
+          <pre><code>Build a settings page with three tabs:
+Profile, Notifications, and Security.
+Each tab click should show its panel and
+hide the others. Default to the Profile tab.</code></pre>
+          <p>Result: three functional tabs with client-side panel switching. The default tab is active on load.</p>
+        </div>
+      </div>
+      <figcaption>Figure 6.3 — Naming behaviors explicitly in the prompt is the difference between a static layout and an interactive prototype. The skill doesn't infer interaction intent from visual labels alone.</figcaption>
+    </figure>
+
+    <p>The same principle applies to modals, bottom-sheets, accordions, and forms. Name the interaction: "clicking the card opens a detail modal", "the accordion expands on click", "the form validates email format on blur". Vague prompts produce vague prototypes.</p>
+
+    <h3>State persistence within a run</h3>
+
+    <p>Within a single preview session, client-side state persists as long as the iframe isn't reloaded. Navigating between screens in a multi-screen flow preserves tab state and form input values. Clicking Export and opening the resulting HTML file starts fresh --- no state is serialized into the export.</p>
+
+    <div class="callout tip">
+      <p>If you need a prototype to demo a specific state (a filled form, a specific tab open, a modal triggered), describe that state in the prompt rather than relying on click-through during a review. "Show the Security tab active with two-factor authentication enabled" produces an artifact that opens in the right state without requiring the reviewer to click through to get there.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-06-4">
+    <h2 class="section-title"><span class="section-num">6.4</span> Live Dashboards</h2>
+
+<p class="section-en">Generate a dashboard with tweakable parameters and real data sources</p>
+    <p class="section-intro">Dashboard prototypes are the highest-fidelity artifact in the prototype family: KPI cards, charts, data tables, sidebar navigation, and adjustable filters, all in one self-contained HTML file. You supply the data --- pasted as CSV rows, as a JSON array, or as a local endpoint URL --- and the skill renders it. No external BI platform required.</p>
+
+    <p>As of June 2026, the <code>dashboard</code> skill supports CSV paste, JSON array, and local endpoint data sources. The "tweakable parameters panel" --- a sidebar control for adjusting chart ranges, metric toggles, and filters without re-prompting --- is referenced in v0.9.0 documentation but its implementation status in the current release should be verified. <!-- TODO-VERIFY: Tweakable parameters panel status in v0.9.0; check GitHub issues and release notes at github.com/nexu-io/open-design/releases/tag/open-design-v0.9.0 --> The fallback is re-prompting: "Change the date range to Q1 2026" triggers a targeted regeneration that preserves the rest of the dashboard layout.</p>
+
+    <h3>Generating a live sales dashboard</h3>
+
+    <pre><code>Build a live sales dashboard with adjustable date-range
+filter and four KPI cards (Revenue, Conversion Rate,
+Customer Acquisition Cost, Churn). Include a revenue-over-time
+line chart and a top-products table. Use the Stripe design system.</code></pre>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Write a prompt that names each KPI card, chart type, and data table explicitly. Use the Stripe design system or your own house brand.</p>
+        <pre><code>Build a live sales dashboard with adjustable date-range
+filter and four KPI cards (Revenue, Conversion Rate,
+Customer Acquisition Cost, Churn). Include a revenue-over-time
+line chart and a top-products table. Use the Stripe design system.</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>The skill generates the dashboard with placeholder data. To replace it with real data, follow up with a data-binding prompt:</p>
+        <pre><code>Replace the revenue chart data with this CSV:
+month,revenue
+Jan,45000
+Feb,52000
+Mar,68000
+Apr,71000
+May,89000</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>Review the updated preview. The chart rerenders with the new data; the card values and table update to match. If the layout shifts due to data volume changes, iterate with a layout-correction prompt before exporting.</p>
+      </div>
+    </div>
+
+    <figure class="figure--full" id="fig-06-03" data-screenshot-id="ch-06-shot-03">
+      <div class="flow">
+        <div class="flow-item">
+          <strong>CSV injected</strong>
+          <p>Revenue, conversion, CAC, churn rows pasted into follow-up prompt</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Skill: <code>dashboard</code></strong>
+          <p>Data bound to KPI cards + chart dataset constants inside artifact</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Sandboxed iframe</strong>
+          <p>Client-side JS renders four KPI cards, revenue line chart, top-products table</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Self-contained HTML</strong>
+          <p>All data inlined as <code>const dashboardData</code>; no backend, no BI platform</p>
+        </div>
+      </div>
+      <figcaption>Figure 6.4 — Live dashboard artifact: KPI cards and charts rendered client-side inside the sandboxed iframe from injected CSV data. Schematic illustration (not a screenshot).</figcaption>
+    </figure>
+
+    <h3>Dashboard data as self-contained HTML</h3>
+
+    <p>The generated dashboard inlines its data directly in the HTML, typically as a JavaScript constant. This is a preview and communication artifact --- it's not wired to a live database. If you need the chart to reflect updated numbers, you re-prompt with new data, not re-query an endpoint.</p>
+
+    <pre><code>// Data inlined in the generated dashboard artifact
+const dashboardData = [
+  { month: 'Jan', revenue: 45000, customers: 320 },
+  { month: 'Feb', revenue: 52000, customers: 380 },
+  { month: 'Mar', revenue: 68000, customers: 450 }
+];
+// Chart rendered via D3 or Chart.js inlined in the same file
+// No external API calls; fully self-contained</code></pre>
+
+    <div class="callout">
+      <p><strong>My take:</strong> The dashboard skill is the right tool for executive reviews and investor demos where you need real numbers in a polished layout fast. I can drop in a CSV of actuals, generate the dashboard in minutes, and hand stakeholders a file they can open without help. The catch is that "live" in the skill name means "interactive controls", not "auto-refreshing from a database." Know which one you need before the demo.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-06-5">
+    <h2 class="section-title"><span class="section-num">6.5</span> From Mockup to Interactive Prototype</h2>
+
+<p class="section-en">Iterating a static layout into a clickable prototype</p>
+    <p class="section-intro">The first generation rarely produces a finished prototype. It produces a starting layout. Quality comes from the iterate step of the generate, preview, iterate, export loop --- not the generate step. This section shows how to move a static layout to a fully interactive prototype in a sequence of targeted follow-up prompts, and how to know when to stop iterating and export.</p>
+
+    <h3>The iterate sequence</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Iterate Steps: Static Mockup to Interactive Prototype</caption>
+        <thead>
+          <tr>
+            <th>Iteration</th>
+            <th>Prompt intent</th>
+            <th>What changes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 (generate)</td>
+            <td>Describe layout, brand, content structure</td>
+            <td>Layout, typography, spacing, color from DESIGN.md</td>
+          </tr>
+          <tr>
+            <td>2 (layout fix)</td>
+            <td>"The hero section is too tall; reduce the top padding"</td>
+            <td>Hero height only; rest of layout preserved</td>
+          </tr>
+          <tr>
+            <td>3 (add interactivity)</td>
+            <td>"Add tab switching to the feature section with three tabs: Product, Pricing, Integrations"</td>
+            <td>Feature section gains working tabs; rest preserved</td>
+          </tr>
+          <tr>
+            <td>4 (state target)</td>
+            <td>"Open the Pricing tab by default and add an annual/monthly toggle above it"</td>
+            <td>Active tab and new toggle control added</td>
+          </tr>
+          <tr>
+            <td>5 (export check)</td>
+            <td>Export to HTML, open in a browser without a server</td>
+            <td>Verify the exported file matches the preview</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Targeted iteration prompts are more reliable than broad ones. "Fix the pricing section" is vague --- the agent might change layout, typography, and copy all at once. "Set the Starter plan price to $29/month and make the Enterprise tier say 'Contact us'" changes exactly two values.</p>
+
+    <h3>Iteration patterns that work</h3>
+
+    <p>These patterns produce reliable iterations:</p>
+
+    <pre><code># Structural change: name the section and the change
+"In the navigation, change the CTA button label from
+'Get Started' to 'Request Demo' and change its background
+to the brand primary color."
+
+# Layout correction: name what is wrong
+"The three feature cards stack vertically on a 1440px
+viewport. Arrange them in a 3-column grid."
+
+# Interactivity addition: describe the behavior fully
+"Add a modal to the 'View Details' button on each product card.
+The modal should show the full product description and a
+'Buy Now' CTA. Close on Escape or clicking the overlay."</code></pre>
+
+    <h3>When self-contained HTML reaches its limits</h3>
+
+    <p>Self-contained HTML is a preview convenience, not a production pattern. At some point a prototype becomes large enough that a real build pipeline --- component library, routing, state management --- produces better results than a single inlined file. That point is usually when you're building a multi-page application with shared state between routes, or when a developer needs to ship the artifact as a real product.</p>
+
+    <p>For those cases, use the code-refresh plugin (covered in <a href="#ch-09-4" class="xref">section 9.4</a>) to refactor a generated prototype into a proper Next.js or React component tree. The prototype gets you the design approved; the plugin gets you the code production-ready.</p>
+
+    <div class="callout warning">
+      <p>A generated prototype is not production code. Artifacts are self-contained HTML optimized for preview and review, not for performance, accessibility standards compliance, or production architecture. The self-contained format means inlined styles and scripts --- appropriate for a prototype file that stakeholders open once, not for a codebase that ships to users. Treat the prototype as the communication artifact it is, and use the code-refresh plugin when production code is the actual deliverable.</p>
+    </div>
+
+    <h3>Prototype troubleshooting</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Prototype Troubleshooting</caption>
+        <thead>
+          <tr>
+            <th>Symptom</th>
+            <th>Cause</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Preview is blank or shows only the device frame shell</td>
+            <td>Daemon not running, or agent MCP connection dropped</td>
+            <td>Verify daemon health at <code>http://localhost:7456</code>; reconnect MCP with <code>od mcp install &lt;agent&gt;</code></td>
+          </tr>
+          <tr>
+            <td>Brand system tokens not applied (default fonts and colors appear)</td>
+            <td>Named brand system not found, or DESIGN.md missing a required token field</td>
+            <td>Check the brand name matches exactly (case-sensitive); run <code>od brands list</code> to confirm it's available</td>
+          </tr>
+          <tr>
+            <td>Exported HTML looks different from preview (broken fonts, missing images)</td>
+            <td>Preview iframe loads external assets live; export inlines only local assets</td>
+            <td>Re-prompt to replace CDN fonts with system fonts; verify all image assets are local before exporting</td>
+          </tr>
+          <tr>
+            <td>Interactive elements (tabs, modals) don't work in the exported HTML</td>
+            <td>Export inlining stripped or re-ordered script tags</td>
+            <td>Open the exported file directly in a browser (not via a server); if still broken, re-export and inspect the script section of the HTML</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The four-beat loop in prototype work</h3>
+
+    <p>The prototype workflow is the generate, preview, iterate, export loop in its most visible form. Generate produces the first layout. Preview surfaces what's wrong. Iterate targets each problem precisely. Export verifies the shippable file. Don't skip the export verification step --- the preview and the exported file can diverge on external asset handling, as noted in the troubleshooting table above.</p>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Generate</strong>
+          <p>Skill + brand + prompt → streaming HTML artifact</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Preview</strong>
+          <p>Sandboxed iframe renders interactive prototype</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Iterate</strong>
+          <p>Targeted follow-up prompts fix layout, add behaviors</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Export</strong>
+          <p>Inlined HTML verified offline, shared as one file</p>
+        </div>
+      </div>
+      <figcaption>Figure 6.5 — The four-beat prototype loop. Quality accumulates in the Iterate step; the Generate step produces a starting point, not a finished artifact.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <p><strong>Next:</strong> Prototypes are one artifact family. Chapter 07 covers the other artifact surfaces --- presentation decks, HyperFrames HTML-to-MP4 motion graphics, and AI images --- and shows how the same brand contract drives all of them under the principle of one brand, many surfaces.</p>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="05.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 05</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">150 Brand Systems</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 05</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">150 Brand Systems</p>
+        </div>
+      </div>
+    </a>
+    <a href="07.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 07</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Decks, Motion, and Images</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 07</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Decks, Motion, and Images</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #748ef5; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Decks, Motion, and Images</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Presentations, HyperFrames HTML-to-MP4, and AI images</p>
+        </div>
+        <a href="07.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

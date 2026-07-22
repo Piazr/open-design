@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>Building Your Own Design Pipeline - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #fe7141;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #fe7141; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART IV: SHIPPING & EXTENSIONS &middot; SECTION 16</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">Building Your Own Design Pipeline</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Capstone: a repeatable agent-native design system for your team</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">18 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-16-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Phase 1: The Brand Contract</a>
+        <a href="#ch-16-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Phase 2: House Skills</a>
+        <a href="#ch-16-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Phase 3: Two Agents via MCP</a>
+        <a href="#ch-16-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Phase 4: Variation Workflow</a>
+        <a href="#ch-16-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Phase 5: Code-Refresh Integration</a>
+        <a href="#ch-16-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Phase 6: Export and Review Gate</a>
+        <a href="#ch-16-7" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Finished Pipeline</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-16-1" data-section="ch-16-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 1: The Brand Contract</span></a>
+          <a href="#ch-16-2" data-section="ch-16-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 2: House Skills</span></a>
+          <a href="#ch-16-3" data-section="ch-16-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 3: Two Agents via MCP</span></a>
+          <a href="#ch-16-4" data-section="ch-16-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 4: Variation Workflow</span></a>
+          <a href="#ch-16-5" data-section="ch-16-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 5: Code-Refresh Integration</span></a>
+          <a href="#ch-16-6" data-section="ch-16-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 6: Export and Review Gate</span></a>
+          <a href="#ch-16-7" data-section="ch-16-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Finished Pipeline</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-16-1" data-section="ch-16-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 1: The Brand Contract</span></a>
+          <a href="#ch-16-2" data-section="ch-16-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 2: House Skills</span></a>
+          <a href="#ch-16-3" data-section="ch-16-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 3: Two Agents via MCP</span></a>
+          <a href="#ch-16-4" data-section="ch-16-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 4: Variation Workflow</span></a>
+          <a href="#ch-16-5" data-section="ch-16-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 5: Code-Refresh Integration</span></a>
+          <a href="#ch-16-6" data-section="ch-16-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Phase 6: Export and Review Gate</span></a>
+          <a href="#ch-16-7" data-section="ch-16-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Finished Pipeline</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">16</p>
+    <h1 class="chapter-title co-title">Building Your Own Design Pipeline</h1>
+    <p class="co-standfirst">Capstone: a repeatable agent-native design system for your team</p>
+    <div class="co-body co-body--dropcap">
+      <p>A team-grade design pipeline is the brand contract plus skills plus two agents plus a review gate, assembled once and run forever. This chapter builds the pipeline spine from scratch: six phases, each producing a concrete output, each referencing the foundation laid in earlier chapters. By the end, you have a documented, reproducible system your team can run on any project.</p>
+    </div>
+  </section>
+
+  <p>Every chapter in this book has been building toward this assembly. The four-beat loop from Chapter 03 is the generation rhythm; skills from Chapter 04 and the brand contract from Chapter 05 are the quality layer; the two-agent strategy from Chapter 11 is the resilience layer; multi-agent teams from Chapter 12 are the variation layer; the export pipeline from Chapter 08 is the delivery layer. The pipeline spine stitches these layers into a sequence any team member can follow and reproduce.</p>
+
+  <p>The pipeline spine is not a tool. It is a documented decision. Undocumented agent workflows look fast at first---they are---but they become unrepeatable within weeks as model defaults shift, agent versions update, and the person who knew the prompt structure moves to another project. Writing the spine down is the one act that converts a personal workflow into a team asset.</p>
+
+  <!-- 16.1 Phase 1: The Brand Contract -->
+
+  <section class="chapter-section" id="ch-16-1">
+    <h2 class="section-title">Phase 1: The Brand Contract</h2>
+
+<p class="section-intro">The pipeline spine starts with a single file: your <code>DESIGN.md</code>. Everything else in the pipeline reads from it. If the file is vague, every agent output will be vague. Get this right first.</p>
+
+  <p>A <code>DESIGN.md</code> is a machine-readable brand contract. It encodes color palette, typography, spacing grid, component patterns, interaction rules, voice, and reserved constraints---all as plain text that every agent CLI can read. Open Design ships 150 bundled brand systems (as of June 2026, v0.9.0), but the only one that matters for your pipeline is the one you write for your own organization.</p>
+
+  <p>The schema has nine sections, each with a specific role. An agent needs all nine to produce consistent output; missing sections fall back to model defaults, which is exactly what you are trying to prevent.</p>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p>Create <code>DESIGN.md</code> at the root of your Open Design project. Start with the nine-section skeleton:</p>
+      <pre><code># DESIGN.md: Acme Design System
+
+## 1. Brand identity
+- **Name:** Acme Inc.
+- **Voice:** Clear, direct, no jargon. No exclamation marks.
+- **Attitude:** Trustworthy and practical.
+
+## 2. Color palette
+- **Primary:** #0B5FFF (electric blue)
+- **Surface:** #0A0A0A (near-black)
+- **Text:** #FFFFFF (white)
+- **Border:** #333333
+
+## 3. Typography
+- **Sans-serif:** Inter
+- **Font scale:** 12px, 14px, 16px, 18px, 20px, 24px, 32px
+- **Line height:** 1.5 for body, 1.2 for headings
+
+## 4. Spacing grid
+- **Base unit:** 8px
+- **Scale:** 4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px
+
+## 5. Component patterns
+- **Buttons:** 32px height, rounded 4px corners, medium weight
+- **Cards:** 1px border, 8px padding, no drop shadows
+- **Forms:** labels above inputs, error states in red
+
+## 6. Imagery
+- **Style:** minimalist, high-contrast, no decorative shadows
+- **Sources:** Unsplash, Pexels (attribution required)
+
+## 7. Layout principles
+- **Max width:** 1200px
+- **Responsive breakpoints:** 640px, 1024px, 1280px
+
+## 8. Interactions
+- **Hover states:** 10% opacity shift
+- **Focus states:** 2px outline in primary color
+- **Transitions:** 150ms ease-out for all state changes
+
+## 9. Reserved rules
+- No marketing superlatives
+- Contrast ratio must be >= 4.5:1 on all text</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p>Validate the contract by generating one test artifact. Open Open Design, point it at your project, and run a minimal prompt:</p>
+      <pre><code>Build a single-page error state using the house DESIGN.md.
+Show a 404 message with a primary CTA button and the brand voice.</code></pre>
+      <p>If the output uses your primary color, your typeface, and the right voice, the contract is wired. If it defaults to blues and grays, the DESIGN.md is not being injected---check that the file is in the project root.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p>Lock the contract into version control before touching anything else.</p>
+      <pre><code>$ git add DESIGN.md
+$ git commit -m "feat: add Acme house DESIGN.md v1"</code></pre>
+      <p>Every pipeline phase reads from this commit. Treat the brand contract as infrastructure, not a draft document.</p>
+    </div>
+  </div>
+
+  <h4>What Makes a Strong Brand Contract</h4>
+
+  <p>The difference between a weak and a strong DESIGN.md is specificity at the constraint level. Vague rules produce vague output. "Use blues and grays" is not a brand contract; it is a suggestion. "Primary: #0B5FFF; background: #0A0A0A; text: #FFFFFF; no gradients; no drop shadows" is a constraint the agent can enforce on every artifact.</p>
+
+  <p>The voice section (Section 1) and the reserved rules section (Section 9) are the two most under-authored sections. Most teams fill in the colors and typography quickly, then leave voice as one sentence. A weak voice section means marketing copy that sounds like a different company from one artifact to the next. Spend at least as much time on voice and reserved rules as on colors---these are what make your artifacts feel like you, not like a generic AI output.</p>
+
+  <div class="callout warning">
+    <p>Open Design ships bundled DESIGN.md files for well-known companies---named by their published brand identities---for reference and learning. These files are for understanding the schema structure, not for shipping a product in another company's visual identity. Use them as structural examples only. Your pipeline must run on a DESIGN.md you authored for your own brand. Trademark law does not allow an agent-generated artifact to carry another organization's trademarked identity to market.</p>
+  </div>
+
+  <!-- 16.2 Phase 2: House Skills -->
+  </section>
+
+  <section class="chapter-section" id="ch-16-2">
+    <h2 class="section-title">Phase 2: House Skills</h2>
+
+<p class="section-intro">The brand contract is the what; skills are the how. A skill constrains structure, output format, and artifact shape so the same prompt reliably produces consistent output across runs.</p>
+
+  <p>Open Design ships 100+ skills as of June 2026 (v0.9.0). Most teams need two to four house skills that are not in that catalog: the artifact shapes specific to their product. A SaaS company might need a <code>feature-announcement</code> skill. A consultancy might need a <code>client-deck</code> skill. These are the skills that encode your team's standards once and apply them on every run.</p>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p>Identify the two or three artifact types your team produces most frequently. These become house skills.</p>
+      <p>For each, answer: what is the fixed structure? What are the variable inputs? What is the output format?</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p>Create a skill file in <code>.claude/skills/</code> (highest-priority discovery path, per the skills protocol). The skill file is plain text with a header block and constraint list:</p>
+      <pre><code># skill: saas-landing
+description: Single-page SaaS landing with hero, features, CTA
+constraints:
+  - hero section: headline + subheadline + primary CTA
+  - feature section: three cards, icon + title + body
+  - footer: privacy link, terms link, company name
+  - no secondary navigation in hero
+  - responsive: 640px breakpoint for mobile layout
+output: single-page-html
+brand: reads from DESIGN.md in project root</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p>Test the skill by invoking it directly:</p>
+      <pre><code>Use the saas-landing skill with the house DESIGN.md to build
+a landing page for a team productivity tool.
+Product name: Acme Workflow. Tagline: Ship faster together.</code></pre>
+      <p>Run this three times. If the output structure is consistent across runs but the copy varies, the skill is working. If the structure varies, tighten the constraints.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>My take:</strong> Most teams under-invest in house skills and then wonder why agent output is inconsistent. A good house skill encodes decisions your team has already made---layout structure, component hierarchy, responsive behavior---so the agent does not have to guess them from a prompt. The investment is 30 minutes of writing; the return is months of consistent output. I have seen teams with two well-written house skills outperform teams with access to all 100+ bundled skills and no constraints of their own.</p>
+  </div>
+
+  <!-- 16.3 Phase 3: Two Agents via MCP -->
+  </section>
+
+  <section class="chapter-section" id="ch-16-3">
+    <h2 class="section-title">Phase 3: Two Agents via MCP</h2>
+
+<p class="section-intro">The pipeline spine is agent-agnostic by design. Wire two agents: one proprietary for depth, one open-source for independence. The Model Context Protocol (MCP) is the connection layer---the same for every agent.</p>
+
+  <p>As of June 2026, Open Design supports 21 agent CLIs via MCP adapters (see the agent adapter catalog). The two-agent hedge is straightforward: Claude Code gives you Anthropic's reference implementation with full streaming and surgical edit capability; OpenCode gives you an MIT-licensed fallback that survives any vendor pricing or sunset event. The pipeline spine never requires a specific agent; it requires MCP connectivity.</p>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p>Connect Claude Code as the primary agent:</p>
+      <pre><code>$ od mcp install claude-code</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p>Connect OpenCode as the secondary agent:</p>
+      <pre><code>$ od mcp install opencode</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p>Verify both agents are detected:</p>
+      <pre><code>$ od status agents</code></pre>
+      <p>You should see both <code>claude-code</code> and <code>opencode</code> listed as active. If one is missing, check that its CLI is installed and the MCP config was written correctly. See <a href="#appendix-A">Appendix A</a> for per-agent config locations.</p>
+    </div>
+  </div>
+
+  <figure class="figure--full" id="fig-16-agent-status" data-screenshot-id="ch-16-shot-01">
+    <img src="../images/od-v011-demo-agent-status.png" alt="Open Design workspace showing a fictional od status agents panel with Claude Code, OpenCode, and Cursor connection states" loading="lazy" />
+    <figcaption>Figure 16.1 — The agent status check rendered in the Open Design workspace. The prompt asks for <code>od status agents</code>, and the preview shows Claude Code, OpenCode, and Cursor connection states against the same local daemon. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+  </figure>
+
+  <p>The two-agent strategy is the pipeline's insurance policy. You generate with Claude Code on a daily basis; if Anthropic changes pricing, access, or capabilities, you switch to OpenCode without touching the pipeline structure. The daemon routes to whichever agent you designate as primary; the MCP protocol is the same either way.</p>
+
+  <p>The selection of Claude Code and OpenCode as the two-agent pair is a recommendation, not a requirement. The principle is: one agent with deep context-window capability and surgical edit support, and one agent with an open-source license that is not tied to any single vendor's commercial roadmap. As of June 2026, that pairing is Claude Code (Anthropic, proprietary) and OpenCode (MIT, community-maintained). If the agent market shifts---and as documented in <a href="#ch-11-4">section 11.4</a>, it will---you substitute at the MCP layer without touching the pipeline spine.</p>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Two-agent pairing rationale as of June 2026</caption>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Agent</th>
+          <th>Why this choice</th>
+          <th>Fallback if unavailable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Primary (proprietary)</td>
+          <td>Claude Code</td>
+          <td>Anthropic reference implementation; streaming edits; large context window; full surgical edit capability</td>
+          <td>Any MCP-connected proprietary agent with streaming support</td>
+        </tr>
+        <tr>
+          <td>Secondary (open-source)</td>
+          <td>OpenCode</td>
+          <td>MIT license; community-maintained; no single vendor dependency; survives commercial pivots</td>
+          <td>Cline, Aider, or any MIT/Apache-licensed MCP-connected agent</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warning">
+    <p>If your pipeline hardcodes a single agent in every step, you have rebuilt the vendor dependency you installed Open Design to escape. Keep the spine agent-agnostic. Specify the agent per-session or per-project in the daemon config, not in the DESIGN.md or skill files. The pipeline should run with any MCP-connected agent with no structural changes required.</p>
+  </div>
+
+  <!-- 16.4 Phase 4: Variation Workflow -->
+  </section>
+
+  <section class="chapter-section" id="ch-16-4">
+    <h2 class="section-title">Phase 4: Variation Workflow</h2>
+
+<p class="section-intro">A multi-agent variation step is where the two-agent wiring pays off creatively. Run the same prompt through both agents, compare outputs, and pick or blend the best parts. This is not an automated merge---it is a deliberate human decision backed by two independent agent interpretations.</p>
+
+  <p>The variation workflow is especially valuable for hero sections, landing page layouts, and deck visuals---any artifact where there is genuine design space to explore. Single-agent generation produces one interpretation; two agents produce a genuine choice.</p>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p>Author the variation prompt. Keep it identical for both agents---the point is to see how each interprets the same brief, not to bias one toward a specific solution:</p>
+      <pre><code># Variation run: Three hero layout options
+
+## Setup
+- DESIGN.md: Acme brand contract
+- Active agents: claude-code, opencode
+- Skill: saas-landing
+
+## Prompt (identical to both agents):
+Build a SaaS landing page using the Acme DESIGN.md.
+Hero: headline, subheadline, primary CTA.
+Three feature cards below the fold.
+Brand colors from DESIGN.md. No stock images.</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p>Run the prompt through Claude Code first and save the output artifact:</p>
+      <pre><code>$ # In Open Design UI: select claude-code, run the prompt
+$ # Artifact saved as artifact-claude-code-001.html</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p>Run the same prompt through OpenCode and save the second artifact:</p>
+      <pre><code>$ # In Open Design UI: switch to opencode, run same prompt
+$ # Artifact saved as artifact-opencode-001.html</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">4</span>
+    <div class="step-content">
+      <p>Preview both artifacts side by side in Open Design. Compare:</p>
+      <ul>
+        <li>Layout spacing and alignment interpretation</li>
+        <li>Typography hierarchy choices</li>
+        <li>Component styling---buttons, cards</li>
+        <li>Hero section structure and visual hierarchy</li>
+      </ul>
+      <p>Pick one as the base, or ask an agent to blend the best parts of both into a third artifact.</p>
+    </div>
+  </div>
+
+  <figure class="figure--full" id="fig-16-variation-compare" data-screenshot-id="ch-16-shot-02">
+    <img src="../images/od-v011-demo-agent-comparison.png" alt="Open Design workspace showing a fictional Claude Code versus OpenCode landing-page variant comparison from the same brand brief" loading="lazy" />
+    <figcaption>Figure 16.2 — A two-agent comparison in the Open Design workspace. The same prompt and DESIGN.md produce separate Claude Code and OpenCode variants, and the preview records the review note that selects one structure while borrowing the other agent's hero energy. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+  </figure>
+
+  <!-- The Pipeline Spine diagram -->
+  <figure>
+    <div class="flow">
+      <div class="flow-item">
+        <strong>DESIGN.md</strong>
+        <p>Brand contract, phase 1</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>House Skills</strong>
+        <p>Artifact constraints, phase 2</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>Two Agents</strong>
+        <p>MCP-connected, phase 3</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>Variations</strong>
+        <p>Multi-agent compare, phase 4</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>Code-Refresh</strong>
+        <p>Codebase alignment, phase 5</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">
+        <strong>Export + Review</strong>
+        <p>Gate and archive, phase 6</p>
+      </div>
+    </div>
+    <figcaption>Figure 16.3 — The pipeline spine: six phases in sequence, each with a concrete output. The two agents attach at phases 3 and 4. The review gate closes at phase 6.</figcaption>
+  </figure>
+
+  <!-- 16.5 Phase 5: Code-Refresh Integration -->
+  </section>
+
+  <section class="chapter-section" id="ch-16-5">
+    <h2 class="section-title">Phase 5: Code-Refresh Integration</h2>
+
+<p class="section-intro">The code-refresh plugin closes the loop between the artifacts you generate and the codebase you ship. Instead of manually porting design tokens from an artifact into your production code, the plugin reads your DESIGN.md and proposes a diff that aligns component tokens in your codebase to the brand contract.</p>
+
+  <p>As of June 2026, the code-refresh plugin is listed as alpha in the Open Design roadmap (v0.9.0). The plugin is the most powerful and the most volatile phase of the pipeline---it has the highest staleness risk as the API is not yet finalized.</p>
+
+  <!-- TODO-VERIFY: Code-refresh plugin shipping status and exact CLI flags as of June 2026 -->
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p>Confirm the code-refresh plugin is available in your Open Design install:</p>
+      <pre><code>$ od plugin list | grep code-refresh</code></pre>
+      <p>If it appears, proceed. If not, check the roadmap---as of June 2026 it is in alpha and may require a manual install from the plugins registry.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p>Run a dry-run pass against your codebase to preview the proposed token changes:</p>
+      <pre><code>$ od plugin code-refresh \
+  --repo-path /path/to/acme-website \
+  --design-path ./DESIGN.md \
+  --scope src/components \
+  --dry-run</code></pre>
+      <p>The dry-run outputs a diff preview. Review every proposed change against the brand contract. A well-authored DESIGN.md produces a clean diff; a vague one produces false positives.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p>If the diff looks correct, apply it with a commit message that traces back to the DESIGN.md version:</p>
+      <pre><code>$ od plugin code-refresh \
+  --repo-path /path/to/acme-website \
+  --design-path ./DESIGN.md \
+  --scope src/components \
+  --commit-message "refactor: align tokens to Acme DESIGN.md v1"</code></pre>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-good">
+      <p><strong>Do: run code-refresh after a DESIGN.md update</strong></p>
+      <pre><code># DESIGN.md updated: new primary color
+# Run dry-run first
+$ od plugin code-refresh \
+  --design-path ./DESIGN.md \
+  --scope src/components \
+  --dry-run
+
+# Review diff, then apply
+$ od plugin code-refresh \
+  --design-path ./DESIGN.md \
+  --scope src/components</code></pre>
+    </div>
+    <div class="compare-bad">
+      <p><strong>Don't: run code-refresh without reviewing the diff</strong></p>
+      <pre><code># Running without --dry-run first
+# skips the review step and applies all
+# proposed token changes immediately.
+# A vague DESIGN.md can introduce regressions.
+$ od plugin code-refresh \
+  --design-path ./DESIGN.md \
+  --scope src/</code></pre>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <p>The code-refresh plugin is alpha as of June 2026 (v0.9.0). The CLI flags shown above are based on the architecture documentation and roadmap; they may change before the plugin reaches stable. Always run with <code>--dry-run</code> first regardless of maturity. The plugin modifies source files in your codebase---treat every run as a potentially breaking change and ensure you have a clean git state before applying. <!-- TODO-VERIFY: code-refresh plugin CLI flag names and --dry-run behavior at stable release --></p>
+  </div>
+
+  <!-- 16.6 Phase 6: Export and Review Gate -->
+  </section>
+
+  <section class="chapter-section" id="ch-16-6">
+    <h2 class="section-title">Phase 6: Export and Review Gate</h2>
+
+<p class="section-intro">The export and review gate is the human decision point. No artifact leaves the pipeline without a person verifying it against the brand contract. The export step produces the canonical files; the review gate is your quality assertion.</p>
+
+  <p>Open Design's export pipeline produces HTML (inlined), PDF, PPTX, ZIP, Markdown, and MP4 from a single artifact (as of June 2026, covered in depth in <a href="#ch-08-3">section 08.3</a>). The pipeline spine codifies which formats are canonical for which artifact types, so the review checklist is consistent across runs.</p>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-content">
+      <p>Export all required formats in one command. Specify the artifact ID and your target formats:</p>
+      <pre><code>$ od export \
+  --artifact-id hero-landing-v3 \
+  --formats html,pdf,pptx \
+  --output ./exports/hero-landing-v3</code></pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-content">
+      <p>Open each exported file independently---not just the preview. The sandboxed preview and the inlined HTML export handle external assets differently. A font that loads in the preview may be missing in the inlined HTML. Verify each format in its target environment:</p>
+      <ul>
+        <li>HTML: open in a browser with network disconnected</li>
+        <li>PDF: open in a PDF viewer, check pagination and typography</li>
+        <li>PPTX: open in your presentation tool, check slide layouts</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-content">
+      <p>Run the brand contract review against the exported artifact. Use the review checklist from Phase 7 of this chapter as your criteria. If the artifact passes, mark it approved:</p>
+      <pre><code>$ od approve \
+  --artifact-id hero-landing-v3 \
+  --reviewer @yourname
+# Marks artifact as approved in the project record</code></pre>
+      <!-- TODO-VERIFY: od approve command exists and takes these flags in v0.9.0 -->
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">4</span>
+    <div class="step-content">
+      <p>Archive the approved exports. The archive is your canonical output for this pipeline run:</p>
+      <pre><code>$ tar -czf hero-landing-v3-approved.tar.gz ./exports/hero-landing-v3
+# Copy to your team's shared storage</code></pre>
+    </div>
+  </div>
+
+  <figure class="figure--full" id="fig-16-export-panel" data-screenshot-id="ch-16-shot-03">
+    <img src="../images/od-v011-demo-approved-export-archive.png" alt="Open Design workspace showing a fictional approved artifact export panel with selected formats, output path, and archive manifest" loading="lazy" />
+    <figcaption>Figure 16.4 — Export and archive as the final step of the pipeline. The preview shows selected release formats, the output path, and the archive manifest so the approved files and their provenance leave the workspace together. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+  </figure>
+
+  <!-- 16.7 The Finished Pipeline -->
+  </section>
+
+  <section class="chapter-section" id="ch-16-7">
+    <h2 class="section-title">The Finished Pipeline</h2>
+
+<p class="section-intro">The pipeline spine is now assembled. Six phases, six outputs, two agents, one brand contract. Before you hand it to your team, document it and stress-test it with a full run.</p>
+
+  <p>The pipeline is worth documenting even for a team of one. The act of writing the spine down is what makes the output reproducible. Undocumented agent workflows become unrepeatable within weeks as model defaults drift, agent versions update, and the person who remembers the prompt structure leaves.</p>
+
+  <h4>Full Pipeline Run</h4>
+
+  <p>Run the entire pipeline end to end once before handing it to your team. Use this compound prompt to kick off a full pass:</p>
+
+  <pre><code>Using DESIGN.md and the house deck skill, generate a launch deck;
+variations agent: three hero options using both claude-code and
+opencode; then run code-refresh on src/ui to the same tokens
+and export the deck to PPTX and PDF.</code></pre>
+
+  <p>The pipeline spine handles the orchestration. You review the variations at phase 4, approve the exports at phase 6.</p>
+
+  <div class="callout">
+    <p><strong>My take:</strong> The pipeline is worth documenting even for a team of one. I have seen undocumented agent workflows become unrepeatable within weeks as defaults drift---a model version updates, a skill gets modified, someone adjusts the DESIGN.md without a commit message, and suddenly the output looks nothing like last month. Six phases on a single page in your repo's <code>docs/pipeline.md</code> costs an hour and pays back every time a new person joins or a previous run needs to be reproduced. Don't over-engineer it: six phases is plenty, and more steps usually mean more places for drift to enter.</p>
+  </div>
+
+  <h4>Pipeline Phases Summary</h4>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Pipeline Phases: output, tool, and source chapter for each phase</caption>
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Output</th>
+          <th>Tool</th>
+          <th>Source chapter</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1 — Brand Contract</td>
+          <td><code>DESIGN.md</code> committed to version control</td>
+          <td>Text editor, Open Design project</td>
+          <td><a href="#ch-05-5">Section 05.5</a></td>
+        </tr>
+        <tr>
+          <td>2 — House Skills</td>
+          <td>Skill files in <code>.claude/skills/</code></td>
+          <td>Skill authoring, Open Design</td>
+          <td><a href="#ch-04-5">Section 04.5</a></td>
+        </tr>
+        <tr>
+          <td>3 — Two Agents</td>
+          <td>Both agents MCP-connected, <code>od status agents</code> clean</td>
+          <td><code>od mcp install</code></td>
+          <td><a href="#ch-10-2">Section 10.2</a></td>
+        </tr>
+        <tr>
+          <td>4 — Variations</td>
+          <td>Two artifact variants from two agents, one selected</td>
+          <td>Open Design multi-agent run</td>
+          <td><a href="#ch-12-3">Section 12.3</a></td>
+        </tr>
+        <tr>
+          <td>5 — Code-Refresh</td>
+          <td>Codebase diff applied and committed</td>
+          <td><code>od plugin code-refresh</code> (alpha)</td>
+          <td><a href="#ch-09-4">Section 09.4</a></td>
+        </tr>
+        <tr>
+          <td>6 — Export + Review</td>
+          <td>Approved exports archived in canonical formats</td>
+          <td><code>od export</code>, manual review</td>
+          <td><a href="#ch-08-3">Section 08.3</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Pipeline Reuse Checklist</h4>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Reuse checklist: criteria for a pipeline ready to hand to your team</caption>
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Done when</th>
+          <th>Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DESIGN.md authored and committed</td>
+          <td>Test artifact uses house colors, typeface, and voice without prompting</td>
+          <td>Design lead</td>
+        </tr>
+        <tr>
+          <td>House skills tested across 3+ prompts</td>
+          <td>Output structure is consistent; copy varies but layout does not</td>
+          <td>Design engineer</td>
+        </tr>
+        <tr>
+          <td>Both agents connected and verified</td>
+          <td><code>od status agents</code> shows both active</td>
+          <td>Platform / infra</td>
+        </tr>
+        <tr>
+          <td>Variation workflow documented</td>
+          <td>A second team member can run the variation prompt independently</td>
+          <td>Design lead</td>
+        </tr>
+        <tr>
+          <td>Code-refresh dry-run reviewed</td>
+          <td>Diff is accurate; no false positives on a clean branch</td>
+          <td>Design engineer</td>
+        </tr>
+        <tr>
+          <td>Export formats verified and archived</td>
+          <td>Each format opens correctly in its target environment; artifact approved</td>
+          <td>Design lead</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Pipeline Troubleshooting</h4>
+
+  <div class="table-wrapper">
+    <table>
+      <caption>Common pipeline failure modes and fixes</caption>
+      <thead>
+        <tr>
+          <th>Symptom</th>
+          <th>Phase</th>
+          <th>Cause</th>
+          <th>Fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Artifacts ignore DESIGN.md colors and typography</td>
+          <td>1</td>
+          <td><code>DESIGN.md</code> not in the project root, or file not committed</td>
+          <td>Verify file location with <code>od status</code>; commit to version control before generating</td>
+        </tr>
+        <tr>
+          <td>Skill output structure varies across runs</td>
+          <td>2</td>
+          <td>Skill constraints are too vague; model interprets layout differently each time</td>
+          <td>Tighten layout constraints in the skill file; add explicit rules for each section</td>
+        </tr>
+        <tr>
+          <td><code>od status agents</code> shows one agent missing</td>
+          <td>3</td>
+          <td>Agent CLI not installed or MCP config not written</td>
+          <td>Run <code>od mcp install &lt;agent&gt;</code> again; check <a href="#appendix-A">Appendix A</a> for the config file location</td>
+        </tr>
+        <tr>
+          <td>Both variation outputs look identical</td>
+          <td>4</td>
+          <td>Agents sharing the same base model through a proxy; prompt too constrained</td>
+          <td>Verify agents are distinct; loosen the variation prompt to give each agent genuine design space</td>
+        </tr>
+        <tr>
+          <td>Code-refresh proposes unrelated changes</td>
+          <td>5</td>
+          <td>DESIGN.md is too broad; <code>--scope</code> path is too wide</td>
+          <td>Narrow <code>--scope</code> to a specific component directory; tighten reserved rules in DESIGN.md Section 9</td>
+        </tr>
+        <tr>
+          <td>Exported HTML missing fonts or images</td>
+          <td>6</td>
+          <td>Preview loads external assets that the inlined export cannot reach</td>
+          <td>Use inline or bundled assets only; verify export offline before approving (see <a href="#ch-08-6">section 08.6</a>)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Agent-Independence Note</h4>
+
+  <p>The pipeline spine is intentionally agent-agnostic. As documented in <a href="#ch-11-3">section 11.3</a>, the agent market churns: Gemini CLI sunsets June 18, 2026; OpenCode has been renamed once; Codex CLI ships near-weekly releases. The spine should never have an agent name hardcoded into it. Agents are wired at the MCP layer; the pipeline documentation refers to "primary agent" and "secondary agent," not "Claude Code" or "OpenCode." When a better agent arrives, you swap the connection without rewriting the spine.</p>
+
+  <div class="callout tip">
+    <p><strong>Next:</strong> The appendices provide the reference material that supports every phase of this pipeline. <a href="#appendix-A">Appendix A</a> is a scannable command and CLI reference---keep it open during setup and handoff. <a href="#appendix-B">Appendix B</a> indexes the bundled skills, brand systems, and plugins catalog. <a href="#appendix-C">Appendix C</a> covers the failure modes you will actually hit, with a symptom-cause-fix table for each. The pipeline spine is assembled; the appendices are its maintenance manual.</p>
+  </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="15.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 15</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Future of Local-First Autonomous Design</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 15</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Future of Local-First Autonomous Design</p>
+        </div>
+      </div>
+    </a>
+    <a href="A.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Appendix A</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Command and CLI Reference</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Appendix A</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Command and CLI Reference</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #cc7373; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Appendix</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Command and CLI Reference</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Every install path, the od command surface, MCP setup per CLI, and the .od/ file layout</p>
+        </div>
+        <a href="A.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>The Local-First Design Machine - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #fe7141;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #fe7141; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART I: FOUNDATIONS &middot; SECTION 01</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">The Local-First Design Machine</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">What Open Design is and why generation runs on your machine</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">15 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-01-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">From Cloud Design Tools to Local-First Generation</a>
+        <a href="#ch-01-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">What Open Design Actually Is</a>
+        <a href="#ch-01-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Three Layers: Brain, Workshop, Window</a>
+        <a href="#ch-01-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Who This Is For</a>
+        <a href="#ch-01-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">A Map of the Book</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-01-1" data-section="ch-01-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>From Cloud Design Tools to Local-First Generation</span></a>
+          <a href="#ch-01-2" data-section="ch-01-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What Open Design Actually Is</span></a>
+          <a href="#ch-01-3" data-section="ch-01-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Three Layers: Brain, Workshop, Window</span></a>
+          <a href="#ch-01-4" data-section="ch-01-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Who This Is For</span></a>
+          <a href="#ch-01-5" data-section="ch-01-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>A Map of the Book</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-01-1" data-section="ch-01-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>From Cloud Design Tools to Local-First Generation</span></a>
+          <a href="#ch-01-2" data-section="ch-01-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What Open Design Actually Is</span></a>
+          <a href="#ch-01-3" data-section="ch-01-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Three Layers: Brain, Workshop, Window</span></a>
+          <a href="#ch-01-4" data-section="ch-01-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Who This Is For</span></a>
+          <a href="#ch-01-5" data-section="ch-01-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>A Map of the Book</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">01</p>
+    <h1 class="chapter-title co-title">The Local-First Design Machine</h1>
+    <p class="co-standfirst">What Open Design is and why generation runs on your machine</p>
+    <div class="co-body co-body--dropcap">
+      <p>Open Design moves brand-compliant design generation from a vendor's cloud onto your own machine, driven by the AI coding agent you already use.</p>
+    </div>
+  </section>
+  <p class="chapter-disclaimer"><em>Trademark notice: product names referenced in this chapter (Claude Code, Cursor, GitHub Copilot, OpenCode, Codex CLI, Gemini CLI, Kimi CLI, Figma, Linear, Stripe, Anthropic, OpenAI, Azure, and Google Gemini) are trademarks of their respective owners, used here for identification only. This book and Open Design are independent and not affiliated with, sponsored by, or endorsed by any of those trademark owners. All feature counts and version references reflect Open Design as of June 2026; verify current state at github.com/nexu-io/open-design.</em></p>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 1.1 — From Cloud Design Tools to Local-First Generation
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <section class="chapter-section" id="ch-01-1">
+    <h2 class="section-title"><span class="section-num">1.1</span> From Cloud Design Tools to Local-First Generation</h2>
+
+<p class="section-en">Why where generation runs is a product decision, not a technical footnote</p>
+    <p class="section-intro">Picture this: you type a prompt, a branded landing page assembles itself in a sandboxed preview window, and nothing about that exchange ever touches a vendor's server. The prompt, the brand tokens, the generated artifact, the revision history --- all on your machine. That is the value proposition of Open Design, and it is meaningfully different from every hosted design AI that came before it.</p>
+
+    <figure class="figure--full" id="fig-ch01-workflow">
+      <img src="../images/fig-diagram-of-the-open-design-local-k2k81o.jpg" alt="Diagram of the Open Design local-first workflow: a terminal window running od init, od generate, and od preview, with arrows flowing down to a rendered web page thumbnail." loading="lazy" />
+      <figcaption>Figure 1.1 — The local-first generation loop. Commands run in your terminal (<code>od init</code>, <code>od generate</code>, <code>od preview</code>), and the rendered artifact appears on your own machine.</figcaption>
+    </figure>
+
+    <p>The dominant design AI tools of the mid-2020s share a common architecture: you send a prompt to a cloud service, the service generates an artifact, and the result is stored on the vendor's infrastructure. That model is convenient. It is also a dependency. Your prompts describe your unreleased products. Your brand tokens encode decisions your competitors don't have yet. Your generation history is a record of your design process. When all of that lives on a vendor's server, you are trusting that vendor with something more sensitive than most teams realize.</p>
+
+    <p>Local-first is a response to that dependency. In Open Design, the orchestration layer --- the daemon that receives your prompts, selects skills, resolves brand systems, and writes artifacts to disk --- runs on your hardware. Open Design v0.9.0 documents no telemetry collection and no Open Design servers; the project files live at <code>.od/projects/&lt;id&gt;/</code> on your own machine, and the application state lives at <code>.od/app.sqlite</code> next to them. (Source: Open Design architecture documentation, v0.9.0, github.com/nexu-io/open-design/docs/architecture.md.)</p>
+
+    <p>The cost argument reinforces the architecture argument. A team running 50 generation cycles per day on a hosted service pays for every one of those cycles. With Open Design, the compute cost is borne by whichever model provider you choose to route to --- and you can route to a free local model if you want. There is no Open Design subscription. Apache-2.0. The product is free.</p>
+
+    <p>The independence argument is subtler but, for a design team, more durable. Cloud design tools can sunset features, change pricing, or simply disappear. Open Design is Apache-2.0 open source. You can fork it. You can pin a version. You can run it offline if you pair it with a local model. That kind of sovereignty is rare in a design toolchain.</p>
+
+    <p>There's a practical side to this that doesn't get discussed enough: local-first means you can use Open Design on a plane, in a data-center-free office, or behind a corporate firewall that blocks outbound API calls --- as long as you have a local model configured. The hosted tools don't have that option. I've done actual client work in airplane mode with a local Ollama model and the daemon running on my laptop. That capability isn't a party trick; for some teams it's the deciding constraint.</p>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The headline numbers --- 140+ brand systems, 261 plugins, 21 supported CLIs (as of June 2026) --- are a feature surface, not the daily-use surface. The local-first architecture is the real reason to adopt Open Design. I've watched teams reach for the tool because the catalog impressed them and then stay because they realized their generation history wasn't sitting on anyone else's servers. Pick the tool for where generation runs and who controls it. The catalog is a nice bonus.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-01-2">
+    <h2 class="section-title"><span class="section-num">1.2</span> What Open Design Actually Is</h2>
+
+<p class="section-en">A desktop app plus daemon that lets coding agents produce design artifacts on your machine</p>
+    <p class="section-intro">Open Design is a local-first, open-source desktop application that gives AI coding agents a structured environment for producing brand-compliant design artifacts. As of June 2026, it ships as v0.9.0 (released June 2, 2026), carries 63,000+ GitHub stars (per the project README header, verified June 11, 2026; the star count will continue to change — check github.com/nexu-io/open-design for current figures), and is licensed under Apache-2.0 with no subscription required.</p>
+
+    <p>The concrete feature set: as of June 2026, Open Design ships over 100 skills for guiding artifact generation (the v0.9.0 README documents 259+ skills; the book uses 100+ as a conservative floor that the project clearly exceeds), approximately 150 portable visual brand systems (the official website lists 150; the README states 142+, reflecting a bundled-versus-API count difference — both figures exceed 140 as of June 2026), 261 official plugins across artifact categories (per the Open Design plugin library, June 2026), and native support for 21 coding-agent CLIs (the README lists 9 named CLIs plus "17+ others"; 21 is the defensible named-and-auto-detected count as of v0.9.0). It exports to HTML (inlined), PDF, PPTX, MP4, ZIP, and Markdown. It runs the same experience on macOS, Windows 10/11 (x64), and Linux.</p>
+
+    <!-- Table 1: Open Design at a Glance -->
+    <div class="table-wrapper">
+      <table>
+        <caption>Open Design at a Glance (all figures as of June 2026)</caption>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Value</th>
+            <th>Last verified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Current version</td>
+            <td>v0.9.0 (released June 2, 2026; codename "Design for everyone")</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>GitHub stars</td>
+            <td>63,000+</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>License</td>
+            <td>Apache-2.0; no subscription</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Skills</td>
+            <td>100+ (conservative floor; v0.9.0 README documents 259+ skills — both figures sourced from github.com/nexu-io/open-design)</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Brand systems</td>
+            <td>140+ (website: 150; README: 142+; both sourced from open-design.ai and github.com/nexu-io/open-design as of June 2026)</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Official plugins</td>
+            <td>261</td>
+            <td>June 2026</td>
+          </tr>
+          <tr>
+            <td>Supported agent CLIs</td>
+            <td>21 (including Claude Code, Cursor, GitHub Copilot, OpenCode, Codex CLI, Kimi CLI, and others)</td>
+            <td>June 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The architecture behind those numbers is a desktop application built on Next.js 16 and React 18, a local Node 24 Express daemon, <code>better-sqlite3</code> for application state, and an Electron shell for the native desktop experience. The preview is rendered inside a sandboxed <code>srcdoc</code> iframe --- generated code is isolated from your system by default.</p>
+
+    <p>The install path is deliberately low-friction. You can download a prebuilt application for your operating system and have Open Design running in under five minutes. The one-line CLI installer handles connecting your first coding-agent CLI:</p>
+
+    <div class="code-block" data-lang="bash" data-label="Command">
+      <div class="code-label">Command</div>
+      <pre><code class="language-bash">$ curl -fsSL https://open-design.ai/install.sh | sh -s claude-code</code></pre>
+    </div>
+
+    <p>The v0.9.0 release shipped with 310 pull requests from 98 contributors (per the official v0.9.0 release notes, github.com/nexu-io/open-design/releases/tag/open-design-v0.9.0), signaling a project that is well past its initial proof-of-concept phase. The star trajectory tells the same story: from roughly 21,000 stars in early May 2026 to 63,000+ by mid-June 2026 (early-May figure from community tracking; 57,400 mid-May per Augment Code blog, May 2026; 63,000+ per project README, June 11, 2026 — verify against current README on publication date). That growth is rapid but consistent with a tool that addresses a previously-unmet need rather than riding a trend.</p>
+
+    <p>Chapter 02 covers the three install paths in detail. This chapter is about understanding what you are installing and why it is designed the way it is.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-01-3">
+    <h2 class="section-title"><span class="section-num">1.3</span> The Three Layers: Brain, Workshop, Window</h2>
+
+<p class="section-en">The mental model that makes everything else in this book legible</p>
+    <p class="section-intro">Open Design is a machine with three layers. Once you hold this model, every feature described in this book falls into one of the three slots. The brain receives intent. The workshop executes. The window shows you the result. Everything runs on your machine --- the cloud, if you use it at all, is an optional extension of the brain.</p>
+
+    <h3 id="ch-01-3-brain">Layer 1: The Brain</h3>
+    <p>The brain is your coding-agent CLI: Claude Code, Cursor, GitHub Copilot Chat, OpenCode, Codex CLI (OpenAI Codex), Gemini CLI, Kimi CLI, or any of the 21 supported CLIs as of June 2026. The brain accepts natural-language prompts and translates them into design instructions the daemon can execute.</p>
+
+    <p>The brain connects to Open Design via MCP (Model Context Protocol) --- an open standard that lets an AI agent connect to external tools. Open Design exposes its daemon as an MCP server; your CLI registers it as a tool. From that point, prompts in your CLI become generation requests on your machine.</p>
+
+    <p>The brain is the one layer that may involve a cloud call. If you route to Anthropic, OpenAI, Azure, or Google, the model inference happens off-machine. If you route to Ollama, the model runs locally. Everything else --- file storage, skill selection, brand resolution, artifact rendering --- stays on your machine regardless.</p>
+
+    <h3 id="ch-01-3-workshop">Layer 2: The Workshop</h3>
+    <p>The workshop is the local daemon: a Node 24 Express server running at port 7456 on your machine. It owns three things: the skill registry (the 100+ skill instructions that shape what an artifact looks like — 259+ as of v0.9.0), the design-system resolver (the 140+ brand DESIGN.md files that govern colors, type, and voice), and artifact storage (the project files at <code>.od/projects/&lt;id&gt;/</code>).</p>
+
+    <p>When you send a prompt through your CLI, the workshop receives the generation request, selects the right skill, resolves the brand system you specified, calls the model through whichever provider you configured, and streams the resulting artifact back to the window. Every file the workshop touches lives at <code>.od/</code> on your local filesystem. The daemon can run entirely without network access if you pair it with a local model.</p>
+
+    <h3 id="ch-01-3-window">Layer 3: The Window</h3>
+    <p>The window is the Next.js 16 frontend and the sandboxed preview iframe. The frontend shows your project history, your brand selection, and the live preview. The preview itself is a <code>srcdoc</code> iframe with <code>sandbox="allow-scripts"</code> --- generated HTML runs inside it, isolated from your browser session and your filesystem. The streaming artifact parser parses the SSE stream from the daemon and renders partial HTML as it arrives, so you see the artifact building in real time.</p>
+
+    <p>When you export, the same artifact content leaves the iframe and goes through the export pipeline: inlined HTML, PDF, PPTX, MP4 (via HyperFrames), ZIP, or Markdown. Chapter 08 covers the divergences between what the sandboxed preview shows and what the exported file contains.</p>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Brain</strong>
+          <p>Your coding-agent CLI (Claude Code, Cursor, OpenCode, etc.) sending prompts via MCP</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Workshop</strong>
+          <p>Local daemon (Node 24 + Express) with skill registry, brand resolver, and artifact storage — all on your machine</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Window</strong>
+          <p>Next.js 16 frontend + sandboxed srcdoc iframe streaming the artifact as it builds</p>
+        </div>
+      </div>
+      <figcaption>Figure 1.2 — The three-layer Design Machine. Everything inside the boundary runs on your machine. A cloud model API (dashed, optional) extends the brain only for inference; files and orchestration stay local regardless.</figcaption>
+    </figure>
+
+    <p>The cloud model --- if you use one --- sits outside this boundary. It extends the brain's reasoning capacity but never touches the workshop or the window. If you replace the cloud model with a local Ollama model, the entire machine runs on your hardware with no external calls.</p>
+
+    <p>This three-layer separation is not an accident of architecture; it is a design decision with consequences. It means you can swap the brain --- try Claude Code today, switch to OpenCode next quarter --- without touching the workshop. It means you can update the daemon (the workshop) independently of your agent CLI version. It means the window layer, the preview and export pipeline, can evolve without breaking how prompts flow in. Layered systems are more maintainable than monolithic ones. Open Design is built to be maintainable on your machine.</p>
+
+    <p>The phrase "on your machine" will recur throughout this book because it is the answer to nearly every architectural question. Where do files live? On your machine. Where does orchestration run? On your machine. Where does the brand contract get resolved? On your machine. The cloud, when you use it, is a computation service you rent for inference --- and even that is optional.</p>
+
+    <div class="callout tip">
+      <p>When something goes wrong in Open Design, the three-layer model tells you where to look first. The brain couldn't parse your prompt? Check the CLI connection. The artifact didn't match the brand? Check the workshop's skill and brand resolution. The preview looks different from the export? That's a window-layer divergence. Chapter 08 has the full troubleshooting table.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-01-4">
+    <h2 class="section-title"><span class="section-num">1.4</span> Who This Is For</h2>
+
+<p class="section-en">Two reader profiles, one book</p>
+    <p class="section-intro">This book is written for two types of practitioners who end up in the same place: running brand-compliant design generation on their own machine, driven by the agent CLI they already use. The path to that destination looks different depending on where you start.</p>
+
+    <!-- Table 2: Two Reader Profiles -->
+    <div class="table-wrapper">
+      <table>
+        <caption>Two Reader Profiles</caption>
+        <thead>
+          <tr>
+            <th>Profile</th>
+            <th>Starting point</th>
+            <th>What they want from Open Design</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Product designer adopting local-first AI</strong></td>
+            <td>Familiar with Figma and design systems; has tried hosted AI design tools; skeptical of vendor lock-in or privacy trade-offs; not primarily a coder</td>
+            <td>A design generation tool they can run privately, with brand systems they control, without a subscription or a server dependency. The agent CLI is new; the design system workflow is familiar.</td>
+          </tr>
+          <tr>
+            <td><strong>Design engineer</strong></td>
+            <td>Comfortable in a terminal; writes component libraries and design tokens; uses a coding agent daily; wants design-as-code where brand specs and generated artifacts live alongside source code</td>
+            <td>DESIGN.md as a machine-readable brand contract, artifacts that export to production-adjacent code, brand-spec refactors via the code-refresh plugin, and the skills system as an extension point they can author against.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Most of this book applies equally to both profiles. Chapter 05 (brand systems) and Chapter 09 (the plugin ecosystem, specifically the code-refresh-to-brand-spec scenario) go deepest for design engineers. Chapter 14 (for leaders and team leads) addresses the adoption conversation that neither profile typically leads alone.</p>
+
+    <p>If you are neither a designer nor an engineer but manage a team that contains both, Chapter 14 is the chapter for you. It covers the adoption scorecard and how to evaluate Open Design against your team's actual constraints. Chapters 01 through 13 build the mental model and technical foundation you'll need to have that conversation credibly.</p>
+
+    <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The design engineer profile gets more leverage from Open Design than the product designer profile, at least initially. The skills and brand-system authoring, the code-refresh plugin, and the MCP integration are all designed around a practitioner who thinks in code. Product designers get the most value once their team has authored a solid house DESIGN.md and a set of custom skills --- at that point, generation feels like magic because someone else did the hard setup work. If you're a product designer, find the design engineer in your orbit and pair on Chapter 05 together. The investment pays back on every generation after that.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-01-5">
+    <h2 class="section-title"><span class="section-num">1.5</span> A Map of the Book</h2>
+
+<p class="section-en">Sixteen chapters, three appendices, one arc from install to team-scale</p>
+    <p class="section-intro">The book moves from setup to system to scale. You'll go from a running daemon to a complete generation loop, then into the components that make that loop reliable --- skills, brand systems, artifacts, preview and export --- before stepping out to the ecosystem: plugins, MCP servers, agent-CLI choices, and multi-agent teams. The final chapters address adoption for leaders and a look at what comes after v1.0.</p>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Install</strong>
+          <p>Ch 01–02: Mental model and three install paths</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>First loop</strong>
+          <p>Ch 03: Generate, preview, iterate, export</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>System</strong>
+          <p>Ch 04–08: Skills, brand systems, artifact types, preview and export pipeline</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Ecosystem</strong>
+          <p>Ch 09–12: Plugins, MCP, agent CLIs, multi-agent teams</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Scale</strong>
+          <p>Ch 13–16: Production workflows, leadership, case studies, future</p>
+        </div>
+      </div>
+      <figcaption>Figure 1.3 — The book arc. Each phase builds on the last. You can read sequentially or jump to the phase relevant to your current constraint.</figcaption>
+    </figure>
+
+    <p><strong>Chapters 01–02</strong> establish the mental model and get you to a running daemon. This chapter frames the three-layer machine. Chapter 02 covers the three install paths and dissects the architecture in enough detail that every subsequent chapter makes structural sense.</p>
+
+    <p><strong>Chapter 03</strong> walks the complete four-beat loop: generate, preview, iterate, export. It is the one chapter I'd run a new user through on day one. Everything after it is elaboration on one of those four beats.</p>
+
+    <p><strong>Chapters 04–05</strong> open the workshop layer. Chapter 04 is the skills system --- what skills are, how they shape generation, how to author one. Chapter 05 is brand systems --- the 140+ bundled DESIGN.md files (as of June 2026), the schema, and how to write a house brand contract that makes every artifact on-brand by default.</p>
+
+    <p><strong>Chapters 06–08</strong> cover the artifact catalog and the export pipeline. Chapter 06 is web and mobile prototypes. Chapter 07 is presentation decks, HyperFrames HTML-to-MP4 motion graphics, and AI image generation. Chapter 08 dissects the sandboxed preview and the six export formats.</p>
+
+    <p><strong>Chapters 09–12</strong> are the ecosystem. Chapter 09 covers the 261-plugin taxonomy (as of June 2026), the Figma-migration scenario, and the code-refresh-to-brand-spec plugin. Chapter 10 covers Open Design's MCP server and how to expose its generation capabilities to external agents. Chapter 11 compares the 21 supported agent CLIs (as of June 2026) so you can route by constraint, not by habit. Chapter 12 is multi-agent design teams.</p>
+
+    <p><strong>Chapters 13–16</strong> address production and scale. Chapter 13 is a real end-to-end project workflow. Chapter 14 is the adoption scorecard for team leads and decision-makers. Chapter 15 frames the durable layer (DESIGN.md, skills, brand contracts) versus the volatile layer (model versions, artifact schemas, CLI versions). Chapter 16 closes with the pipeline spine and what the project's trajectory means for practitioners planning ahead.</p>
+
+    <p>Three appendices round out the reference material: Appendix A is a complete CLI command reference, Appendix B is an agent-CLI comparison matrix, and Appendix C is a curated failure-modes catalog for when something goes wrong.</p>
+
+    <div class="callout tip">
+      <p><strong>Next:</strong> Chapter 02 gets Open Design running on your machine. It covers the three install paths, the daemon, the file layout, and the sandboxed preview. By the end of it, you'll have a running workshop layer to feed the rest of the book.</p>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="preface.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 0</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Open Design</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 0</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Open Design</p>
+        </div>
+      </div>
+    </a>
+    <a href="02.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 02</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Install and Architecture</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 02</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Install and Architecture</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #e98e52; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">Install and Architecture</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">Desktop app, daemon, SQLite, Electron, and Docker</p>
+        </div>
+        <a href="02.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

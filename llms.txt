@@ -1,0 +1,33 @@
+# Open Design
+
+> *Open Design* is a comprehensive guide to using Open Design (Anthropic's CLI coding agent) as a design workflow tool—from setup and basics through prototyping, visual design, production UI code, design system maintenance, and team collaboration. Written by Mehran Mozaffari (AI Operator & Systems Designer based in Sydney, Australia), the book is free for personal use under a CC BY-NC-SA 4.0 license.
+
+## Core Resources
+*   **Official Website**: [https://piazr.github.io/open-design/](https://piazr.github.io/open-design/) - Read the full book online.
+*   **Book Repository**: [https://github.com/imehr/open-design](https://github.com/imehr/open-design) - Download the book's source HTML, PDF, and EPUB files.
+*   **Website Repository**: [https://github.com/Piazr/open-design](https://github.com/Piazr/open-design) - Repository for the companion website.
+
+## Front Matter
+*   [Preface](https://piazr.github.io/open-design/chapters/preface.html): Why I Wrote This Book for Designers.
+*   [Copyright & License](https://piazr.github.io/open-design/chapters/copyright.html): Terms of use, licensing, and distribution permissions.
+
+## Part I: Foundations & Core Skills
+*   [Chapter 01: The Design-Code Gap](https://piazr.github.io/open-design/chapters/01.html): Understanding the shift, what Open Design is, and where it fits in the designer's workflow.
+*   [Chapter 02: Getting Started (No Terminal Fear)](https://piazr.github.io/open-design/chapters/02.html): Installing Open Design, initializing your first workspace, and mastering command options.
+*   [Chapter 03: Your First Design Prototype](https://piazr.github.io/open-design/chapters/03.html): Creating dynamic HTML layouts, reviewing them live, and iterating on visual details.
+*   [Chapter 04: The Art of Prompting for Design](https://piazr.github.io/open-design/chapters/04.html): Designing structures via natural language, specifying grids, alignment, and responsiveness.
+
+## Part II: System & Workflow Automation
+*   [Chapter 05: Teaching Claude Your Design Language](https://piazr.github.io/open-design/chapters/05.html): Using CLAUDE.md guidelines, design tokens, brand specs, and code standards.
+*   [Chapter 06: Design Systems at Scale](https://piazr.github.io/open-design/chapters/06.html): Building, extending, and maintaining atomic component libraries with automated tests.
+*   [Chapter 07: Automating Design Workflows](https://piazr.github.io/open-design/chapters/07.html): Scheduled operations, git hooks, and continuous integration workflows for design teams.
+*   [Chapter 08: Connecting Your Design Tools](https://piazr.github.io/open-design/chapters/08.html): Using Figma integration, Miro integration, and building custom Model Context Protocol (MCP) servers.
+
+## Part III: Production & Tool Landscape
+*   [Chapter 09: From Design to Production](https://piazr.github.io/open-design/chapters/09.html): The capstone workflow, taking a prototype to production code and deploying to staging.
+*   [Chapter 10: The AI Design Tool Landscape](https://piazr.github.io/open-design/chapters/10.html): Comparing Open Design against Cursor, Copilot, v0, Bolt, and other AI editors.
+
+## Appendices
+*   [Appendix A: Open Design Command Reference](https://piazr.github.io/open-design/chapters/A.html): Detailed list of keyboard shortcuts, commands, configurations, and settings.
+*   [Appendix B: Pricing, Plans, and Limits](https://piazr.github.io/open-design/chapters/B.html): Cost tracking, model context limits, token usage, and cost-effective prompting.
+*   [Appendix C: Troubleshooting and FAQ](https://piazr.github.io/open-design/chapters/C.html): Common connection issues, syntax errors, permission problems, and troubleshooting guides.

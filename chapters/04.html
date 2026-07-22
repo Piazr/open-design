@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>The Skills System - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #b59664;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #b59664; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART I: FOUNDATIONS &middot; SECTION 04</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">The Skills System</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">How 100+ design skills shape what agents produce</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">17 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-04-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">What a Skill Is</a>
+        <a href="#ch-04-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Skill Catalog</a>
+        <a href="#ch-04-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">How Agents Select and Compose Skills</a>
+        <a href="#ch-04-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Anatomy of a Skill File</a>
+        <a href="#ch-04-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Authoring Your Own Skill</a>
+        <a href="#ch-04-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">When to Write a Skill vs Tweak a Prompt</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-04-1" data-section="ch-04-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What a Skill Is</span></a>
+          <a href="#ch-04-2" data-section="ch-04-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Skill Catalog</span></a>
+          <a href="#ch-04-3" data-section="ch-04-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>How Agents Select and Compose Skills</span></a>
+          <a href="#ch-04-4" data-section="ch-04-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Anatomy of a Skill File</span></a>
+          <a href="#ch-04-5" data-section="ch-04-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Authoring Your Own Skill</span></a>
+          <a href="#ch-04-6" data-section="ch-04-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When to Write a Skill vs Tweak a Prompt</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-04-1" data-section="ch-04-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What a Skill Is</span></a>
+          <a href="#ch-04-2" data-section="ch-04-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Skill Catalog</span></a>
+          <a href="#ch-04-3" data-section="ch-04-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>How Agents Select and Compose Skills</span></a>
+          <a href="#ch-04-4" data-section="ch-04-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Anatomy of a Skill File</span></a>
+          <a href="#ch-04-5" data-section="ch-04-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Authoring Your Own Skill</span></a>
+          <a href="#ch-04-6" data-section="ch-04-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When to Write a Skill vs Tweak a Prompt</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">04</p>
+    <h1 class="chapter-title co-title">The Skills System</h1>
+    <p class="co-standfirst">How 100+ design skills shape what agents produce</p>
+    <div class="co-body co-body--dropcap">
+      <p>A skill is a reusable instruction package that turns a vague prompt into a brand-consistent artifact, and Open Design ships 100+ of them. The skill is the recipe---and once you see that, the black box opens.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- Section 4.1: What a Skill Is                                -->
+  <!-- ============================================================ -->
+
+  <section class="chapter-section" id="ch-04-1">
+    <h2 class="section-title"><span class="section-num">4.1</span> What a Skill Is</h2>
+
+<p class="section-en">Skills as Recipes</p>
+    <p class="section-intro">Before I ran Open Design with explicit skills, I did what most people do: I wrote long, detailed prompts and hoped the agent would produce something consistent. Sometimes it did. More often, the same prompt produced a different layout, a different color treatment, and a different component style on every run. Skills fix that. A skill is a recipe the agent follows: it constrains structure, applies a brand system, and fixes the output format, so the same prompt produces reliable results across runs.</p>
+
+    <p>The skill is the recipe in exactly the way a kitchen recipe works. A recipe doesn't just list ingredients---it specifies quantities, sequence, temperature, and the expected result. A good recipe is repeatable: the same cook, the same kitchen, the same result. Open Design skills do the same thing for design artifacts. They tell the agent how to lay out a dashboard, which brand tokens to pull, how many KPI cards to render, and what self-check to run before returning the artifact.</p>
+
+    <p>Without a skill, generation is raw-prompt generation. With a skill, it's recipe-driven generation. The difference shows immediately.</p>
+
+    <figure>
+      <div class="compare">
+        <div class="compare-good">
+          <p><strong>Skill-driven generation:</strong></p>
+          <pre><code>Use the dashboard skill with the Stripe brand system
+to build an analytics overview with four KPI cards
+and a revenue chart.</code></pre>
+          <p>The agent reads the <code>dashboard</code> skill, pulls brand tokens from the active DESIGN.md, applies the platform-desktop layout, inlines SVG charts, and self-checks that every color came from DESIGN.md---on every run.</p>
+        </div>
+        <div class="compare-bad">
+          <p><strong>Raw-prompt generation:</strong></p>
+          <pre><code>Build an analytics dashboard with four cards
+and a revenue chart.</code></pre>
+          <p>The agent improvises layout, chooses colors arbitrarily, may or may not self-check, and produces a different result on the next run with the same prompt.</p>
+        </div>
+      </div>
+      <figcaption>Figure 4.1 — Skill-driven vs raw-prompt generation for the same dashboard request. The skill constrains structure, brand, and the self-check step; raw prompting leaves all three to chance.</figcaption>
+    </figure>
+
+    <p>A skill file is small---most are under 80 lines of YAML frontmatter plus Markdown prose. The frontmatter declares the skill's identity, triggers, and Open Design extensions. The prose body is the workflow the agent reads verbatim: what to do first, how to classify the request, how to lay out the regions, and what to check before calling the artifact done.</p>
+
+    <p>As of June 2026, Open Design ships with 100+ skills (the repository contains 157 total items across the <code>skills/</code> and <code>design-templates/</code> directories; the README uses the conservative "100+" figure). <!-- TODO-VERIFY: confirm whether the README count includes design-templates or only the skills/ directory --></p>
+
+    <div class="callout warning">
+      <p>The "100+" count in Open Design's README is a conservative floor, not a ceiling. As of June 2026, the repository contains 157 skill directories spanning 54+ functional skills and roughly 100 design templates. That count grows with every release. Always verify against the live repository when the exact number matters.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-04-2">
+    <h2 class="section-title"><span class="section-num">4.2</span> The Skill Catalog</h2>
+
+<p class="section-en">Seven artifact modes, hundreds of variations</p>
+    <p class="section-intro">Skills are organized by artifact mode. Each mode corresponds to a distinct type of output: prototype, deck, template, design-system, image, video, or audio. Most teams use the prototype and deck modes daily; the rest exist for specific pipelines. Knowing which mode covers your artifact lets you route a prompt to the right skill immediately instead of guessing.</p>
+
+    <figure class="figure--full" data-screenshot-id="ch-04-shot-01">
+      <img src="../images/ch-04-shot-01.png" alt="Open Design skill picker UI showing skill cards organized by artifact mode, with search and filter controls" loading="lazy"/>
+      <figcaption>Figure 4.2 — The Open Design design-systems and skill library: skills are browsable by artifact mode, searchable by description, and filterable by platform. Official Open Design screenshot, reproduced under Apache-2.0. As of June 2026, Open Design v0.9.0.</figcaption>
+    </figure>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Skill Families and Artifacts --- as of June 2026, Open Design v0.9.0</caption>
+        <thead>
+          <tr>
+            <th>Skill family (mode)</th>
+            <th>Produces</th>
+            <th>Typical brand pairing</th>
+            <th>Example skill</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>prototype</strong></td>
+            <td>Single-page interactive HTML for web, desktop, or mobile viewports</td>
+            <td>Any DESIGN.md with color + typography sections</td>
+            <td><code>dashboard</code>, <code>landing-page</code>, <code>onboarding</code></td>
+          </tr>
+          <tr>
+            <td><strong>deck</strong></td>
+            <td>HTML slide deck, exportable to PPTX</td>
+            <td>Brand systems with strong typographic identity (Vercel, Linear)</td>
+            <td><code>magazine-web-ppt</code>, <code>swiss-international</code></td>
+          </tr>
+          <tr>
+            <td><strong>template</strong></td>
+            <td>Reusable HTML/CSS/JS component template</td>
+            <td>Design systems requiring consistent UI atoms</td>
+            <td><code>email-template</code>, <code>card-grid</code></td>
+          </tr>
+          <tr>
+            <td><strong>design-system</strong></td>
+            <td>Generated component library or style guide</td>
+            <td>House brand DESIGN.md files</td>
+            <td><code>design-system-overview</code></td>
+          </tr>
+          <tr>
+            <td><strong>image</strong></td>
+            <td>AI-generated images via configured provider</td>
+            <td>Brand with color and voice sections</td>
+            <td><code>hero-image</code>, <code>social-card</code></td>
+          </tr>
+          <tr>
+            <td><strong>video</strong></td>
+            <td>HTML-to-MP4 motion graphics via HyperFrames</td>
+            <td>Brand with animation and accent color tokens</td>
+            <td><code>motion-intro</code>, <code>explainer-clip</code></td>
+          </tr>
+          <tr>
+            <td><strong>audio</strong></td>
+            <td>Text-to-speech or ambient audio generation</td>
+            <td>Voice and tone sections of DESIGN.md</td>
+            <td><code>narration</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The prototype mode is the highest-volume category by a wide margin. <!-- TODO-VERIFY: no public telemetry; author judgment based on skill count distribution in repo --> Most bundled skills target <code>prototype</code> with <code>platform: desktop</code> or <code>platform: mobile</code>. Decks come second, with several magazine and Swiss International variants. The remaining five modes cover specialized pipelines: design system documentation, image generation, video, audio.</p>
+
+    <p>One distinction the catalog makes explicit is that <strong>design templates</strong> and <strong>functional skills</strong> are not the same thing, even though both use SKILL.md and appear in the picker. Functional skills (under <code>skills/</code>) describe complete workflows. Design templates (under <code>design-templates/</code>) are reference implementations of a specific visual layout. Both use the same API shape, but templates are more like examples than instructions.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-04-3">
+    <h2 class="section-title"><span class="section-num">4.3</span> How Agents Select and Compose Skills</h2>
+
+<p class="section-en">From prompt to skill to artifact</p>
+    <p class="section-intro">When you submit a generation request in Open Design, the daemon doesn't immediately hand it to the agent. It first resolves which skill to apply. That resolution is brief-matching: the daemon scans skill <code>description</code> and <code>triggers</code> fields against your prompt and surfaces the best match in the skill picker. You confirm it---or pick a different skill---before the agent reads the skill body and begins generating.</p>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Prompt</strong>
+          <p>User submits a generation brief in the UI</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Skill Selection</strong>
+          <p>Daemon matches brief against skill descriptions and triggers; surfaced in the picker</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Brand Application</strong>
+          <p>Active DESIGN.md is injected into the skill's context window</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Artifact</strong>
+          <p>Agent executes the skill workflow, returns a branded, self-contained artifact</p>
+        </div>
+      </div>
+      <figcaption>Figure 4.3 — The four-stage resolution path from prompt to artifact. The skill is resolved and confirmed before the agent reads it; the brand system is injected automatically when <code>od.design_system.requires: true</code>.</figcaption>
+    </figure>
+
+    <h3 id="ch-04-3-1">Skill Discovery and Precedence</h3>
+
+    <p>Open Design scans three locations for skills, in priority order:</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Skill Discovery Locations and Priority --- as of June 2026, Open Design v0.9.0</caption>
+        <thead>
+          <tr>
+            <th>Location</th>
+            <th>Priority</th>
+            <th>Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>./.claude/skills/</code></td>
+            <td>1 (highest)</td>
+            <td>Project-private; not committed to source control; overrides bundled and global skills</td>
+          </tr>
+          <tr>
+            <td><code>./skills/</code></td>
+            <td>2</td>
+            <td>Project-committed; shared with the team via version control</td>
+          </tr>
+          <tr>
+            <td><code>~/.claude/skills/</code></td>
+            <td>3 (lowest)</td>
+            <td>User-global; applies to every project on this machine</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>When two skills share the same <code>name</code>, the higher-priority location wins. This lets you override a bundled skill at the project level---write a project-private version of <code>dashboard</code> in <code>.claude/skills/</code> and it shadows the bundled one for that project alone.</p>
+
+    <h3 id="ch-04-3-2">Brand Injection</h3>
+
+    <p>Skills that declare <code>od.design_system.requires: true</code> get the active DESIGN.md injected automatically at the top of their context window before the agent reads any prompt content. The <code>sections</code> list controls which parts of DESIGN.md are injected---a dashboard skill that only needs color and typography requests those two sections, keeping the context tight.</p>
+
+    <pre><code>od:
+  mode: prototype
+  design_system:
+    requires: true
+    sections: [color, typography, layout, components]</code></pre>
+
+    <p>Skills that don't declare <code>requires: true</code> don't see the DESIGN.md at all. Image-generation and audio skills often skip it because their output format can't consume CSS tokens directly.</p>
+
+    <h3 id="ch-04-3-3">Craft References</h3>
+
+    <p>As of June 2026 (v0.9.0), Open Design supports a third input axis alongside the skill body and DESIGN.md: <strong>craft references</strong>, stored under <code>craft/</code>. Craft references are brand-agnostic rules---things like letter-spacing conventions, accent color frequency rules, and anti-AI-slop typography checks. They shipped with v0.8.0 and are documented in <code>skills-protocol.md §5.5</code>. A skill can request specific craft references in its frontmatter:</p>
+
+    <pre><code>od:
+  craft:
+    requires: [state-coverage, accessibility-baseline, laws-of-ux]</code></pre>
+
+    <!-- TODO-VERIFY: craft references feature described in skills-protocol.md §5.5 as of v0.9.0; confirm not removed before publication -->
+    <p>Craft references (shipping since v0.8.0) are a newer concept and are likely to evolve. Think of them as a quality layer below brand: they ensure the artifact meets baseline design principles regardless of which brand system is active.</p>
+
+    <div class="callout tip">
+      <p>You don't need to understand craft references to use built-in skills---they're already declared in bundled skills like <code>dashboard</code>. They matter when you're writing a custom skill and want to borrow the same quality checks the built-in skills use. Reference them by filename (without extension) from the <code>craft/</code> directory.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-04-4">
+    <h2 class="section-title"><span class="section-num">4.4</span> Anatomy of a Skill File</h2>
+
+<p class="section-en">What every skill is made of</p>
+    <p class="section-intro">Every skill is a single file: SKILL.md. It combines YAML frontmatter with Markdown prose. The frontmatter is machine-read by the daemon and the skill picker; the prose is agent-read during generation. The split is important---you design the frontmatter for the machine, and you write the prose for the agent.</p>
+
+    <h3 id="ch-04-4-1">File Structure</h3>
+
+    <div class="file-tree">
+      <pre><code>my-skill/
+├── SKILL.md          # required: frontmatter + workflow prose
+├── example.html      # required if od.preview.type is "html"
+├── assets/           # optional: static files referenced by example.html
+└── references/       # optional: extra documents the agent should read</code></pre>
+    </div>
+
+    <p>The minimum viable skill is just <code>SKILL.md</code> with an <code>example.html</code> when the skill produces HTML output. Everything else is optional. The <code>references/</code> folder is useful when a skill needs the agent to consult supplementary material---a data schema, a component spec, a copywriting guide.</p>
+
+    <h3 id="ch-04-4-2">The SKILL.md Frontmatter Fields</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>SKILL.md Frontmatter Fields --- as of June 2026, Open Design v0.9.0</caption>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Namespace</th>
+            <th>Purpose</th>
+            <th>Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>name</code></td>
+            <td>base</td>
+            <td>Unique identifier; used for skill precedence resolution</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>description</code></td>
+            <td>base</td>
+            <td>Multi-line description used by the picker for brief-matching</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>triggers</code></td>
+            <td>base</td>
+            <td>Exact phrases that should surface this skill; must be concrete, not generic</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td><code>od.mode</code></td>
+            <td>od</td>
+            <td>Artifact mode: <code>prototype</code>, <code>deck</code>, <code>template</code>, <code>design-system</code>, <code>image</code>, <code>video</code>, <code>audio</code></td>
+            <td>Recommended</td>
+          </tr>
+          <tr>
+            <td><code>od.preview</code></td>
+            <td>od</td>
+            <td>Declares the preview type (<code>html</code>) and entry file; required for HTML preview</td>
+            <td>Conditional</td>
+          </tr>
+          <tr>
+            <td><code>od.design_system</code></td>
+            <td>od</td>
+            <td>Controls DESIGN.md injection: <code>requires: true</code> and optional <code>sections</code> list</td>
+            <td>Recommended</td>
+          </tr>
+          <tr>
+            <td><code>od.example_prompt</code></td>
+            <td>od</td>
+            <td>A prompt that should produce a working artifact end-to-end; used in the merge checklist</td>
+            <td>Recommended</td>
+          </tr>
+          <tr>
+            <td><code>od.craft.requires</code></td>
+            <td>od</td>
+            <td>List of craft reference names to inject as quality rules</td>
+            <td>Optional</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="ch-04-4-3">A Real Skill: The Dashboard</h3>
+
+    <p>The <code>dashboard</code> skill in the Open Design repository is the clearest example of a well-authored skill. Its frontmatter is precise, its triggers are concrete, and its workflow prose is explicit about what the agent must do at each step. The excerpt below is reproduced for commentary from <code>design-templates/dashboard/SKILL.md</code> in the Open Design repository (Apache-2.0 licensed; source: github.com/nexu-io/open-design, as of June 2026). The workflow steps are abbreviated here; the full prose is in the source file.</p>
+
+    <!-- Code and license attribution: the following SKILL.md excerpt is derived from
+         design-templates/dashboard/SKILL.md in the Open Design repository
+         (github.com/nexu-io/open-design), licensed Apache-2.0.
+         Reproduced in minimal form for commentary under OD-INC-005.
+         Copyright notice and license terms are preserved in the book's
+         "Code and license attributions" front-matter section. -->
+    <pre><code>---
+name: dashboard
+description: |
+  Admin / analytics dashboard in a single HTML file. Fixed left sidebar,
+  top bar with user/search, main grid of KPI cards and one or two charts.
+  Use when the brief asks for a "dashboard", "admin", "analytics", or
+  "control panel" screen.
+triggers:
+  - "dashboard"
+  - "admin panel"
+  - "analytics"
+  - "control panel"
+od:
+  mode: prototype
+  platform: desktop
+  scenario: operations
+  preview:
+    type: html
+    entry: index.html
+  design_system:
+    requires: true
+    sections: [color, typography, layout, components]
+  craft:
+    requires: [state-coverage, accessibility-baseline, laws-of-ux]
+---
+
+# Dashboard Skill
+
+Produce a single-screen admin / analytics dashboard.
+
+## Workflow
+
+1. Read the active DESIGN.md (injected above). Colors, typography,
+   spacing, component styling all come from it. Do not invent new tokens.
+2. Classify what the dashboard monitors...
+3. Lay out required regions...
+4. Write one self-contained HTML document...
+5. Charts: inline SVG only...
+6. Self-check:
+   - Every color comes from DESIGN.md tokens.
+   - Accent used at most twice...</code></pre>
+    <!-- Source: design-templates/dashboard/SKILL.md, Apache-2.0 -->
+
+    <p>Notice what the skill enforces: tokens come from DESIGN.md (never invented), the output is a single HTML file, SVG charts are inlined, and a self-check runs before the artifact is returned. The recipe is the recipe---no run should skip those steps.</p>
+
+    <h3 id="ch-04-4-4">The Trigger Quality Bar</h3>
+
+    <p>Triggers are the most commonly mis-authored part of a skill. The Open Design merge checklist (in <code>docs/skills-contributing.md</code>, Apache-2.0) explicitly rejects vague triggers. The concrete trigger examples below are illustrative of the accepted/rejected pattern documented in <code>docs/skills-protocol.md §5</code> (Apache-2.0):</p>
+
+    <!-- Trigger examples below are illustrative, based on the pattern
+         documented in docs/skills-protocol.md (Apache-2.0);
+         the magazine-web-ppt triggers derive from that source. -->
+    <div class="compare">
+      <div class="compare-good">
+        <p><strong>Concrete triggers (accepted):</strong></p>
+        <pre><code>triggers:
+  - "magazine deck"
+  - "杂志风 PPT"
+  - "horizontal swipe presentation"</code></pre>
+      </div>
+      <div class="compare-bad">
+        <p><strong>Vague triggers (rejected):</strong></p>
+        <pre><code>triggers:
+  - "design something cool"
+  - "make a nice layout"
+  - "creative design"</code></pre>
+      </div>
+    </div>
+
+    <p>Vague triggers match too broadly and surface the wrong skill. Concrete triggers match the actual language users reach for when they know what they want. Writing good triggers means reading a week's worth of your team's actual generation prompts and extracting the phrases that reliably predict this artifact type.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-04-5">
+    <h2 class="section-title"><span class="section-num">4.5</span> Authoring Your Own Skill</h2>
+
+<p class="section-en">Step-by-step: from blank file to working recipe</p>
+    <p class="section-intro">Custom skills are where the skills system pays back the most. A house skill encodes your team's standards once and applies them on every run---every artifact from that skill will follow the same layout rules, use the same component patterns, and run the same self-checks. The barrier is low; the maintenance is real. Here's how to build one correctly.</p>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p><strong>Choose where to put the skill.</strong> For a project-private skill not committed to source control, create <code>.claude/skills/my-skill/SKILL.md</code>. For a team skill committed to the project, use <code>skills/my-skill/SKILL.md</code>. For a personal global skill, use <code>~/.claude/skills/my-skill/SKILL.md</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p><strong>Write the frontmatter.</strong> Start with the three required base fields, then add the <code>od</code> extensions your artifact type needs.</p>
+        <pre><code>---
+name: pricing-table
+description: |
+  Pricing page with three tiers and a monthly/annual toggle.
+  Use when the brief asks for a "pricing page", "pricing table",
+  or "subscription plans" screen.
+triggers:
+  - "pricing page"
+  - "pricing table"
+  - "subscription plans"
+  - "three tiers"
+
+od:
+  mode: prototype
+  platform: desktop
+  preview:
+    type: html
+    entry: index.html
+  example_prompt: "Build a pricing page with three tiers and an annual toggle."
+  design_system:
+    requires: true
+    sections: [color, typography, components]
+---</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p><strong>Write the workflow prose.</strong> Below the frontmatter, add a Markdown workflow section. Be explicit. The agent reads this verbatim---write it as instructions to a skilled but literal interpreter.</p>
+        <pre><code># Pricing Table Skill
+
+Produce a single-page pricing component.
+
+## Constraints
+- Three tiers only (Starter, Pro, Enterprise)
+- Monthly/annual toggle with JS state
+- Highlighted "recommended" tier
+
+## Workflow
+1. Read the active DESIGN.md. All colors come from it.
+2. Build the toggle: monthly default, annual shows 20% off.
+3. Three columns; each gets: tier name, price, feature list,
+   CTA button.
+4. Self-check: every color from DESIGN.md; toggle works
+   without external dependencies.
+
+## Output
+Single self-contained index.html with inline CSS and JS.</code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p><strong>Create example.html.</strong> The merge checklist (and good practice) requires a working example HTML when the skill produces HTML output. Generate one run first, save the output as <code>example.html</code> in the skill directory. This is the visual reference for the skill picker and future authors.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <div class="step-content">
+        <p><strong>Test across several prompts.</strong> Run the <code>example_prompt</code> from the frontmatter. Then run two or three variations. A skill that only works for its own example prompt isn't reliable. Test: a minimal brief ("three-tier pricing page"), a detailed brief ("pricing page for a SaaS dev tool, two annual plans, enterprise contact-sales"), and an off-label brief ("comparison table for three subscription levels"). If any of these produce wrong output, tighten the constraints in the workflow prose.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">6</span>
+      <div class="step-content">
+        <p><strong>Document what the skill does not do.</strong> Add a short "Out of scope" section to the prose. If your skill is for a three-tier pricing page, say it doesn't handle enterprise custom-quote flows or usage-based pricing. This shapes the triggers---don't add "billing page" as a trigger if the skill can't handle billing history.</p>
+      </div>
+    </div>
+
+    <div class="callout my-take">
+      <p><strong>My take:</strong> Skills are the single biggest reason Open Design output beats raw-prompt generation, and most teams under-invest in writing their own. A house skill encodes a team's standards once and applies them on every run---the ROI appears immediately on the second artifact. I've seen teams generate 50 artifacts from one well-authored house skill with zero drift between runs. The caution is real, though: a bad custom skill is worse than no skill. A skill with vague triggers surfaces on the wrong prompt; a skill with weak constraints produces inconsistent output; a skill that wasn't tested across several prompts creates false confidence. Test it hard before you trust it.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-04-6">
+    <h2 class="section-title"><span class="section-num">4.6</span> When to Write a Skill vs Tweak a Prompt</h2>
+
+<p class="section-en">The skill/prompt boundary</p>
+    <p class="section-intro">Not every generation problem needs a new skill. Tweaking a prompt handles one-off customizations; a skill handles structural patterns you repeat. The skill/prompt boundary is a judgment call, but it's not an arbitrary one. There are four signals that tell you when a skill is the right answer.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Skill vs Prompt Decision Guide</caption>
+        <thead>
+          <tr>
+            <th>Signal</th>
+            <th>Use a skill when...</th>
+            <th>Tweak the prompt when...</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Repetition</strong></td>
+            <td>You're writing the same structural constraints in every prompt for this artifact type</td>
+            <td>This is a one-off request unlikely to recur in the same form</td>
+          </tr>
+          <tr>
+            <td><strong>Consistency</strong></td>
+            <td>Multiple team members generate this artifact and the results vary unacceptably</td>
+            <td>Variation across runs is acceptable or desirable</td>
+          </tr>
+          <tr>
+            <td><strong>Complexity</strong></td>
+            <td>The instructions are complex enough that prompts routinely miss one requirement</td>
+            <td>The instructions are simple enough to fit in one prompt without errors</td>
+          </tr>
+          <tr>
+            <td><strong>Review feedback</strong></td>
+            <td>You're giving the same feedback ("always put the CTA in the top-right") on every artifact of this type</td>
+            <td>Feedback is specific to this artifact's content, not its structure</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The practical rule: if you've added the same constraint to three different prompts for the same artifact type, move that constraint into a skill. Three is the threshold where the maintenance cost of prompting exceeds the cost of authoring a skill.</p>
+
+    <h3 id="ch-04-6-1">Composition Over Forking</h3>
+
+    <p>When a bundled skill is close but not quite right, the instinct is to fork it---copy the whole skill directory, edit the copy. Resist this. Forked skills diverge from upstream as Open Design updates its bundled skills. You'll be maintaining your own version of a skill that the repo is actively improving.</p>
+
+    <p>The better pattern is composition: create a new skill that <em>augments</em> a bundled one rather than replacing it. Reference the bundled skill by name in your prompt, then add the custom constraints in your own skill's prose. Or use the skill picker to select the bundled skill and add your constraints as a follow-up prompt in the iterate beat.</p>
+
+    <div class="callout warning">
+      <p>Forked skills diverge from upstream. As of June 2026, Open Design's merge checklist (in <code>docs/skills-contributing.md</code>, Apache-2.0) documents the guidance: "prefer composing on top of bundled skills over forking them wholesale." Every release of Open Design may improve a bundled skill's self-checks, trigger quality, or craft references---a forked copy misses all of those improvements and accumulates debt with each release. Layer your changes; don't replace.</p>
+    </div>
+
+    <h3 id="ch-04-6-2">Invoking a Skill Directly</h3>
+
+    <p>You can invoke a named skill explicitly in your prompt without relying on the picker's brief-matching:</p>
+
+    <pre><code>Use the dashboard skill with the Stripe brand system to build
+an analytics overview with four KPI cards and a revenue chart.</code></pre>
+
+    <p>Naming the skill directly is useful when you know exactly which skill you want and don't want the picker to surface alternatives. It also makes prompts more auditable---a prompt that names its skill is easier to review and reproduce than one relying on implicit matching.</p>
+
+    <div class="callout my-take">
+      <p><strong>My take:</strong> Most teams I've talked to skip the skill layer entirely for the first few months, then discover it all at once when they're tired of writing the same constraints in every prompt. The inflection point is usually when a new team member generates their first artifact and it looks nothing like what the senior designer expected. That's the moment a house skill would have prevented. Don't wait for that moment. Write one skill for your highest-volume artifact type in the first week. Test it across five prompts. Adjust. The compound interest starts immediately.</p>
+    </div>
+
+    <h3 id="ch-04-6-3">The Merge Checklist (For Contributors)</h3>
+
+    <p>If you intend to contribute a skill back to the Open Design repository, the merge checklist is the quality bar to clear. The key criteria from the checklist as of June 2026:</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Open Design Skill Merge Checklist --- abbreviated, as of June 2026</caption>
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Criterion</th>
+            <th>Common failure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Triggers</td>
+            <td>Concrete, not generic; "design something cool" is a hard reject</td>
+            <td>Trigger overlaps with existing skill; too broad</td>
+          </tr>
+          <tr>
+            <td>Example prompt</td>
+            <td>Must produce a working artifact end-to-end</td>
+            <td>Example prompt works in one brand system, fails in others</td>
+          </tr>
+          <tr>
+            <td>Design quality</td>
+            <td>No AI defaults: no purple gradients, no generic card styling, no lorem ipsum</td>
+            <td>Outputs that look "AI-made" rather than designed</td>
+          </tr>
+          <tr>
+            <td>Brand agnosticism</td>
+            <td>Skill must work with any DESIGN.md, not just the author's test brand</td>
+            <td>Hardcoded colors or fonts that ignore DESIGN.md tokens</td>
+          </tr>
+          <tr>
+            <td>Self-check</td>
+            <td>Workflow prose must include a self-check step</td>
+            <td>No verification that DESIGN.md tokens were honored</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Even if you're writing a private house skill that will never be contributed, these criteria are the right bar to hold yourself to. The merge checklist distills what makes a skill reliable versus one that only works when conditions are perfect.</p>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="03.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 03</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Your First Artifact</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 03</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Your First Artifact</p>
+        </div>
+      </div>
+    </a>
+    <a href="05.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 05</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">150 Brand Systems</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 05</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">150 Brand Systems</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #cdabfe; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">150 Brand Systems</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">DESIGN.md as the contract between brand and agent</p>
+        </div>
+        <a href="05.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>

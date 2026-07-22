@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bw-version" content="0.1.0">
+  <title>The Preview and Export Pipeline - Open Design</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;0,700;1,400&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Beausite Classic Medium', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"Geist Mono"', '"Fragment Mono"', 'monospace'],
+          },
+          colors: {
+            coral: '#fe7141',
+            lavender: '#cdabfe',
+            sage: '#597e87',
+            'sage-light': '#d1ddd3',
+            'blue-light': '#f5f9fc',
+            'blue-dark': '#153250',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @font-face { font-family: 'Beausite Classic Medium'; src: url('../assets/fonts/beausite-medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Regular'; src: url('../assets/fonts/beausite-regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Beausite Classic Bold'; src: url('../assets/fonts/beausite-bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    .book-content {
+      font-family: 'Beausite Classic Regular', Inter, system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(0,0,0,0.75);
+      max-width: 680px;
+      margin-left: auto;
+    }
+    .book-content .chapter-section {
+      margin-top: 64px;
+      margin-bottom: 64px;
+    }
+    .book-content .chapter-section:first-child {
+      margin-top: 0;
+    }
+    .book-content h2.section-title {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      padding-top: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #000;
+    }
+    .book-content h2.section-title:first-of-type {
+      border-top: 1px solid #000;
+    }
+    .book-content h3 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #000;
+      margin-top: 36px;
+      margin-bottom: 12px;
+    }
+    .book-content h4 {
+      font-family: 'Beausite Classic Medium', Inter, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+    .book-content p { margin-bottom: 18px; color: rgba(0,0,0,0.75); }
+    .book-content em { font-style: italic; color: rgba(0,0,0,0.6); }
+    .book-content strong { font-weight: 700; color: #000; }
+    .book-content a { color: #fe7141; text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(254,113,65,0.4); }
+    .book-content a:hover { text-decoration-color: #fe7141; }
+
+    /* Code Blocks */
+    .book-content .code-block {
+      margin: 24px 0;
+      border: 1px solid #000;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .book-content .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f4f4f2;
+      padding: 8px 16px;
+      font-size: 11px;
+      border-bottom: 1px solid #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .code-label {
+      font-weight: 600;
+      color: #000;
+    }
+    .book-content .code-lang {
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.4);
+      font-weight: 500;
+    }
+    .book-content pre {
+      background: #fafaf8;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .book-content code {
+      font-family: "Geist Mono", "Fragment Mono", monospace;
+      font-size: 13px;
+      background: #f4f4f2;
+      padding: 2px 6px;
+      border-radius: 0;
+    }
+    .book-content pre code { background: none; padding: 0; }
+
+    /* Tables */
+    .book-content .table-wrapper {
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid #000;
+    }
+    .book-content table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .book-content table caption {
+      font-family: "Geist Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+    }
+    .book-content thead th {
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #000;
+      font-size: 11px;
+      color: rgba(0,0,0,0.4);
+      font-family: "Geist Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f4f4f2;
+    }
+    .book-content td { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); vertical-align: top; }
+    .book-content tbody tr:hover { background: #fafaf8; }
+
+    /* Callouts */
+    .book-content .callout {
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 24px 28px;
+      margin: 28px 0;
+      font-size: 15px;
+      background: #f5f9fc;
+    }
+    .book-content .callout-header {
+      font-weight: 700;
+      color: #153250;
+      margin-bottom: 8px;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .book-content .callout-body p { margin-bottom: 8px; }
+    .book-content .callout-body p:last-child { margin-bottom: 0; }
+    .book-content .callout.tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+    }
+    .book-content .callout.tip .callout-header {
+      color: #166534;
+    }
+    .book-content .callout.warning {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .book-content .callout.warning .callout-header {
+      color: #991b1b;
+    }
+    .book-content .callout.my-take {
+      background: #fff7ed;
+      border-left: 4px solid #fe7141;
+    }
+    .book-content .callout.my-take .callout-header {
+      color: #c2410c;
+    }
+
+    /* Comparers */
+    .book-content .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .book-content .compare-good {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-good h4 {
+      color: #166534;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .book-content .compare-bad {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0;
+      padding: 18px;
+      font-size: 14px;
+    }
+    .book-content .compare-bad h4 {
+      color: #991b1b;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .book-content .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .book-content .step-num {
+      width: 28px; height: 28px;
+      background: #fe7141;
+      color: white;
+      border-radius: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Geist Mono", monospace;
+      flex-shrink: 0;
+    }
+    .book-content .step-content {
+      flex: 1;
+    }
+
+    /* Diagrams & Figures */
+    .book-content figure { margin: 32px 0; }
+    .book-content figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .book-content figcaption { margin-top: 10px; font-size: 13px; color: rgba(0,0,0,0.4); line-height: 1.4; }
+
+    /* Flows */
+    .book-content .flow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+    .book-content .flow-item {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 0;
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #000;
+      font-family: "Geist Mono", monospace;
+    }
+    .book-content .flow-arrow { color: rgba(0,0,0,0.2); font-size: 18px; }
+
+    .book-content ul, .book-content ol { margin: 12px 0 20px 24px; }
+    .book-content li { margin-bottom: 6px; list-style-type: square; }
+
+
+    .chapter-hero {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-stack {
+      position: relative;
+      z-index: 2;
+    }
+    .chapter-body {
+      width: 100%;
+      padding: 64px clamp(24px, 4vw, 80px) 96px;
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+    }
+    .chapter-grid {
+      display: grid;
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(24px, 3vw, 48px);
+      row-gap: 32px;
+      align-items: start;
+    }
+    .chapter-sidebar-rail {
+      --page-padding: clamp(24px, 4vw, 80px);
+      --site-header-height: 3.5rem;
+      --section-nav-height: 2.75rem;
+      --sidebar-top: calc(var(--site-header-height) + var(--section-nav-height));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 1920px);
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      padding: 0 var(--page-padding);
+      box-sizing: border-box;
+    }
+    .chapter-nav {
+      position: absolute;
+      top: var(--sidebar-top);
+      left: var(--page-padding);
+      width: 160px;
+      pointer-events: auto;
+      will-change: transform;
+    }
+    .sidebar-nav {
+      background: #fff;
+      padding: 1rem 0;
+      max-height: calc(100vh - var(--sidebar-top) - 1rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .chapter-nav-spacer {
+      grid-column: 1 / span 2;
+    }
+    .chapter-main {
+      grid-column: 4 / -1;
+      min-width: 0;
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+    @media (max-width: 1023px) {
+      .chapter-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+      .chapter-nav-spacer {
+        grid-column: 1 / span 2;
+      }
+      .chapter-main {
+        grid-column: 3 / span 4;
+      }
+    }
+    @media (max-width: 767px) {
+      .chapter-sidebar-rail {
+        display: none;
+      }
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+      .chapter-nav-spacer {
+        display: none;
+      }
+      .chapter-main {
+        grid-column: 1 / -1;
+      }
+      .chapter-mobile-nav {
+        display: block;
+        margin-bottom: 2rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .chapter-mobile-nav {
+        display: none;
+      }
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding-left: clamp(24px, 4vw, 80px);
+      padding-right: clamp(24px, 4vw, 80px);
+    }
+
+    .nav-hover-link {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 24px;
+      color: #000;
+      font-family: 'Beausite Classic Medium', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .bg-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      width: 200%;
+      height: 100%;
+      z-index: 0;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .bg-slide-primary {
+      width: 50%;
+      height: 100%;
+      background-color: #60aeb8;
+    }
+    .bg-slide-secondary {
+      width: 50%;
+      height: 100%;
+      background-color: #fff;
+    }
+    .nav-hover-link:hover .bg-slide {
+      transform: translateX(-50%);
+    }
+    .nav-hover-link .nav-text-wrapper {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      height: 1.4em;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-hover-link .nav-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link .nav-text-clone {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(0.44, 0, 0.56, 1);
+    }
+    .nav-hover-link:hover .nav-text {
+      transform: translateY(-100%);
+    }
+    .nav-hover-link:hover .nav-text-clone {
+      transform: translateY(-100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
+    <div class="flex h-full items-center">
+      <a href="../index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
+        <span class="font-sans text-sm font-bold tracking-tight">OD</span>
+        <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
+      </a>
+      <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
+    </div>
+    <div class="flex h-full items-center">
+      <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
+        View on GitHub
+      </a>
+      <nav class="flex h-full items-center text-sm font-sans text-black">
+        <a href="../about.html" class="nav-hover-link">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">About</span>
+            <span class="nav-text-clone">About</span>
+          </span>
+        </a>
+        <a href="../index.html#chapters" class="nav-hover-link border-r border-black">
+          <span class="bg-slide">
+            <span class="bg-slide-secondary bg-white"></span>
+            <span class="bg-slide-primary"></span>
+          </span>
+          <span class="nav-text-wrapper">
+            <span class="nav-text">Chapters</span>
+            <span class="nav-text-clone">Chapters</span>
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="chapter-hero" style="background-color: #60aeb8; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+    <div class="page-shell py-16 md:py-24 lg:py-32">
+      <div class="flex flex-col justify-between md:flex-row md:items-end">
+        <div class="max-w-3xl">
+          <a href="../index.html#chapters" class="mb-8 inline-flex items-center gap-2 font-sans text-sm text-black/60 hover:text-black transition-colors">
+            <i data-lucide="arrow-left" class="size-4"></i>
+            All Chapters
+          </a>
+          <p class="font-mono text-[13px] font-medium uppercase tracking-wider text-black/30 mb-6">PART II: WORKING IN OPEN DESIGN &middot; SECTION 08</p>
+          <h1 class="font-sans text-4xl font-bold leading-[0.95] tracking-[-0.03em] sm:text-5xl md:text-6xl lg:text-7xl">The Preview and Export Pipeline</h1>
+          <p class="mt-6 max-w-lg font-sans text-lg leading-relaxed text-black/50">Sandboxed iframe to HTML, PDF, PPTX, MP4, ZIP, and Markdown</p>
+        </div>
+        <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
+          <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">19 <span class="text-lg font-normal">min</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Navigation -->
+  <nav class="sticky top-14 z-40 border-b border-black bg-white/95 backdrop-blur-sm">
+    <div class="page-shell">
+      <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
+        <a href="#ch-08-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Why the Preview Is Sandboxed</a>
+        <a href="#ch-08-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Streaming the Artifact</a>
+        <a href="#ch-08-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Six Export Formats</a>
+        <a href="#ch-08-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">HTML and PDF</a>
+        <a href="#ch-08-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">PPTX, MP4, ZIP, and Markdown</a>
+        <a href="#ch-08-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">When Preview and Export Diverge</a>
+        <a href="#ch-08-7" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Versions, Provenance, and Design Jury</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar rail -->
+  <div class="chapter-sidebar-rail" id="chapter-sidebar-rail">
+    <aside class="chapter-nav" id="chapter-sidebar-nav-wrap" aria-label="In this chapter">
+      <nav class="sidebar-nav" id="chapter-sidebar-nav">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-08-1" data-section="ch-08-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Why the Preview Is Sandboxed</span></a>
+          <a href="#ch-08-2" data-section="ch-08-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Streaming the Artifact</span></a>
+          <a href="#ch-08-3" data-section="ch-08-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Six Export Formats</span></a>
+          <a href="#ch-08-4" data-section="ch-08-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>HTML and PDF</span></a>
+          <a href="#ch-08-5" data-section="ch-08-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>PPTX, MP4, ZIP, and Markdown</span></a>
+          <a href="#ch-08-6" data-section="ch-08-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When Preview and Export Diverge</span></a>
+          <a href="#ch-08-7" data-section="ch-08-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Versions, Provenance, and Design Jury</span></a>
+      </nav>
+    </aside>
+  </div>
+
+  <!-- Content -->
+  <div class="chapter-body" id="chapter-body">
+    <div class="chapter-grid">
+      <div class="chapter-nav-spacer" aria-hidden="true"></div>
+      <nav class="chapter-mobile-nav sidebar-nav" aria-label="In this chapter">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mb-4">Front Matter</p>
+          <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
+          <a href="#ch-08-1" data-section="ch-08-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Why the Preview Is Sandboxed</span></a>
+          <a href="#ch-08-2" data-section="ch-08-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Streaming the Artifact</span></a>
+          <a href="#ch-08-3" data-section="ch-08-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Six Export Formats</span></a>
+          <a href="#ch-08-4" data-section="ch-08-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>HTML and PDF</span></a>
+          <a href="#ch-08-5" data-section="ch-08-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>PPTX, MP4, ZIP, and Markdown</span></a>
+          <a href="#ch-08-6" data-section="ch-08-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>When Preview and Export Diverge</span></a>
+          <a href="#ch-08-7" data-section="ch-08-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Versions, Provenance, and Design Jury</span></a>
+      </nav>
+      <main class="chapter-main">
+        <div class="book-content">
+<section class="chapter-opener chapter-opener--rule-standfirst">
+    <p class="co-kicker">Chapter</p>
+    <p class="co-no">08</p>
+    <h1 class="chapter-title co-title">The Preview and Export Pipeline</h1>
+    <p class="co-standfirst">Sandboxed iframe to HTML, PDF, PPTX, MP4, ZIP, and Markdown</p>
+    <div class="co-body co-body--dropcap">
+      <p>The sandboxed preview keeps generated code from touching your system, and the export pipeline turns that same artifact into six shippable formats — sandbox in, files out.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+
+  <section class="chapter-section" id="ch-08-1">
+    <h2 class="section-title"><span class="section-num">8.1</span> Why the Preview Is Sandboxed</h2>
+
+<p class="section-en">Sandboxed iframe preview architecture</p>
+    <p class="section-intro">Every artifact Open Design generates runs inside a locked-down iframe before you ever export it. The lock is intentional, and removing it would undermine the central promise of local-first design.</p>
+
+    <p>When a coding agent produces a component or a prototype, that output is model-generated code. It could be well-structured, idiomatic HTML. It could also contain a script that reads your <code>~/.ssh/id_rsa</code> and exfiltrates it. Both are possible outputs of a language model. The preview iframe is what stands between those two cases.</p>
+
+    <p>As of June 2026, Open Design renders all artifact previews inside an <code>&lt;iframe sandbox="allow-scripts"&gt;</code> with no <code>allow-same-origin</code> permission. That single attribute omission is load-bearing: without <code>allow-same-origin</code>, the iframe's document is treated as having a unique, opaque origin. It cannot read cookies, cannot access <code>localStorage</code>, and cannot make requests back to the parent page. The agent's generated code runs in an isolated universe.</p>
+
+    <p>Open Design uses the HTML <code>srcdoc</code> attribute rather than a URL-based <code>src</code>. The artifact HTML is written directly into the iframe as a string. No server endpoint is needed to serve the content, and the sandbox attributes apply unconditionally.</p>
+
+    <div class="code-block" data-lang="html" data-label="Example">
+      <div class="code-label">Example</div>
+      <pre><code>&lt;!-- Standard HTML artifact preview --&gt;
+&lt;iframe
+  sandbox="allow-scripts allow-popups"
+  srcdoc="&lt;!DOCTYPE html&gt;&lt;html&gt;...artifact content...&lt;/html&gt;"
+&gt;&lt;/iframe&gt;
+
+&lt;!-- JSX artifact preview (Babel bootstrap injected) --&gt;
+&lt;iframe
+  sandbox="allow-scripts"
+  srcdoc="&lt;html&gt;&lt;head&gt;&lt;script src=&quot;babel.min.js&quot;&gt;...&lt;/script&gt;...&lt;/html&gt;"
+&gt;&lt;/iframe&gt;</code></pre>
+    </div>
+
+    <div class="callout warning">
+      <p>If you encounter a fork or third-party build of Open Design that offers an "unsandboxed preview mode" for convenience, treat it as a security regression. Running model-generated code without the sandbox removes the one reliable barrier between a malicious or buggy generation and your local system. The preview sandbox is not a UX polish feature; it's a threat model boundary.</p>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Sandbox Attribute Constraints — Open Design v0.9.0, verified June 2026</caption>
+        <thead>
+          <tr>
+            <th>Attribute present</th>
+            <th>Effect</th>
+            <th>Why Open Design uses / omits it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>allow-scripts</code></td>
+            <td>Permits JavaScript execution inside the iframe</td>
+            <td>Required: interactive artifacts and JSX rendering need JS</td>
+          </tr>
+          <tr>
+            <td><code>allow-same-origin</code> (omitted)</td>
+            <td>Would grant the iframe the same origin as the parent document</td>
+            <td>Deliberately omitted: prevents generated code from reading cookies, localStorage, or making credentialed requests to the parent</td>
+          </tr>
+          <tr>
+            <td><code>allow-popups</code> (conditional)</td>
+            <td>Permits <code>window.open()</code> and link targets</td>
+            <td>Added for static HTML artifacts that include navigation links</td>
+          </tr>
+          <tr>
+            <td><code>allow-forms</code> (omitted)</td>
+            <td>Would permit form submissions</td>
+            <td>Omitted by default; form submissions in prototypes are cosmetic, not functional</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>For JSX-based artifacts, the sandbox handles an additional constraint. Because the iframe has no external network access and no <code>allow-same-origin</code>, the JSX compilation must happen inside the iframe itself. The architecture injects a Babel standalone bootstrap so JSX compiles and React renders entirely within the sandboxed context, without making any external script requests. <!-- TODO-VERIFY: Babel standalone bootstrap injection confirmed in architecture.md §5; verify version used and whether it applies to all JSX skills or only a subset. --></p>
+
+    <p>The Electron desktop shell adds one more layer. The renderer process is sandboxed, and the daemon runs as a sidecar communicating via IPC. Generated code never runs directly in the Electron main process. As of June 2026, the desktop topology uses a sandboxed renderer with HMAC-gated folder-import authentication. <!-- TODO-VERIFY: Confirm HMAC-gated design details from architecture.md §2 remain current in v0.9.0. --></p>
+
+    <!-- Rights register: fig-ch08-preview — Open Design UI, Apache-2.0; sandboxed artifact preview shown, no personal data present. -->
+    <figure class="figure--full" id="fig-ch08-preview">
+      <img src="../images/od-v015-07-project-workspace-preview.png" alt="Open Design project workspace split view with chat rail on the left, generated files and sandboxed preview on the right, and Preview tab active" loading="lazy" />
+      <figcaption>Figure 8.1 — The project workspace (v0.15.1). Chat and run history stay on the left; generated files and the sandboxed preview stay on the right. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3 id="ch-08-1-1">Preview, Code, and Desktop toggles</h3>
+
+    <p>The preview pane exposes three review modes without leaving the workspace. <em>Preview</em> renders the artifact inside the sandboxed iframe. <em>Code</em> shows the generated HTML source --- the handoff view for verifying token-driven output. <em>Desktop</em> widens the viewport for responsive checks. Switching tabs does not re-run generation; it only changes how the same on-disk files are presented.</p>
+
+    <figure class="figure--full" id="fig-ch08-code-view">
+      <img src="../images/od-v015-10-code-view.png" alt="Open Design workspace Code view showing generated HTML source with DESIGN TOKENS block in a root CSS custom-property declaration" loading="lazy" />
+      <figcaption>Figure 8.1a — The Code view. Readable source with a token block at the top --- the fastest audit for production-viable output. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3 id="ch-08-1-2">Chat rail and NEXT STEP suggestions</h3>
+
+    <p>The chat rail holds the full turn history, run cost, and mode chips. When a generation finishes, Open Design surfaces <strong>NEXT STEP</strong> suggestions derived from project state --- one-click follow-ups so you do not have to recall iteration syntax. The <em>More</em> menu expands the set when the first three shortcuts are not enough.</p>
+
+    <figure class="figure--full" id="fig-ch08-chat-rail">
+      <img src="../images/od-v015-11-chat-scrolled.png" alt="Open Design project workspace chat rail scrolled through prior turns with agent summary and follow-up prompt field" loading="lazy" />
+      <figcaption>Figure 8.1b — The chat rail after a long run. Prior turns, tool summaries, and the follow-up composer stay visible while you review the preview. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch08-next-step">
+      <img src="../images/od-v015-13-next-step-more.png" alt="Open Design NEXT STEP suggestion chips with a More menu listing additional context-aware follow-up prompts" loading="lazy" />
+      <figcaption>Figure 8.1c — NEXT STEP suggestions. Context-aware shortcuts compress the iterate beat into a single click; More exposes the full set. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <div class="callout my-take">
+      <p><strong>My take:</strong> The sandboxed preview is non-negotiable and should never be disabled, even though it occasionally causes preview-to-export divergence. I've run into cases where an artifact looks perfect in the preview and the exported HTML behaves differently because of how assets are resolved. That friction is real and worth acknowledging. But the alternative --- running model-generated code with full DOM access on my own machine --- is a risk I won't accept. The sandbox is the architecture's spine. If you're evaluating forks or derivatives of Open Design, the first thing to check is whether this constraint is preserved.</p>
+    </div>
+
+    <figure>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>Agent writes artifact</strong>
+          <p>Model generates HTML/JSX/CSS as files in <code>.od/projects/</code></p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>SSE stream to frontend</strong>
+          <p>Daemon pushes <code>write_file</code> events over <code>text/event-stream</code></p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>srcdoc iframe</strong>
+          <p><code>sandbox="allow-scripts"</code>, no <code>allow-same-origin</code></p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <strong>Export pipeline</strong>
+          <p>HTML / PDF / PPTX / MP4 / ZIP / MD</p>
+        </div>
+      </div>
+      <figcaption>Figure 8.2 — The sandbox-in, files-out pipeline: generated code passes through an isolated iframe before the export pipeline serializes it into any of the six shippable formats.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-08-2">
+    <h2 class="section-title"><span class="section-num">8.2</span> Streaming the Artifact</h2>
+
+<p class="section-en">SSE delivery and the streaming artifact parser</p>
+    <p class="section-intro">The preview doesn't appear after generation finishes. It appears while the agent is still writing. Understanding how that works explains both the responsiveness you see and the constraints it imposes on the export pipeline.</p>
+
+    <p>When you submit a prompt, the frontend sends a <code>POST /api/chat</code> request to the local daemon. The daemon responds immediately with a <code>text/event-stream</code> content type and begins pushing Server-Sent Events (SSE) back to the browser. This is not a WebSocket connection; it's a one-directional stream over HTTP, which means no special protocol setup and no persistent bidirectional socket management.</p>
+
+    <p>The SSE stream carries two main event types during generation. <code>text_delta</code> events carry the agent's conversational output, which appears in the chat panel. <code>tool_call</code> events carry the agent's file operations, and the most important of these is <code>write_file</code>, which delivers the artifact's HTML content progressively as the agent writes it.</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Output">
+      <div class="code-label">Output</div>
+      <pre><code># SSE stream from daemon (simplified)
+# POST /api/chat -> text/event-stream
+
+data: {"type":"text_delta","text":"Building a pricing page with three tiers..."}
+
+data: {"type":"tool_call","tool":"write_file","args":{
+  "path":"index.html",
+  "content":"&lt;!DOCTYPE html&gt;\n&lt;html&gt;..."
+}}
+
+data: {"type":"text_delta","text":"The layout uses CSS Grid..."}
+
+data: {"type":"done"}</code></pre>
+    </div>
+
+    <p>The streaming artifact parser in the frontend receives these events and updates the srcdoc iframe in real time. As each <code>write_file</code> event arrives, the iframe's <code>srcdoc</code> attribute is rewritten with the new content. The result is the live-updating preview you see while generation runs: the page appears, then fills in, then finalizes.</p>
+
+    <p>This real-time update model has one important implication for the export pipeline. The export does not simply dump the final <code>srcdoc</code> value. The daemon holds the canonical artifact files in <code>.od/projects/&lt;id&gt;/</code>, and the export pipeline reads from those files rather than from the browser's iframe state. This is by design: the iframe state can diverge from the files if a streaming write is interrupted, so the files are the authoritative source.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>SSE Event Types During Artifact Generation — v0.9.0, verified June 2026</caption>
+        <thead>
+          <tr>
+            <th>Event type</th>
+            <th>Payload</th>
+            <th>Frontend action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>text_delta</code></td>
+            <td>Agent's conversational text fragment</td>
+            <td>Appended to the chat panel</td>
+          </tr>
+          <tr>
+            <td><code>tool_call</code> (<code>write_file</code>)</td>
+            <td>Artifact file path and HTML content</td>
+            <td>Written to <code>.od/projects/&lt;id&gt;/</code>; iframe <code>srcdoc</code> updated</td>
+          </tr>
+          <tr>
+            <td><code>done</code></td>
+            <td>Empty</td>
+            <td>Stream closed; preview settles; export buttons activate</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="ch-08-2-1">Hot Reload</h3>
+
+    <p>Once generation finishes, the preview continues to update if the artifact files change. The daemon watches the project directory for writes and pushes new <code>write_file</code> events over a persistent SSE connection. This means that if you manually edit an artifact file or if a second agent pass modifies it, the preview refreshes without any action on your part. The four-beat loop from <a href="#ch-03-2" class="xref">Section 3.2</a> is hot-reloaded by default.</p>
+  </section>
+
+  <section class="chapter-section" id="ch-08-3">
+    <h2 class="section-title"><span class="section-num">8.3</span> The Six Export Formats</h2>
+
+<p class="section-en">Format matrix: what each produces and how</p>
+    <p class="section-intro">Open Design exports to six formats as of June 2026. Each format is produced by a different mechanism, and each has a different relationship to the sandboxed preview. Knowing the mechanism is what lets you predict and prevent the divergence described in <a href="#ch-08-6" class="xref">Section 8.6</a>.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Export Format Matrix — Open Design v0.9.0, verified June 2026</caption>
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Source artifact</th>
+            <th>Produced by</th>
+            <th>Use case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HTML (inlined)</td>
+            <td>Any HTML artifact</td>
+            <td>CSS inliner + asset URL rewriter to <code>data:</code> URIs</td>
+            <td>Offline distribution; review without a server</td>
+          </tr>
+          <tr>
+            <td>PDF</td>
+            <td>Any HTML artifact</td>
+            <td>Puppeteer <code>page.pdf()</code> on rendered HTML</td>
+            <td>Print-ready documents; formal handoffs</td>
+          </tr>
+          <tr>
+            <td>PPTX</td>
+            <td>Deck artifacts</td>
+            <td>Slide snapshot capture + <code>pptxgenjs</code></td>
+            <td>Presentations for stakeholders using PowerPoint/Keynote</td>
+          </tr>
+          <tr>
+            <td>MP4</td>
+            <td>HyperFrames motion artifacts</td>
+            <td>Headless Chrome frame capture + FFmpeg encode</td>
+            <td>Motion graphics; social content; video handoffs</td>
+          </tr>
+          <tr>
+            <td>ZIP</td>
+            <td>Any artifact or project</td>
+            <td>Daemon archive of project directory</td>
+            <td>Full project portability; multi-file handoffs</td>
+          </tr>
+          <tr>
+            <td>Markdown</td>
+            <td>Text and structured artifacts</td>
+            <td>HTML-to-Markdown converter</td>
+            <td>Documentation; CMS import; Git-tracked content</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Every format except ZIP produces output from the artifact's rendered state. HTML inlining serializes the rendered DOM. PDF captures the Puppeteer-rendered page. PPTX captures slide snapshots. MP4 captures video frames. Only ZIP archives the raw source files. This distinction matters when external assets load in the preview but cannot be bundled --- ZIP is then the only format that preserves them faithfully.</p>
+
+    <!-- Rights register: fig-ch08-export — Open Design UI, Apache-2.0; Share/Export menu shown, no personal data present. -->
+    <figure class="figure--full" id="fig-ch08-export">
+      <img src="../images/od-v011-demo-approved-export-archive.png" alt="Open Design project workspace showing an approved artifact export panel with HTML, PDF, PPTX, and ZIP selected" loading="lazy" />
+      <figcaption>Figure 8.3 — The export panel appears on the same workspace surface as the prompt and preview. This mock-safe run shows an approved artifact with HTML, PDF, PPTX, and ZIP selected, making the six-format export model concrete instead of hiding it behind a generic download menu. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter-section" id="ch-08-4">
+    <h2 class="section-title"><span class="section-num">8.4</span> HTML and PDF</h2>
+
+<p class="section-en">Inlined export and Puppeteer-generated PDF</p>
+    <p class="section-intro">HTML and PDF share an export strategy: both produce a single self-contained file from the artifact's rendered content. The difference is that HTML inlines assets while PDF captures a page render.</p>
+
+    <h3 id="ch-08-4-1">HTML Inlining</h3>
+
+    <p>The HTML export pipeline reads the artifact's source HTML from <code>.od/projects/&lt;id&gt;/</code>, then runs an inliner that rewrites external references into the document itself. Every <code>&lt;link rel="stylesheet"&gt;</code> is replaced with an inline <code>&lt;style&gt;</code> block. Every <code>&lt;img src="..."&gt;</code> is replaced with a <code>data:</code> URI encoding the image in Base64. External scripts are inlined if they are local; remote scripts either stay as remote references or fail silently depending on the inliner's configuration.</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Example">
+      <div class="code-label">Example</div>
+      <pre><code># Before export (in preview):
+&lt;link rel="stylesheet" href="/styles/main.css"&gt;
+&lt;img src="/assets/logo.png"&gt;
+
+# After HTML inlining:
+&lt;style&gt;
+  /* all CSS from main.css inlined here */
+&lt;/style&gt;
+&lt;img src="data:image/png;base64,iVBORw0KGgo..."&gt;</code></pre>
+    </div>
+
+    <p>The result is a single HTML file you can open offline, email to a stakeholder, or drop in a static host without any server-side dependencies. This is the format I use for design reviews: one file, no instructions.</p>
+
+    <h3 id="ch-08-4-2">PDF Export</h3>
+
+    <p>PDF export uses Puppeteer's headless Chromium to render the artifact HTML and call <code>page.pdf()</code>. The daemon launches a headless browser, navigates to the artifact, waits for the page to fully load including any fonts or deferred scripts, then triggers the PDF generation. As of June 2026, the daemon uses Puppeteer as the documented PDF generation approach; the specific version is pinned as a daemon dependency and may lag behind the latest Puppeteer release. <!-- TODO-VERIFY: Confirm current Puppeteer version pin in daemon package.json and whether known CSS Grid or SVG rendering issues affect v0.9.0. --></p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Prompt">
+      <div class="code-label">Prompt</div>
+      <pre><code>Export the current artifact to PDF, A4, with print margins.</code></pre>
+    </div>
+
+    <p>PDF export is the format most likely to diverge from the preview. The preview renders in the sandboxed srcdoc iframe, which uses the browser's screen rendering model. Puppeteer renders in a headless Chromium instance using the print rendering model. Custom fonts loaded from the parent page don't transfer into Puppeteer's context unless they're bundled in the artifact. CSS that uses <code>@media screen</code> applies in the preview but not in the PDF. This is expected behavior, not a bug, but it's worth testing explicitly before any print-destined export.</p>
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-content">
+        <p>Generate and preview your artifact until the preview looks correct in the sandbox.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-content">
+        <p>Trigger the PDF export and open the resulting file locally, offline, before sharing it.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-content">
+        <p>If font rendering or layout differs from the preview, check whether fonts are loaded via external URLs or self-contained. Switch to system fonts or embed font files in the artifact if print fidelity is required.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-content">
+        <p>If page breaks are wrong, add explicit <code>page-break-before</code> or <code>page-break-after</code> CSS to the artifact and re-export.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-08-5">
+    <h2 class="section-title"><span class="section-num">8.5</span> PPTX, MP4, ZIP, and Markdown</h2>
+
+<p class="section-en">The remaining four formats and their export strategies</p>
+    <p class="section-intro">PPTX, MP4, ZIP, and Markdown each serve a different downstream audience. Understanding how each is produced tells you when to reach for it and what to watch for.</p>
+
+    <h3 id="ch-08-5-1">PPTX: Deck Snapshots</h3>
+
+    <p>PPTX export applies to deck artifacts generated by the deck skills. The original PPTX approach re-prompted the agent to regenerate each slide as PowerPoint-compatible content, which meant the export could diverge from the preview in layout and typography. As of June 2026, that approach was replaced by a snapshot-based pipeline: the daemon captures a rendered image of each slide from the preview and passes these images to <code>pptxgenjs</code> to assemble the PPTX file. This fix was merged in PR #3641 on June 2, 2026, resolving issue #1842.</p>
+
+    <p>The snapshot approach means PPTX fidelity to the preview is high, because the slides are literal captures. The trade-off is that the resulting PPTX is image-per-slide: stakeholders cannot edit text inside PowerPoint without replacing the images. For presentations where downstream editing is required, export to HTML and use screen-based presentation software instead.</p>
+
+    <div class="compare">
+      <div class="compare-good">
+        <p><strong>When to use PPTX:</strong></p>
+        <p>Stakeholder reviews where the audience's tool is PowerPoint or Keynote and fidelity to the designed layout matters more than editable text.</p>
+      </div>
+      <div class="compare-bad">
+        <p><strong>When not to use PPTX:</strong></p>
+        <p>Presentations where stakeholders will edit slide content in PowerPoint. The snapshot-based export produces image slides, not editable text frames.</p>
+      </div>
+    </div>
+
+    <h3 id="ch-08-5-2">MP4: HyperFrames Rendering</h3>
+
+    <p>MP4 export is exclusive to HyperFrames motion artifacts. HyperFrames takes HTML and CSS animations, renders them frame by frame using a headless Chrome instance, and encodes the frame sequence into an MP4 file using FFmpeg. As of June 2026, bundled HyperFrames templates produce outputs at 1920×1080 at 30 fps, confirmed by the 23 pre-rendered template MP4s shipped in PR #3739 on June 10, 2026. Each bundled template's rendered preview file is under 1 MiB.</p>
+
+    <!-- TODO-VERIFY: Confirm typical render time for a 15–30 second HyperFrames clip on a modern laptop (M3 or equivalent). Architecture notes mention headless Chrome + FFmpeg but do not document expected duration. -->
+
+    <p>Render time scales with clip length and complexity. A 15-second intro animation renders significantly faster than a 60-second product demo. I have not measured average render time precisely across clip lengths, so budget conservatively: do not expect instant results. Keep clips short while iterating, and only render at full length for final export.</p>
+
+    <div class="code-block" data-lang="plaintext" data-label="Prompt">
+      <div class="code-label">Prompt</div>
+      <pre><code>Build a 15-second HyperFrames intro animation of a logo assembling from
+grid lines, using the brand accent color. Render to MP4.</code></pre>
+    </div>
+
+    <h3 id="ch-08-5-3">ZIP: Raw Project Archive</h3>
+
+    <div class="code-block" data-lang="plaintext" data-label="Output">
+      <div class="code-label">Output</div>
+      <pre><code># ZIP archive contents (typical single-artifact export):
+project-abc123/
+├── index.html          # main artifact
+├── assets/
+│   ├── logo.svg
+│   └── hero.png
+└── od-meta.json        # Open Design project metadata</code></pre>
+    </div>
+
+    <p>ZIP export archives the project directory from <code>.od/projects/&lt;id&gt;/</code>. Unlike all other formats, ZIP preserves the source files without transformation. This makes it the correct choice when an artifact references external assets that cannot be inlined, when you want to hand off the raw files to another developer, or when you want a portable backup of everything the agent produced. The ZIP is also the only export format that survives cleanly if the artifact includes multiple interdependent files, such as a design system with separate CSS and component files.</p>
+
+    <!-- TODO-VERIFY: Confirm any file size limits or compression settings for ZIP export in the daemon code. No documented limit found in README or architecture.md as of June 2026. -->
+
+    <h3 id="ch-08-5-4">Markdown: Text Artifact Export</h3>
+
+    <div class="code-block" data-lang="plaintext" data-label="Example">
+      <div class="code-label">Example</div>
+      <pre><code># HTML input (artifact section):
+&lt;h2&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Local-first generation&lt;/li&gt;
+  &lt;li&gt;100+ design skills&lt;/li&gt;
+&lt;/ul&gt;
+
+# Markdown output:
+## Features
+
+- Local-first generation
+- 100+ design skills</code></pre>
+    </div>
+
+    <p>Markdown export applies to artifacts with significant text structure: documentation pages, content outlines, or structured HTML documents that were generated from a text-heavy skill. The pipeline runs an HTML-to-Markdown converter on the artifact. The resulting file is compatible with any Markdown-based CMS, static site generator, or Git-tracked documentation system.</p>
+
+    <p>Markdown export loses layout. CSS positioning, column structures, and visual hierarchy do not translate into Markdown. If layout fidelity matters, use HTML export instead. Markdown export is for cases where the content is what you need and the styling is irrelevant to the downstream consumer.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Four Export Formats: When to Reach for Each — verified June 2026</caption>
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Best when</th>
+            <th>Limitation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PPTX</td>
+            <td>Deck review with PowerPoint audience; layout fidelity required</td>
+            <td>Slides are image-per-slide; no editable text in PowerPoint</td>
+          </tr>
+          <tr>
+            <td>MP4</td>
+            <td>Motion graphic is the final deliverable; social or video handoff</td>
+            <td>Render time scales with clip length; not instant</td>
+          </tr>
+          <tr>
+            <td>ZIP</td>
+            <td>Multi-file artifact; external assets; developer handoff; backup</td>
+            <td>No transformation; downstream consumer must handle raw files</td>
+          </tr>
+          <tr>
+            <td>Markdown</td>
+            <td>Text-heavy artifact for CMS or documentation; layout irrelevant</td>
+            <td>Layout and visual hierarchy are lost in conversion</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-08-6">
+    <h2 class="section-title"><span class="section-num">8.6</span> When Preview and Export Diverge</h2>
+
+<p class="section-en">Gotchas, root causes, and fixes</p>
+    <p class="section-intro">Preview and export divergence is the most common frustration when working with the sandbox-in, files-out model. The preview renders in one context; the export pipeline renders in another. They usually agree. When they don't, the cause follows one of a handful of predictable patterns.</p>
+
+    <p>The root tension is architectural. The preview is a sandboxed iframe with the browser's font cache and network stack. Export formats use different renderers: Puppeteer for PDF, a snapshot capturer for PPTX, FFmpeg-mediated headless Chrome for MP4, and a static inliner for HTML. Each renderer has different capabilities. An asset that loads in the browser preview may not be reachable by Puppeteer, or may be blocked because the sandboxed iframe returns an opaque origin context that the inliner can't replicate.</p>
+
+    <p>Issues #2218 and #3744 (closed May–June 2026) documented this: the deck preview renders correctly from a raw URL, but the bridge transport that wraps the preview for export returns null, causing snapshot capture to fail silently. PR #2325 added fallback retry logic, but the pattern remains real: export capture can fail while the preview looks fine. Always verify the exported file, not just the preview.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <caption>Preview vs Export Divergence: Symptoms, Causes, and Fixes</caption>
+        <thead>
+          <tr>
+            <th>Symptom</th>
+            <th>Cause</th>
+            <th>Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Fonts render correctly in preview but use fallback fonts in PDF</td>
+            <td>External font URLs (e.g., Google Fonts) are not fetched by Puppeteer in the export context</td>
+            <td>Inline the font via <code>@font-face</code> with <code>data:</code> URI or use system fonts for PDF-destined artifacts</td>
+          </tr>
+          <tr>
+            <td>Images appear in preview but are blank or broken in HTML export</td>
+            <td>Image sources are external URLs that the HTML inliner cannot reach or embed</td>
+            <td>Bundle images locally in the artifact before export, or verify the inliner config allows fetching external assets</td>
+          </tr>
+          <tr>
+            <td>PPTX export produces blank slides or fails silently</td>
+            <td>Preview snapshot capture returns null; bridge transport between the srcdoc iframe and the export pipeline fails</td>
+            <td>Reload the preview until the artifact fully renders, then re-trigger export; if persistent, check the daemon logs for bridge transport errors</td>
+          </tr>
+          <tr>
+            <td>Layout differs between preview and PDF (column breaks, grid gaps)</td>
+            <td>Puppeteer uses print rendering model; <code>@media screen</code> CSS does not apply</td>
+            <td>Add explicit <code>@media print</code> styles to the artifact, or accept the difference and use HTML export for screen-fidelity review</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warning">
+      <p>External assets that load in the preview can break in the inlined HTML export. The preview iframe fetches resources with the browser's full network access; the HTML inliner runs in the daemon and may not reach the same CDN-hosted fonts or authenticated endpoints. Verify exported files offline before sending --- open the exported HTML with the network tab active and look for failed asset requests. This applies especially to artifacts that load external fonts or image CDNs.</p>
+    </div>
+
+    <h3 id="ch-08-6-1">The Verification Habit</h3>
+
+    <p>Sandbox in, files out --- this is the model that works cleanly for the majority of artifacts. Divergence clusters around external assets and format-specific rendering. Build a short verification step into your export workflow: trigger the export, open the file independently of the preview, and confirm they match. For HTML, do this offline. For PDF, check font rendering. For PPTX, scroll all slides in a presentation tool. Two minutes of verification prevents "it looked right in the preview" mistakes from reaching a stakeholder.</p>
+
+    <div class="callout my-take">
+      <p><strong>My take:</strong> The preview/export divergence problem is not a flaw in Open Design's design; it's an inherent consequence of having a security-correct sandbox paired with a rich export pipeline. Each export format has its own rendering context, and those contexts can't all be identical to the browser sandbox. The right response isn't to close the gap by relaxing the sandbox; it's to verify every export before it leaves your machine. I check every exported file before sending it. Not because I've been burned every time, but because the one time I didn't check, the PDF had a blank first page from a missed font load --- and it went to a client.</p>
+    </div>
+  </section>
+
+  <section class="chapter-section" id="ch-08-7">
+    <h2 class="section-title"><span class="section-num">8.7</span> Versions, Provenance, and Design Jury</h2>
+
+<p class="section-en">Per-file version history with originating prompts, recycle-to-template, and five-panel adjudication</p>
+    <p class="section-intro">Export is not the only way an artifact leaves the sandbox. The workspace also keeps a version spine and an optional Design Jury so you can restore, recycle, or refuse a generation before it ships.</p>
+
+    <h3>Versions carry the prompt that made them</h3>
+
+    <p>As of v0.15.1, every meaningful file write creates a version entry that stores the originating prompt. The Versions panel lists those entries with a Current badge, timestamps, and a Prompt disclosure so you can see why a revision exists --- not only that it exists. Restore returns the file; the chat history still explains how you got there.</p>
+
+    <figure class="figure--full" id="fig-ch08-versions">
+      <img src="../images/od-v015-08-versions-panel.png" alt="Open Design Versions panel listing version cards with Current and Manual edit badges beside a full-size preview of the selected version" loading="lazy" />
+      <figcaption>Figure 8.4 — The Versions panel. Each entry can disclose the prompt that produced it. Restore is a first-class action, not a hidden git ritual. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3>Export menu and Save as template</h3>
+
+    <p>The Download menu exposes PDF, image, ZIP, standalone HTML, and a Save group that includes <strong>Save as template…</strong>. Finished projects recycle into the template strip on home --- the same closed loop as crystallising a successful run into a skill via Automations.</p>
+
+    <figure class="figure--full" id="fig-ch08-export-menu">
+      <img src="../images/od-v015-09-export-menu.png" alt="Open Design Download menu showing Export as PDF, Export as image, Download as zip, Export as standalone HTML, and Save as template" loading="lazy" />
+      <figcaption>Figure 8.5 — Export and recycle. Ship formats sit beside Save as template so a good run becomes tomorrow's starting point. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <h3>Design Jury — adjudication as a feature</h3>
+
+    <p>Design Jury (also described in product copy as a Critique Theater) is a Settings toggle: when enabled, a five-panel scored review appears alongside agent generations. You can interrupt at any time. It is not a replacement for human taste; it is a structured second pass before you treat a Heavy Design run as shippable.</p>
+
+    <figure class="figure--full" id="fig-ch08-design-jury">
+      <img src="../images/od-v015-24-settings-design-jury.png" alt="Open Design Settings dialog on Design Jury with toggle for five-panel design review during agent runs" loading="lazy" />
+      <figcaption>Figure 8.6 — Design Jury in Settings. Enable to stream a five-panel review beside generation; open a project to persist the preference server-side. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <p>Pair Jury with Plan mode on high-stakes work: Plan locks the brief, Design builds, Jury scores, then you export. That sequence is slower than a single Heavy send --- and usually cheaper than three unplanned Design retries.</p>
+    </div>
+  </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="chapter-stack border-t border-black">
+    <div class="page-shell py-16">
+      <div class="flex flex-col gap-4 sm:flex-row">
+    <a href="07.html" class="group relative flex-1 overflow-hidden border border-black p-6">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 07</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Decks, Motion, and Images</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 07</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Decks, Motion, and Images</p>
+        </div>
+      </div>
+    </a>
+    <a href="09.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
+      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
+        <span class="bg-slide-secondary bg-white"></span>
+        <span class="bg-slide-primary"></span>
+      </span>
+      <div class="relative z-10 overflow-hidden">
+        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 09</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Plugin Ecosystem</p>
+        </div>
+        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
+          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 09</p>
+          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">The Plugin Ecosystem</p>
+        </div>
+      </div>
+    </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Next Chapter Navigation -->
+  <section class="chapter-hero border-t border-black py-16 md:py-24" style="background-color: #597e87; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+    <div class="page-shell">
+      <div class="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div>
+          <p class="font-mono text-[13px] uppercase tracking-wider text-white/30 mb-4">Next Chapter</p>
+          <h2 class="font-sans text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:text-6xl">The Plugin Ecosystem</h2>
+          <p class="mt-4 max-w-md font-sans text-base text-white/40">261 official plugins, Figma migration, and code-refresh-to-brand</p>
+        </div>
+        <a href="09.html" class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-black font-mono bg-white hover:bg-neutral-100 transition-colors">
+          Continue Reading
+          <i data-lucide="arrow-right" class="size-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter Index -->
+  <div class="chapter-stack border-t border-black bg-white">
+    <div class="page-shell py-16">
+      <div class="flex flex-col justify-between gap-12 md:flex-row md:items-start">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="flex h-10 items-center bg-black px-3">
+              <span class="font-sans text-base font-bold tracking-tight text-white">OD</span>
+              <span class="ml-0.5 font-mono text-xs font-medium leading-none text-white">'26</span>
+            </div>
+          </div>
+          <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
+          <a href="preface.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Front Matter</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Preface</h3>
+          </a>
+          <a href="01.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Local-First Design Machine</h3>
+          </a>
+          <a href="02.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Install and Architecture</h3>
+          </a>
+          <a href="03.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Your First Artifact</h3>
+          </a>
+          <a href="04.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part I: Foundations</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Skills System</h3>
+          </a>
+          <a href="05.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">150 Brand Systems</h3>
+          </a>
+          <a href="06.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Web and Mobile Prototypes</h3>
+          </a>
+          <a href="07.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Decks, Motion, and Images</h3>
+          </a>
+          <a href="08.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part II: Working in Open Design</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Preview and Export Pipeline</h3>
+          </a>
+          <a href="09.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Plugin Ecosystem</h3>
+          </a>
+          <a href="10.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The MCP Server</h3>
+          </a>
+          <a href="11.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Choosing Your Agent</h3>
+          </a>
+          <a href="12.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part III: Systems & Teams</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Multi-Agent Design Teams</h3>
+          </a>
+          <a href="13.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Case Studies</h3>
+          </a>
+          <a href="14.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Evaluating the Stack for Your Organization</h3>
+          </a>
+          <a href="15.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">The Future of Local-First Autonomous Design</h3>
+          </a>
+          <a href="16.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Part IV: Shipping & Extensions</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Building Your Own Design Pipeline</h3>
+          </a>
+          <a href="A.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Command and CLI Reference</h3>
+          </a>
+          <a href="B.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Skills, Brand Systems, and Plugins Index</h3>
+          </a>
+          <a href="C.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">Troubleshooting and FAQ</h3>
+          </a>
+          <a href="D.html" class="group border-b border-black pb-4">
+            <p class="font-mono text-[10px] uppercase tracking-wider text-black/40">Appendices</p>
+            <h3 class="font-sans text-sm font-medium group-hover:underline" style="font-family: 'Beausite Classic Medium', sans-serif">A Visual Tour of the Open Design UI</h3>
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
+          <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Chapters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 bg-black text-white">
+    <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
+      <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
+      <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
+      </div>
+    </div>
+    <div class="border-t border-white">
+      <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+        <div class="font-mono text-[11px] text-white/60 leading-relaxed">
+          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
+          <a href="../index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
+          <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+          <span class="font-mono text-[11px] text-white/40">mehranmozaffari.com</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="../assets/chapter-sidebar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+<script src="../assets/menu.js"></script>
+</body>
+</html>
