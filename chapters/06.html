@@ -684,8 +684,11 @@ gradient headline, three feature cards below, and a
       <figcaption>Figure 6.1 — SaaS landing page artifact streaming into the preview with brand tokens applied before first paint. Schematic illustration (not a screenshot).</figcaption>
     </figure>
 
-    <div class="callout">
-      <p><strong>My take:</strong> Self-contained HTML is the unsung hero feature of Open Design. I've watched review cycles collapse when a prototype is a single file anyone can open in any browser. No server, no build, no "you need Node 24" --- just open the file. The opposite is a prototype that requires a dev environment to view, which means most stakeholders never open it. Self-contained HTML removes that friction entirely.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Self-contained HTML is the unsung hero feature of Open Design. I've watched review cycles collapse when a prototype is a single file anyone can open in any browser. No server, no build, no "you need Node 24" --- just open the file. The opposite is a prototype that requires a dev environment to view, which means most stakeholders never open it. Self-contained HTML removes that friction entirely.</p>
+      </div>
     </div>
 
     <div class="table-wrapper">
@@ -808,8 +811,10 @@ design_system:
 
     <!-- TODO-VERIFY: Exact SKILL.md frontmatter fields and values for mobile-app skill; verify against docs/skills-protocol.md and actual SKILL.md in github.com/nexu-io/open-design -->
 
-    <div class="callout warning">
-      <p>Device frame models in <code>assets/frames/</code> are version-sensitive. The iPhone 15 Pro frames ship in v0.9.0; a future release may add or rename frames (e.g., iPhone 16 Pro). If you name a specific frame that doesn't exist, the skill falls back to the default frame. Always verify the frame renders as expected in the preview before exporting.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>Device frame models in <code>assets/frames/</code> are version-sensitive. The iPhone 15 Pro frames ship in v0.9.0; a future release may add or rename frames (e.g., iPhone 16 Pro). If you name a specific frame that doesn't exist, the skill falls back to the default frame. Always verify the frame renders as expected in the preview before exporting.</p>
+      </div>
     </div>
   </section>
 
@@ -853,8 +858,10 @@ hide the others. Default to the Profile tab.</code></pre>
 
     <p>Within a single preview session, client-side state persists as long as the iframe isn't reloaded. Navigating between screens in a multi-screen flow preserves tab state and form input values. Clicking Export and opening the resulting HTML file starts fresh --- no state is serialized into the export.</p>
 
-    <div class="callout tip">
-      <p>If you need a prototype to demo a specific state (a filled form, a specific tab open, a modal triggered), describe that state in the prompt rather than relying on click-through during a review. "Show the Security tab active with two-factor authentication enabled" produces an artifact that opens in the right state without requiring the reviewer to click through to get there.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p>If you need a prototype to demo a specific state (a filled form, a specific tab open, a modal triggered), describe that state in the prompt rather than relying on click-through during a review. "Show the Security tab active with two-factor authentication enabled" produces an artifact that opens in the right state without requiring the reviewer to click through to get there.</p>
+      </div>
     </div>
   </section>
 
@@ -943,8 +950,11 @@ const dashboardData = [
 // Chart rendered via D3 or Chart.js inlined in the same file
 // No external API calls; fully self-contained</code></pre>
 
-    <div class="callout">
-      <p><strong>My take:</strong> The dashboard skill is the right tool for executive reviews and investor demos where you need real numbers in a polished layout fast. I can drop in a CSV of actuals, generate the dashboard in minutes, and hand stakeholders a file they can open without help. The catch is that "live" in the skill name means "interactive controls", not "auto-refreshing from a database." Know which one you need before the demo.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The dashboard skill is the right tool for executive reviews and investor demos where you need real numbers in a polished layout fast. I can drop in a CSV of actuals, generate the dashboard in minutes, and hand stakeholders a file they can open without help. The catch is that "live" in the skill name means "interactive controls", not "auto-refreshing from a database." Know which one you need before the demo.</p>
+      </div>
     </div>
   </section>
 
@@ -1020,10 +1030,12 @@ The modal should show the full product description and a
 
     <p>Self-contained HTML is a preview convenience, not a production pattern. At some point a prototype becomes large enough that a real build pipeline --- component library, routing, state management --- produces better results than a single inlined file. That point is usually when you're building a multi-page application with shared state between routes, or when a developer needs to ship the artifact as a real product.</p>
 
-    <p>For those cases, use the code-refresh plugin (covered in <a href="#ch-09-4" class="xref">section 9.4</a>) to refactor a generated prototype into a proper Next.js or React component tree. The prototype gets you the design approved; the plugin gets you the code production-ready.</p>
+    <p>For those cases, use the code-refresh plugin (covered in <a href="ch-09.html#ch-09-4" class="xref">section 9.4</a>) to refactor a generated prototype into a proper Next.js or React component tree. The prototype gets you the design approved; the plugin gets you the code production-ready.</p>
 
-    <div class="callout warning">
-      <p>A generated prototype is not production code. Artifacts are self-contained HTML optimized for preview and review, not for performance, accessibility standards compliance, or production architecture. The self-contained format means inlined styles and scripts --- appropriate for a prototype file that stakeholders open once, not for a codebase that ships to users. Treat the prototype as the communication artifact it is, and use the code-refresh plugin when production code is the actual deliverable.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>A generated prototype is not production code. Artifacts are self-contained HTML optimized for preview and review, not for performance, accessibility standards compliance, or production architecture. The self-contained format means inlined styles and scripts --- appropriate for a prototype file that stakeholders open once, not for a codebase that ships to users. Treat the prototype as the communication artifact it is, and use the code-refresh plugin when production code is the actual deliverable.</p>
+      </div>
     </div>
 
     <h3>Prototype troubleshooting</h3>
@@ -1092,8 +1104,10 @@ The modal should show the full product description and a
       <figcaption>Figure 6.5 — The four-beat prototype loop. Quality accumulates in the Iterate step; the Generate step produces a starting point, not a finished artifact.</figcaption>
     </figure>
 
-    <div class="callout tip">
-      <p><strong>Next:</strong> Prototypes are one artifact family. Chapter 07 covers the other artifact surfaces --- presentation decks, HyperFrames HTML-to-MP4 motion graphics, and AI images --- and shows how the same brand contract drives all of them under the principle of one brand, many surfaces.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p><strong>Next:</strong> Prototypes are one artifact family. Chapter 07 covers the other artifact surfaces --- presentation decks, HyperFrames HTML-to-MP4 motion graphics, and AI images --- and shows how the same brand contract drives all of them under the principle of one brand, many surfaces.</p>
+      </div>
     </div>
   </section>
         </div>
@@ -1169,7 +1183,7 @@ The modal should show the full product description and a
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1274,7 +1288,7 @@ The modal should show the full product description and a
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

@@ -740,8 +740,10 @@ indie SaaS launches, agency credentials, creative reviews, brand redesigns.</cod
       </table>
     </div>
 
-    <div class="callout tip">
-      <p>Name the deck style in every prompt. Even "use the default style" is better than silence, because it prevents the agent from switching styles across iterations.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p>Name the deck style in every prompt. Even "use the default style" is better than silence, because it prevents the agent from switching styles across iterations.</p>
+      </div>
     </div>
 
     <h3 id="7.1.3">Troubleshooting Deck Generation</h3>
@@ -823,8 +825,11 @@ indie SaaS launches, agency credentials, creative reviews, brand redesigns.</cod
       patterns.
     </p>
 
-    <div class="callout">
-      <p><strong>My take:</strong> HyperFrames is the most differentiated artifact type in Open Design. I haven't found another agent-native pipeline that renders branded motion from plain HTML. Most hosted tools give you a template library; this gives you a renderer you drive with prompts. The caveat is real: render times make it a deliberate-use feature, not a rapid-fire one. Don't run it on every iteration — use it once the HTML prototype is close to final.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>HyperFrames is the most differentiated artifact type in Open Design. I haven't found another agent-native pipeline that renders branded motion from plain HTML. Most hosted tools give you a template library; this gives you a renderer you drive with prompts. The caveat is real: render times make it a deliberate-use feature, not a rapid-fire one. Don't run it on every iteration — use it once the HTML prototype is close to final.</p>
+      </div>
     </div>
 
     <h3 id="7.2.2">Scene Structure</h3>
@@ -981,8 +986,10 @@ HyperFrames export.</code></pre>
       <figcaption>Figure 7.3 — A Motion Frames workflow for HyperFrames export. The sequence starts on the Home prompt with the HyperFrames chip selected, opens a mock-safe project with the original prompt visible, shows the generated motion HTML and preview, then checks the render metadata before MP4 capture. Entry screen supplied by the author; remaining captures from a local Open Design v0.11.0 project, June 2026.</figcaption>
     </figure>
 
-    <div class="callout warning">
-      <p>Render times are not instant. As of June 2026, a 240-frame (approximately 8-second at 30fps) composition takes roughly 16 seconds end-to-end on a standard laptop — 8 seconds for headless Chrome frame capture and 8 seconds for FFmpeg encoding. HyperFrames uses half of available CPU cores by default, capped at 4, and each worker consumes significant RAM. Keep clips short during iteration. Render final quality once the HTML is confirmed correct.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>Render times are not instant. As of June 2026, a 240-frame (approximately 8-second at 30fps) composition takes roughly 16 seconds end-to-end on a standard laptop — 8 seconds for headless Chrome frame capture and 8 seconds for FFmpeg encoding. HyperFrames uses half of available CPU cores by default, capped at 4, and each worker consumes significant RAM. Keep clips short during iteration. Render final quality once the HTML is confirmed correct.</p>
+      </div>
     </div>
 
     <h3 id="7.3.2">Brand Tokens in Motion</h3>
@@ -1025,7 +1032,7 @@ HyperFrames export.</code></pre>
       negative prompt, generated files, and reuse notes stay beside the design artifact.
     </p>
 
-    <h3 id="7.4.1">Media Providers, Not Just Image Providers</h3>
+    <h3 id="7.4.1">Expanding Beyond Image Providers</h3>
     <p>
       The important architectural shift is that Open Design treats generated media as a shared
       capability. In Settings, open <strong>Media providers</strong>. That panel exposes provider
@@ -1116,9 +1123,7 @@ of the original image.</code></pre>
       <div class="step-content">
         <p>
           Upload the reference image and send the template prompt. Open Design keeps the prompt in
-          the chat pane while the output appears as an image file in the project workspace. The point
-          is not just that the image exists; the book-worthy process is that the chosen template,
-          provider route, reference image, generated file, and prompt remain reviewable together.
+          the chat pane while the output appears as an image file in the project workspace. The process keeps the chosen template, provider route, reference image, generated file, and prompt reviewable together.
         </p>
         <pre><code>Mode: image-to-image edit
 Provider route: gpt-image-2
@@ -1171,11 +1176,14 @@ Output: generated crayon illustration</code></pre>
         alt="Open Design project created from the Illustrated City Food Map image template, showing the template prompt and preparing state"
         loading="lazy"
       />
-      <figcaption>Additional image-template example — <em>Illustrated City Food Map</em> creates a hand-drawn food-map brief rather than a style-transfer edit. The screenshot shows the real Open Design project creation state, with the prompt visible in chat and the workspace preparing the image output. Screenshot supplied by the author, captured June 2026.</figcaption>
+      <figcaption>Figure 7.5 — Additional image-template example — <em>Illustrated City Food Map</em> creates a hand-drawn food-map brief rather than a style-transfer edit. The screenshot shows the real Open Design project creation state, with the prompt visible in chat and the workspace preparing the image output. Screenshot supplied by the author, captured June 2026.</figcaption>
     </figure>
 
-    <div class="callout">
-      <p><strong>My take:</strong> The template library is the important UI here. It turns image generation from a blank prompt box into a catalog of named design operations: style transfer, poster generation, UI rework, portrait treatment, explainer slides, and so on. The provider matters, but the template is what makes the result repeatable.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The template library is the important UI here. It turns image generation from a blank prompt box into a catalog of named design operations: style transfer, poster generation, UI rework, portrait treatment, explainer slides, and so on. The provider matters, but the template is what makes the result repeatable.</p>
+      </div>
     </div>
   </section>
 
@@ -1261,7 +1269,7 @@ Output: generated crayon illustration</code></pre>
 # Different runs, different blue shades</code></pre>
         </div>
       </div>
-      <figcaption>Figure 7.5 — Brand token binding is deterministic for deck and motion artifacts; image generation introduces a natural-language translation step that can produce variation across runs.</figcaption>
+      <figcaption>Figure 7.6 — Brand token binding is deterministic for deck and motion artifacts; image generation introduces a natural-language translation step that can produce variation across runs.</figcaption>
     </figure>
 
     <p>
@@ -1358,7 +1366,7 @@ Output: generated crayon illustration</code></pre>
           </div>
         </div>
       </div>
-      <figcaption>Figure 7.6 — One project, three artifact types (deck, motion, image), one DESIGN.md. Brand tokens flow from a single source to each renderer; deck and motion bindings are deterministic via CSS custom properties, image binding passes through a natural-language translation step. Schematic illustration (not a screenshot).</figcaption>
+      <figcaption>Figure 7.7 — One project, three artifact types (deck, motion, image), one DESIGN.md. Brand tokens flow from a single source to each renderer; deck and motion bindings are deterministic via CSS custom properties, image binding passes through a natural-language translation step. Schematic illustration (not a screenshot).</figcaption>
     </figure>
 
     <h3 id="7.5.4">When Brand Consistency Breaks</h3>
@@ -1401,8 +1409,10 @@ Output: generated crayon illustration</code></pre>
       </table>
     </div>
 
-    <div class="callout warning">
-      <p>The "one brand, many surfaces" principle depends on one DESIGN.md file per project. If you create artifact-specific overrides by editing the DESIGN.md between generations, you introduce drift. Keep one canonical brand file and use prompt instructions for artifact-specific adjustments — don't mutate the source of truth.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>The "one brand, many surfaces" principle depends on one DESIGN.md file per project. If you create artifact-specific overrides by editing the DESIGN.md between generations, you introduce drift. Keep one canonical brand file and use prompt instructions for artifact-specific adjustments — don't mutate the source of truth.</p>
+      </div>
     </div>
   </section>
         </div>
@@ -1478,7 +1488,7 @@ Output: generated crayon illustration</code></pre>
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1583,7 +1593,7 @@ Output: generated crayon illustration</code></pre>
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

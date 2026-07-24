@@ -630,7 +630,7 @@
     <div class="callout my-take">
       <div class="callout-header">My Take</div>
       <div class="callout-body">
-        <p>The headline numbers --- 140+ brand systems, 261 plugins, 21 supported CLIs (as of June 2026) --- are a feature surface, not the daily-use surface. The local-first architecture is the real reason to adopt Open Design. I've watched teams reach for the tool because the catalog impressed them and then stay because they realized their generation history wasn't sitting on anyone else's servers. Pick the tool for where generation runs and who controls it. The catalog is a nice bonus.</p>
+        <p>The headline numbers --- 150 brand systems, 261 plugins, 21 supported CLIs (as of June 2026) --- are a feature surface, not the daily-use surface. The local-first architecture is the real reason to adopt Open Design. I've watched teams reach for the tool because the catalog impressed them and then stay because they realized their generation history wasn't sitting on anyone else's servers. Pick the tool for where generation runs and who controls it. The catalog is a nice bonus.</p>
       </div>
     </div>
   </section>
@@ -641,7 +641,7 @@
 <p class="section-en">A desktop app plus daemon that lets coding agents produce design artifacts on your machine</p>
     <p class="section-intro">Open Design is a local-first, open-source desktop application that gives AI coding agents a structured environment for producing brand-compliant design artifacts. As of June 2026, it ships as v0.9.0 (released June 2, 2026), carries 63,000+ GitHub stars (per the project README header, verified June 11, 2026; the star count will continue to change — check github.com/nexu-io/open-design for current figures), and is licensed under Apache-2.0 with no subscription required.</p>
 
-    <p>The concrete feature set: as of June 2026, Open Design ships over 100 skills for guiding artifact generation (the v0.9.0 README documents 259+ skills; the book uses 100+ as a conservative floor that the project clearly exceeds), approximately 150 portable visual brand systems (the official website lists 150; the README states 142+, reflecting a bundled-versus-API count difference — both figures exceed 140 as of June 2026), 261 official plugins across artifact categories (per the Open Design plugin library, June 2026), and native support for 21 coding-agent CLIs (the README lists 9 named CLIs plus "17+ others"; 21 is the defensible named-and-auto-detected count as of v0.9.0). It exports to HTML (inlined), PDF, PPTX, MP4, ZIP, and Markdown. It runs the same experience on macOS, Windows 10/11 (x64), and Linux.</p>
+    <p>The concrete feature set: as of June 2026, Open Design ships over 100 skills for guiding artifact generation (the v0.9.0 README documents 259+ skills; the book uses 100+ as a conservative floor that the project clearly exceeds), approximately 150 portable visual brand systems (the official website lists 150; the README states 142+, reflecting a bundled-versus-API count difference — both figures align around 150 as of June 2026), 261 official plugins across artifact categories (per the Open Design plugin library, June 2026), and native support for 21 coding-agent CLIs (the README lists 9 named CLIs plus "17+ others"; 21 is the defensible named-and-auto-detected count as of v0.9.0). It exports to HTML (inlined), PDF, PPTX, MP4, ZIP, and Markdown. It runs the same experience on macOS, Windows 10/11 (x64), and Linux.</p>
 
     <!-- Table 1: Open Design at a Glance -->
     <div class="table-wrapper">
@@ -677,7 +677,7 @@
           </tr>
           <tr>
             <td>Brand systems</td>
-            <td>140+ (website: 150; README: 142+; both sourced from open-design.ai and github.com/nexu-io/open-design as of June 2026)</td>
+            <td>150 (website: 150; README: 142+; both sourced from open-design.ai and github.com/nexu-io/open-design as of June 2026)</td>
             <td>June 2026</td>
           </tr>
           <tr>
@@ -722,7 +722,7 @@
     <p>The brain is the one layer that may involve a cloud call. If you route to Anthropic, OpenAI, Azure, or Google, the model inference happens off-machine. If you route to Ollama, the model runs locally. Everything else --- file storage, skill selection, brand resolution, artifact rendering --- stays on your machine regardless.</p>
 
     <h3 id="ch-01-3-workshop">Layer 2: The Workshop</h3>
-    <p>The workshop is the local daemon: a Node 24 Express server running at port 7456 on your machine. It owns three things: the skill registry (the 100+ skill instructions that shape what an artifact looks like — 259+ as of v0.9.0), the design-system resolver (the 140+ brand DESIGN.md files that govern colors, type, and voice), and artifact storage (the project files at <code>.od/projects/&lt;id&gt;/</code>).</p>
+    <p>The workshop is the local daemon: a Node 24 Express server running at port 7456 on your machine. It owns three things: the skill registry (the 100+ skill instructions that shape what an artifact looks like — 259+ as of v0.9.0), the design-system resolver (the 150 brand DESIGN.md files that govern colors, type, and voice), and artifact storage (the project files at <code>.od/projects/&lt;id&gt;/</code>).</p>
 
     <p>When you send a prompt through your CLI, the workshop receives the generation request, selects the right skill, resolves the brand system you specified, calls the model through whichever provider you configured, and streams the resulting artifact back to the window. Every file the workshop touches lives at <code>.od/</code> on your local filesystem. The daemon can run entirely without network access if you pair it with a local model.</p>
 
@@ -757,8 +757,10 @@
 
     <p>The phrase "on your machine" will recur throughout this book because it is the answer to nearly every architectural question. Where do files live? On your machine. Where does orchestration run? On your machine. Where does the brand contract get resolved? On your machine. The cloud, when you use it, is a computation service you rent for inference --- and even that is optional.</p>
 
-    <div class="callout tip">
-      <p>When something goes wrong in Open Design, the three-layer model tells you where to look first. The brain couldn't parse your prompt? Check the CLI connection. The artifact didn't match the brand? Check the workshop's skill and brand resolution. The preview looks different from the export? That's a window-layer divergence. Chapter 08 has the full troubleshooting table.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p>When something goes wrong in Open Design, the three-layer model tells you where to look first. The brain couldn't parse your prompt? Check the CLI connection. The artifact didn't match the brand? Check the workshop's skill and brand resolution. The preview looks different from the export? That's a window-layer divergence. Chapter 08 has the full troubleshooting table.</p>
+      </div>
     </div>
   </section>
 
@@ -846,7 +848,7 @@
 
     <p><strong>Chapter 03</strong> walks the complete four-beat loop: generate, preview, iterate, export. It is the one chapter I'd run a new user through on day one. Everything after it is elaboration on one of those four beats.</p>
 
-    <p><strong>Chapters 04–05</strong> open the workshop layer. Chapter 04 is the skills system --- what skills are, how they shape generation, how to author one. Chapter 05 is brand systems --- the 140+ bundled DESIGN.md files (as of June 2026), the schema, and how to write a house brand contract that makes every artifact on-brand by default.</p>
+    <p><strong>Chapters 04–05</strong> open the workshop layer. Chapter 04 is the skills system --- what skills are, how they shape generation, how to author one. Chapter 05 is brand systems --- the 150 bundled DESIGN.md files (as of June 2026), the schema, and how to write a house brand contract that makes every artifact on-brand by default.</p>
 
     <p><strong>Chapters 06–08</strong> cover the artifact catalog and the export pipeline. Chapter 06 is web and mobile prototypes. Chapter 07 is presentation decks, HyperFrames HTML-to-MP4 motion graphics, and AI image generation. Chapter 08 dissects the sandboxed preview and the six export formats.</p>
 
@@ -856,8 +858,10 @@
 
     <p>Three appendices round out the reference material: Appendix A is a complete CLI command reference, Appendix B is an agent-CLI comparison matrix, and Appendix C is a curated failure-modes catalog for when something goes wrong.</p>
 
-    <div class="callout tip">
-      <p><strong>Next:</strong> Chapter 02 gets Open Design running on your machine. It covers the three install paths, the daemon, the file layout, and the sandboxed preview. By the end of it, you'll have a running workshop layer to feed the rest of the book.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p><strong>Next:</strong> Chapter 02 gets Open Design running on your machine. It covers the three install paths, the daemon, the file layout, and the sandboxed preview. By the end of it, you'll have a running workshop layer to feed the rest of the book.</p>
+      </div>
     </div>
   </section>
         </div>
@@ -868,22 +872,6 @@
   <div class="chapter-stack border-t border-black">
     <div class="page-shell py-16">
       <div class="flex flex-col gap-4 sm:flex-row">
-    <a href="preface.html" class="group relative flex-1 overflow-hidden border border-black p-6">
-      <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
-        <span class="bg-slide-secondary bg-white"></span>
-        <span class="bg-slide-primary"></span>
-      </span>
-      <div class="relative z-10 overflow-hidden">
-        <div class="transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
-          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 0</p>
-          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Open Design</p>
-        </div>
-        <div class="absolute top-full left-0 w-full transition-transform duration-400 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:-translate-y-full">
-          <p class="font-mono text-[13px] uppercase tracking-wider text-black/30 mb-3 transition-colors">Chapter 0</p>
-          <p class="font-sans text-xl font-semibold tracking-tight transition-colors">Open Design</p>
-        </div>
-      </div>
-    </a>
     <a href="02.html" class="group relative flex-1 overflow-hidden border border-black p-6 text-right">
       <span class="bg-slide pointer-events-none group-hover:-translate-x-1/2">
         <span class="bg-slide-secondary bg-white"></span>
@@ -933,7 +921,7 @@
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1038,7 +1026,7 @@
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

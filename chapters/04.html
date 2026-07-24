@@ -641,8 +641,10 @@ and a revenue chart.</code></pre>
 
     <p>As of June 2026, Open Design ships with 100+ skills (the repository contains 157 total items across the <code>skills/</code> and <code>design-templates/</code> directories; the README uses the conservative "100+" figure). <!-- TODO-VERIFY: confirm whether the README count includes design-templates or only the skills/ directory --></p>
 
-    <div class="callout warning">
-      <p>The "100+" count in Open Design's README is a conservative floor, not a ceiling. As of June 2026, the repository contains 157 skill directories spanning 54+ functional skills and roughly 100 design templates. That count grows with every release. Always verify against the live repository when the exact number matters.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>The "100+" count in Open Design's README is a conservative floor, not a ceiling. As of June 2026, the repository contains 157 skill directories spanning 54+ functional skills and roughly 100 design templates. That count grows with every release. Always verify against the live repository when the exact number matters.</p>
+      </div>
     </div>
   </section>
 
@@ -810,8 +812,10 @@ and a revenue chart.</code></pre>
     <!-- TODO-VERIFY: craft references feature described in skills-protocol.md §5.5 as of v0.9.0; confirm not removed before publication -->
     <p>Craft references (shipping since v0.8.0) are a newer concept and are likely to evolve. Think of them as a quality layer below brand: they ensure the artifact meets baseline design principles regardless of which brand system is active.</p>
 
-    <div class="callout tip">
-      <p>You don't need to understand craft references to use built-in skills---they're already declared in bundled skills like <code>dashboard</code>. They matter when you're writing a custom skill and want to borrow the same quality checks the built-in skills use. Reference them by filename (without extension) from the <code>craft/</code> directory.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p>You don't need to understand craft references to use built-in skills---they're already declared in bundled skills like <code>dashboard</code>. They matter when you're writing a custom skill and want to borrow the same quality checks the built-in skills use. Reference them by filename (without extension) from the <code>craft/</code> directory.</p>
+      </div>
     </div>
   </section>
 
@@ -1071,8 +1075,11 @@ Single self-contained index.html with inline CSS and JS.</code></pre>
       </div>
     </div>
 
-    <div class="callout my-take">
-      <p><strong>My take:</strong> Skills are the single biggest reason Open Design output beats raw-prompt generation, and most teams under-invest in writing their own. A house skill encodes a team's standards once and applies them on every run---the ROI appears immediately on the second artifact. I've seen teams generate 50 artifacts from one well-authored house skill with zero drift between runs. The caution is real, though: a bad custom skill is worse than no skill. A skill with vague triggers surfaces on the wrong prompt; a skill with weak constraints produces inconsistent output; a skill that wasn't tested across several prompts creates false confidence. Test it hard before you trust it.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Skills are the single biggest reason Open Design output beats raw-prompt generation, and most teams under-invest in writing their own. A house skill encodes a team's standards once and applies them on every run---the ROI appears immediately on the second artifact. I've seen teams generate 50 artifacts from one well-authored house skill with zero drift between runs. The caution is real, though: a bad custom skill is worse than no skill. A skill with vague triggers surfaces on the wrong prompt; a skill with weak constraints produces inconsistent output; a skill that wasn't tested across several prompts creates false confidence. Test it hard before you trust it.</p>
+      </div>
     </div>
   </section>
 
@@ -1125,8 +1132,10 @@ Single self-contained index.html with inline CSS and JS.</code></pre>
 
     <p>The better pattern is composition: create a new skill that <em>augments</em> a bundled one rather than replacing it. Reference the bundled skill by name in your prompt, then add the custom constraints in your own skill's prose. Or use the skill picker to select the bundled skill and add your constraints as a follow-up prompt in the iterate beat.</p>
 
-    <div class="callout warning">
-      <p>Forked skills diverge from upstream. As of June 2026, Open Design's merge checklist (in <code>docs/skills-contributing.md</code>, Apache-2.0) documents the guidance: "prefer composing on top of bundled skills over forking them wholesale." Every release of Open Design may improve a bundled skill's self-checks, trigger quality, or craft references---a forked copy misses all of those improvements and accumulates debt with each release. Layer your changes; don't replace.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>Forked skills diverge from upstream. As of June 2026, Open Design's merge checklist (in <code>docs/skills-contributing.md</code>, Apache-2.0) documents the guidance: "prefer composing on top of bundled skills over forking them wholesale." Every release of Open Design may improve a bundled skill's self-checks, trigger quality, or craft references---a forked copy misses all of those improvements and accumulates debt with each release. Layer your changes; don't replace.</p>
+      </div>
     </div>
 
     <h3 id="ch-04-6-2">Invoking a Skill Directly</h3>
@@ -1138,8 +1147,11 @@ an analytics overview with four KPI cards and a revenue chart.</code></pre>
 
     <p>Naming the skill directly is useful when you know exactly which skill you want and don't want the picker to surface alternatives. It also makes prompts more auditable---a prompt that names its skill is easier to review and reproduce than one relying on implicit matching.</p>
 
-    <div class="callout my-take">
-      <p><strong>My take:</strong> Most teams I've talked to skip the skill layer entirely for the first few months, then discover it all at once when they're tired of writing the same constraints in every prompt. The inflection point is usually when a new team member generates their first artifact and it looks nothing like what the senior designer expected. That's the moment a house skill would have prevented. Don't wait for that moment. Write one skill for your highest-volume artifact type in the first week. Test it across five prompts. Adjust. The compound interest starts immediately.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Most teams I've talked to skip the skill layer entirely for the first few months, then discover it all at once when they're tired of writing the same constraints in every prompt. The inflection point is usually when a new team member generates their first artifact and it looks nothing like what the senior designer expected. That's the moment a house skill would have prevented. Don't wait for that moment. Write one skill for your highest-volume artifact type in the first week. Test it across five prompts. Adjust. The compound interest starts immediately.</p>
+      </div>
     </div>
 
     <h3 id="ch-04-6-3">The Merge Checklist (For Contributors)</h3>
@@ -1261,7 +1273,7 @@ an analytics overview with four KPI cards and a revenue chart.</code></pre>
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1366,7 +1378,7 @@ an analytics overview with four KPI cards and a revenue chart.</code></pre>
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

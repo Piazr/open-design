@@ -618,8 +618,10 @@
 
     <p>The library spans categories including Fintech, Productivity, Developer Tools, E-Commerce, Social and Media, Automotive, Enterprise, and Consumer. Named systems include brands like Linear, Stripe, Vercel, Airbnb, Notion, and Figma---referred to here nominatively for learning and structural reference only.</p>
 
-    <div class="callout warning">
-      <p><strong>Trademark notice:</strong> The bundled brand systems are reference materials for studying design-system structure, not a license to ship another company's visual identity. If you generate a prototype using a famous brand's DESIGN.md, that prototype is for learning and internal evaluation. Ship your own brand, not someone else's trademarked identity.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p><strong>Trademark notice:</strong> The bundled brand systems are reference materials for studying design-system structure, not a license to ship another company's visual identity. If you generate a prototype using a famous brand's DESIGN.md, that prototype is for learning and internal evaluation. Ship your own brand, not someone else's trademarked identity.</p>
+      </div>
     </div>
 
     <p>A portion of the bundled systems originated from the community collection at <a href="https://github.com/VoltAgent/awesome-design-md">VoltAgent/awesome-design-md</a> (a publicly available, community-contributed set of DESIGN.md files); the remainder are hand-authored systems bundled directly in the Open Design repository. The exact split is documented in each system's <code>manifest.json</code> <code>source</code> field within the <code>design-systems/</code> directory of the Open Design repo. Note that the VoltAgent/awesome-design-md collection carries its own per-system licensing; verify the upstream license for any system before using it beyond local prototyping.</p>
@@ -690,20 +692,23 @@
       </table>
     </div>
 
-    <div class="callout my-take">
-      <p><strong>My take:</strong> Open Design ships a large library of bundled brand systems. Most teams use one---their own. The bundled library solves a discovery problem: it shows you what a well-structured brand contract looks like across eight categories, so you have concrete examples when you sit down to author your house system. I study three or four before writing a new DESIGN.md. I don't use any of them in production.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Open Design ships a large library of bundled brand systems. Most teams use one---their own. The bundled library solves a discovery problem: it shows you what a well-structured brand contract looks like across eight categories, so you have concrete examples when you sit down to author your house system. I study three or four before writing a new DESIGN.md. I don't use any of them in production.</p>
+      </div>
     </div>
 
     <p>On the home composer and inside a project, the design-system picker is a first-class lever: open it before you send a prompt to bind a DESIGN.md, or switch systems mid-session without leaving the chat. The sidebar <em>Design systems</em> rail is the management surface for installed systems, presets, and org-shared libraries.</p>
 
-    <figure class="figure--full" id="fig-ch05-design-system-picker">
-      <img src="../images/od-v015-04-design-system-picker.png" alt="Open Design design system picker popover on the home composer listing bundled brand systems with search and category filters" loading="lazy" />
-      <figcaption>Figure 5.1a — The design-system picker on the composer. Selecting a system here prefixes every generation in the session with that DESIGN.md contract. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
-    </figure>
-
     <figure class="figure--full" id="fig-ch05-design-systems">
       <img src="../images/od-v015-15-sidebar-design-systems.png" alt="Open Design Design systems sidebar showing Your systems, Official presets, and Enterprise tabs with installed brand systems and Create new design system action" loading="lazy" />
       <figcaption>Figure 5.1 — The design-systems management surface (v0.15.1). Installed brand systems are listed with category and source; the active system is highlighted and its DESIGN.md brand contract is injected into every artifact generated in the project. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    </figure>
+
+    <figure class="figure--full" id="fig-ch05-design-system-picker">
+      <img src="../images/od-v015-04-design-system-picker.png" alt="Open Design design system picker popover on the home composer listing bundled brand systems with search and category filters" loading="lazy" />
+      <figcaption>Figure 5.1a — The design-system picker on the composer. Selecting a system here prefixes every generation in the session with that DESIGN.md contract. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
     </figure>
 
     <figure class="figure--full" id="fig-ch05-presets">
@@ -803,11 +808,9 @@
     </div>
 
     <h3 id="05.2.2">The Manifest and tokens.css</h3>
-    <p>The <code>manifest.json</code> is the identity card for a brand system. It declares the schema version, a unique ID, a human name, a category, a description, a source attribution, and the file locations. Modern systems must pass the manifest guard on import; legacy systems without a manifest still work but are skipped by the pnpm validation step.</p>
+    <p>The <code>manifest.json</code> is the identity card for a brand system. It declares the schema version, a unique ID, a human name, a category, a description, a source attribution, and the file locations. Modern systems must pass the manifest guard on import; legacy systems without a manifest still work but are skipped by the pnpm validation step. Below is an example <code>manifest.json</code> for a house brand system (fictitious "Acme" example; schema documented at github.com/nexu-io/open-design — Apache-2.0):</p>
 
-    <pre><code>/* manifest.json for a house brand system (fictitious "Acme" example;
-   schema documented at github.com/nexu-io/open-design — Apache-2.0) */
-{
+    <pre><code>{
   "schemaVersion": "1.0",
   "id": "acme-brand",
   "name": "Acme",
@@ -939,8 +942,10 @@ od:
 
     <p>For internal prototyping where you have your own brand, select your house DESIGN.md. If you haven't authored one yet, use Neutral Modern---the built-in starter is intentionally opinionated enough to produce clean output but neutral enough not to confuse stakeholders.</p>
 
-    <div class="callout tip">
-      <p>When you select a bundled system for a prototype, note which three rules you most want to borrow. That list is the seed for your own DESIGN.md when you're ready to author it. The anti-patterns section is especially worth reading---it tells you what the system considers a cardinal sin, and those constraints are often more informative than the positive rules.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p>When you select a bundled system for a prototype, note which three rules you most want to borrow. That list is the seed for your own DESIGN.md when you're ready to author it. The anti-patterns section is especially worth reading---it tells you what the system considers a cardinal sin, and those constraints are often more informative than the positive rules.</p>
+      </div>
     </div>
 
     <h3 id="05.4.2">Layering Brand Rules</h3>
@@ -948,8 +953,10 @@ od:
 
     <p>The safest layering approach is additive: add sections that the base system doesn't define rather than replacing sections it does define. If your base system has no Motion section and you want animation conventions, add the Motion section from another system. If it already has a strong Motion section, leave it alone.</p>
 
-    <div class="callout warning">
-      <p>Combining two brand systems that both have strong color opinions will produce conflicting token values. The daemon resolves conflicts by taking the first token value found in the merged file. If you're merging, put the tokens you want to win at the top of the merged DESIGN.md.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>Combining two brand systems that both have strong color opinions will produce conflicting token values. The daemon resolves conflicts by taking the first token value found in the merged file. If you're merging, put the tokens you want to win at the top of the merged DESIGN.md.</p>
+      </div>
     </div>
   </section>
 
@@ -1094,8 +1101,11 @@ od:
     <h3 id="05.5.2">Starting From Figma</h3>
     <p>If your team already has a Figma design system, Open Design's plugin ecosystem includes migration tooling for extracting token values from external sources. Check the Open Design plugin registry for a current Figma-to-DESIGN.md extraction workflow, as plugin availability and naming can change between versions. If extraction tooling is available, treat its output as a skeleton---automated extraction misses rationale, voice rules, and anti-patterns, which you'll need to write by hand.</p>
 
-    <div class="callout my-take">
-      <p><strong>My take:</strong> Authoring one good house DESIGN.md returns more value than all 150 bundled systems combined. I don't say that to dismiss the library---I say it because teams generate for their own brand far more often than they prototype against a famous one. Spend the time on Voice and Anti-Patterns. Colors are the easy part; any designer can pick a hex code. Anti-patterns are where institutional knowledge lives, and they're the section most teams skip because it requires discipline to write prohibitions before you see the violation.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>Authoring one good house DESIGN.md returns more value than all 150 bundled systems combined. I don't say that to dismiss the library---I say it because teams generate for their own brand far more often than they prototype against a famous one. Spend the time on Voice and Anti-Patterns. Colors are the easy part; any designer can pick a hex code. Anti-patterns are where institutional knowledge lives, and they're the section most teams skip because it requires discipline to write prohibitions before you see the violation.</p>
+      </div>
     </div>
   </section>
 
@@ -1139,7 +1149,7 @@ borderRadius: { button: '6px' }</code></pre>
     </figure>
 
     <h3 id="05.6.2">The Code-Refresh Plugin</h3>
-    <p>Open Design includes a code-migration scenario plugin that closes this loop. You point the plugin at a git repository and an active DESIGN.md, and it produces a refactoring pull request that updates the codebase's token definitions to match the brand contract. The plugin's exact name in v0.9.0 is documented in the <code>plugins/_official/</code> folder of the Open Design repository; the 0.8.0 release notes reference codebase refactoring capability per the <a href="https://open-design.ai/blog/open-design-0-8-0-everything-is-a-plugin/">open-design.ai blog (2025)</a>. The plugin is covered in depth in <a href="#ch-09-4">section 9.4</a>; this section focuses on the conceptual pattern.</p>
+    <p>Open Design includes a code-migration scenario plugin that closes this loop. You point the plugin at a git repository and an active DESIGN.md, and it produces a refactoring pull request that updates the codebase's token definitions to match the brand contract. The plugin's exact name in v0.9.0 is documented in the <code>plugins/_official/</code> folder of the Open Design repository; the 0.8.0 release notes reference codebase refactoring capability per the <a href="https://open-design.ai/blog/open-design-0-8-0-everything-is-a-plugin/">open-design.ai blog (2025)</a>. The plugin is covered in depth in <a href="ch-09.html#ch-09-4">section 9.4</a>; this section focuses on the conceptual pattern.</p>
 
     <p>The code-refresh workflow runs in both directions:</p>
 
@@ -1185,8 +1195,10 @@ borderRadius: { button: '6px' }</code></pre>
     <h3 id="05.6.3">Keeping Them in Sync Over Time</h3>
     <p>Treat DESIGN.md as a design-system PR companion. When a design decision changes in production---a component gets a new radius, a color is updated for accessibility---the same PR that updates the component also updates DESIGN.md and <code>tokens.css</code>. Two extra minutes on a PR review prevents months of drift. I add a checklist item to every design-adjacent PR: "Does this change a design token? Update DESIGN.md and tokens.css."</p>
 
-    <div class="callout tip">
-      <p><strong>Next:</strong> Skills and brand systems are the generation engine. <strong>Chapter 06</strong> puts them to work on the most-used artifact family---web and mobile prototypes. You'll run real generation loops for a single-page web UI, a multi-screen mobile flow, and a live dashboard, and you'll see how the brand contract we wrote here shapes every output.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p><strong>Next:</strong> Skills and brand systems are the generation engine. <strong>Chapter 06</strong> puts them to work on the most-used artifact family---web and mobile prototypes. You'll run real generation loops for a single-page web UI, a multi-screen mobile flow, and a live dashboard, and you'll see how the brand contract we wrote here shapes every output.</p>
+      </div>
     </div>
   </section>
         </div>
@@ -1262,7 +1274,7 @@ borderRadius: { button: '6px' }</code></pre>
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1367,7 +1379,7 @@ borderRadius: { button: '6px' }</code></pre>
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

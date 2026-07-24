@@ -636,8 +636,10 @@
 &gt;&lt;/iframe&gt;</code></pre>
     </div>
 
-    <div class="callout warning">
-      <p>If you encounter a fork or third-party build of Open Design that offers an "unsandboxed preview mode" for convenience, treat it as a security regression. Running model-generated code without the sandbox removes the one reliable barrier between a malicious or buggy generation and your local system. The preview sandbox is not a UX polish feature; it's a threat model boundary.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>If you encounter a fork or third-party build of Open Design that offers an "unsandboxed preview mode" for convenience, treat it as a security regression. Running model-generated code without the sandbox removes the one reliable barrier between a malicious or buggy generation and your local system. The preview sandbox is not a UX polish feature; it's a threat model boundary.</p>
+      </div>
     </div>
 
     <div class="table-wrapper">
@@ -708,8 +710,11 @@
       <figcaption>Figure 8.1c — NEXT STEP suggestions. Context-aware shortcuts compress the iterate beat into a single click; More exposes the full set. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
     </figure>
 
-    <div class="callout my-take">
-      <p><strong>My take:</strong> The sandboxed preview is non-negotiable and should never be disabled, even though it occasionally causes preview-to-export divergence. I've run into cases where an artifact looks perfect in the preview and the exported HTML behaves differently because of how assets are resolved. That friction is real and worth acknowledging. But the alternative --- running model-generated code with full DOM access on my own machine --- is a risk I won't accept. The sandbox is the architecture's spine. If you're evaluating forks or derivatives of Open Design, the first thing to check is whether this constraint is preserved.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The sandboxed preview is non-negotiable and should never be disabled, even though it occasionally causes preview-to-export divergence. I've run into cases where an artifact looks perfect in the preview and the exported HTML behaves differently because of how assets are resolved. That friction is real and worth acknowledging. But the alternative --- running model-generated code with full DOM access on my own machine --- is a risk I won't accept. The sandbox is the architecture's spine. If you're evaluating forks or derivatives of Open Design, the first thing to check is whether this constraint is preserved.</p>
+      </div>
     </div>
 
     <figure>
@@ -801,7 +806,7 @@ data: {"type":"done"}</code></pre>
 
     <h3 id="ch-08-2-1">Hot Reload</h3>
 
-    <p>Once generation finishes, the preview continues to update if the artifact files change. The daemon watches the project directory for writes and pushes new <code>write_file</code> events over a persistent SSE connection. This means that if you manually edit an artifact file or if a second agent pass modifies it, the preview refreshes without any action on your part. The four-beat loop from <a href="#ch-03-2" class="xref">Section 3.2</a> is hot-reloaded by default.</p>
+    <p>Once generation finishes, the preview continues to update if the artifact files change. The daemon watches the project directory for writes and pushes new <code>write_file</code> events over a persistent SSE connection. This means that if you manually edit an artifact file or if a second agent pass modifies it, the preview refreshes without any action on your part. The four-beat loop from <a href="ch-03.html#ch-03-2" class="xref">Section 3.2</a> is hot-reloaded by default.</p>
   </section>
 
   <section class="chapter-section" id="ch-08-3">
@@ -1090,16 +1095,21 @@ project-abc123/
       </table>
     </div>
 
-    <div class="callout warning">
-      <p>External assets that load in the preview can break in the inlined HTML export. The preview iframe fetches resources with the browser's full network access; the HTML inliner runs in the daemon and may not reach the same CDN-hosted fonts or authenticated endpoints. Verify exported files offline before sending --- open the exported HTML with the network tab active and look for failed asset requests. This applies especially to artifacts that load external fonts or image CDNs.</p>
+        <div class="callout warning">
+      <div class="callout-body">
+        <p>External assets that load in the preview can break in the inlined HTML export. The preview iframe fetches resources with the browser's full network access; the HTML inliner runs in the daemon and may not reach the same CDN-hosted fonts or authenticated endpoints. Verify exported files offline before sending --- open the exported HTML with the network tab active and look for failed asset requests. This applies especially to artifacts that load external fonts or image CDNs.</p>
+      </div>
     </div>
 
     <h3 id="ch-08-6-1">The Verification Habit</h3>
 
     <p>Sandbox in, files out --- this is the model that works cleanly for the majority of artifacts. Divergence clusters around external assets and format-specific rendering. Build a short verification step into your export workflow: trigger the export, open the file independently of the preview, and confirm they match. For HTML, do this offline. For PDF, check font rendering. For PPTX, scroll all slides in a presentation tool. Two minutes of verification prevents "it looked right in the preview" mistakes from reaching a stakeholder.</p>
 
-    <div class="callout my-take">
-      <p><strong>My take:</strong> The preview/export divergence problem is not a flaw in Open Design's design; it's an inherent consequence of having a security-correct sandbox paired with a rich export pipeline. Each export format has its own rendering context, and those contexts can't all be identical to the browser sandbox. The right response isn't to close the gap by relaxing the sandbox; it's to verify every export before it leaves your machine. I check every exported file before sending it. Not because I've been burned every time, but because the one time I didn't check, the PDF had a blank first page from a missed font load --- and it went to a client.</p>
+        <div class="callout my-take">
+      <div class="callout-header">My Take</div>
+      <div class="callout-body">
+        <p>The preview/export divergence problem is not a flaw in Open Design's design; it's an inherent consequence of having a security-correct sandbox paired with a rich export pipeline. Each export format has its own rendering context, and those contexts can't all be identical to the browser sandbox. The right response isn't to close the gap by relaxing the sandbox; it's to verify every export before it leaves your machine. I check every exported file before sending it. Not because I've been burned every time, but because the one time I didn't check, the PDF had a blank first page from a missed font load --- and it went to a client.</p>
+      </div>
     </div>
   </section>
 
@@ -1111,7 +1121,7 @@ project-abc123/
 
     <h3>Versions carry the prompt that made them</h3>
 
-    <p>As of v0.15.1, every meaningful file write creates a version entry that stores the originating prompt. The Versions panel lists those entries with a Current badge, timestamps, and a Prompt disclosure so you can see why a revision exists --- not only that it exists. Restore returns the file; the chat history still explains how you got there.</p>
+    <p>As of v0.15.1, every meaningful file write creates a version entry that stores the originating prompt. The Versions panel lists those entries with a Current badge, timestamps, and a Prompt disclosure, revealing the rationale behind each revision alongside its timestamp. Restore returns the file; the chat history still explains how you got there.</p>
 
     <figure class="figure--full" id="fig-ch08-versions">
       <img src="../images/od-v015-08-versions-panel.png" alt="Open Design Versions panel listing version cards with Current and Manual edit badges beside a full-size preview of the selected version" loading="lazy" />
@@ -1136,8 +1146,10 @@ project-abc123/
       <figcaption>Figure 8.6 — Design Jury in Settings. Enable to stream a five-panel review beside generation; open a project to persist the preference server-side. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
     </figure>
 
-    <div class="callout tip">
-      <p>Pair Jury with Plan mode on high-stakes work: Plan locks the brief, Design builds, Jury scores, then you export. That sequence is slower than a single Heavy send --- and usually cheaper than three unplanned Design retries.</p>
+        <div class="callout tip">
+      <div class="callout-body">
+        <p>Pair Jury with Plan mode on high-stakes work: Plan locks the brief, Design builds, Jury scores, then you export. That sequence is slower than a single Heavy send --- and usually cheaper than three unplanned Design retries.</p>
+      </div>
     </div>
   </section>
         </div>
@@ -1213,7 +1225,7 @@ project-abc123/
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1318,7 +1330,7 @@ project-abc123/
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>
