@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.1">
+  <meta name="bw-version" content="0.1.2">
   <title>Web and Mobile Prototypes - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #a68bfc; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="ch-06" style="background-color: #a68bfc; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -1030,7 +1030,7 @@ The modal should show the full product description and a
 
     <p>Self-contained HTML is a preview convenience, not a production pattern. At some point a prototype becomes large enough that a real build pipeline --- component library, routing, state management --- produces better results than a single inlined file. That point is usually when you're building a multi-page application with shared state between routes, or when a developer needs to ship the artifact as a real product.</p>
 
-    <p>For those cases, use the code-refresh plugin (covered in <a href="ch-09.html#ch-09-4" class="xref">section 9.4</a>) to refactor a generated prototype into a proper Next.js or React component tree. The prototype gets you the design approved; the plugin gets you the code production-ready.</p>
+    <p>For those cases, use the code-refresh plugin (covered in <a href="09.html#ch-09-4" class="xref">section 9.4</a>) to refactor a generated prototype into a proper Next.js or React component tree. The prototype gets you the design approved; the plugin gets you the code production-ready.</p>
 
         <div class="callout warning">
       <div class="callout-body">
@@ -1183,7 +1183,7 @@ The modal should show the full product description and a
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1288,7 +1288,7 @@ The modal should show the full product description and a
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

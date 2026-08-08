@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.0">
+  <meta name="bw-version" content="0.1.2">
   <title>Command and CLI Reference - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #cc7373; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="appendix-A" style="background-color: #cc7373; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -540,7 +540,7 @@
         </div>
         <div class="mt-8 md:mt-0 md:text-right flex-shrink-0">
           <p class="font-mono text-[13px] font-medium text-black/25">Reading time</p>
-          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">11 <span class="text-lg font-normal">min</span></p>
+          <p class="font-sans text-4xl font-bold tracking-tight text-black/30 mt-1">9 <span class="text-lg font-normal">min</span></p>
         </div>
       </div>
     </div>
@@ -554,6 +554,10 @@
         <a href="#appendix-A-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The od Command Surface</a>
         <a href="#appendix-A-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">MCP Install per CLI</a>
         <a href="#appendix-A-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">File Layout and Config</a>
+        <a href="#appendix-A-4-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">BYOK Proxy Routes</a>
+        <a href="#appendix-A-4-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Docker Environment Config</a>
+        <a href="#appendix-A-4-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">config.json Snippet</a>
+        <a href="#appendix-A-4-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Version Pin Reference</a>
       </div>
     </div>
   </nav>
@@ -569,6 +573,10 @@
           <a href="#appendix-A-2" data-section="appendix-A-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The od Command Surface</span></a>
           <a href="#appendix-A-3" data-section="appendix-A-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>MCP Install per CLI</span></a>
           <a href="#appendix-A-4" data-section="appendix-A-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>File Layout and Config</span></a>
+          <a href="#appendix-A-4-1" data-section="appendix-A-4-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>BYOK Proxy Routes</span></a>
+          <a href="#appendix-A-4-2" data-section="appendix-A-4-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Docker Environment Config</span></a>
+          <a href="#appendix-A-4-3" data-section="appendix-A-4-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>config.json Snippet</span></a>
+          <a href="#appendix-A-4-4" data-section="appendix-A-4-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Version Pin Reference</span></a>
       </nav>
     </aside>
   </div>
@@ -585,6 +593,10 @@
           <a href="#appendix-A-2" data-section="appendix-A-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The od Command Surface</span></a>
           <a href="#appendix-A-3" data-section="appendix-A-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>MCP Install per CLI</span></a>
           <a href="#appendix-A-4" data-section="appendix-A-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>File Layout and Config</span></a>
+          <a href="#appendix-A-4-1" data-section="appendix-A-4-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>BYOK Proxy Routes</span></a>
+          <a href="#appendix-A-4-2" data-section="appendix-A-4-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Docker Environment Config</span></a>
+          <a href="#appendix-A-4-3" data-section="appendix-A-4-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>config.json Snippet</span></a>
+          <a href="#appendix-A-4-4" data-section="appendix-A-4-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Version Pin Reference</span></a>
       </nav>
       <main class="chapter-main">
         <div class="book-content">
@@ -594,12 +606,14 @@
     <h1 class="chapter-title co-title">Command and CLI Reference</h1>
     <p class="co-standfirst">Every install path, the od command surface, MCP setup per CLI, and the .od/ file layout</p>
     <div class="co-body co-body--dropcap">
-      <p>Everything you need to run Open Design from the terminal, in one scannable place. This appendix covers the four surfaces you reach for during setup and daily operation: install paths, the <code>od</code> command surface, <code>od mcp install</code> for each supported CLI, and the <code>.od/</code> file layout with key config snippets. Scan, don't read --- if you need narrative context, the chapter that owns each topic is cited inline. All entries reflect Open Design v0.9.0 (released June 2, 2026) with Node.js ~24 and pnpm 10.33.x. Commands age with every release; the repository is the source of truth when anything here conflicts with a newer version.</p>
+      <p>Everything required to operate the terminal surface in one scannable place. This appendix covers four key setup areas: install options, the <code>od</code> command set, <code>od mcp install</code> per CLI, and the <code>.od/</code> configuration layout. Narrative chapters are cross-referenced inline for deeper context. All entries reflect release 0.9.0 with Node.js ~24 and pnpm 10.33.x. The project repository serves as the authoritative source of truth for updates.</p>
     </div>
   </section>
 
-  <div class="callout warning">
-    <p>Commands and version pins age with every release. All entries here reflect Open Design v0.9.0 (released June 2, 2026). Verify against the live repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a> before running in a new environment.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>Commands and version pins age over time. All entries here reflect version 0.9.0 (June 2026). Verify against the live repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a> before provisioning a new environment.</p>
+    </div>
   </div>
 
   <!-- A.1 Install Commands -->
@@ -607,10 +621,10 @@
   <section class="chapter-section" id="appendix-A-1">
     <h2 class="section-title"><span class="section-num">A.1</span> Install Commands</h2>
 
-<p>Three install paths exist. Choose based on whether you intend to run Open Design as a desktop app, develop against the source, or deploy it on a server. As of June 2026, all three paths install v0.9.0. A fourth option --- the one-line CLI installer --- is a shortcut that combines download and agent wiring in a single command, useful when you know which coding-agent CLI you'll use and want to skip the desktop UI entirely. See <a href="#ch-02">Chapter 02</a> for the full first-run walkthrough including troubleshooting for native build failures.</p>
+<p>Three primary installation routes are available. Select the workflow that fits your target environment: desktop execution, source development, or server deployment. Each route provisions release 0.9.0. Alternatively, a one-line CLI installer combines binary retrieval and agent wiring into a single command for headless environments. See <a href="02.html#ch-02">Chapter 02</a> for the complete first-run walkthrough and build diagnostics.</p>
 
   <table>
-    <caption>Install Paths — Open Design v0.9.0, June 2026</caption>
+    <caption>Install Paths — v0.9.0 Reference</caption>
     <thead>
       <tr>
         <th>Path</th>
@@ -642,13 +656,16 @@
         <td>One-line CLI installer</td>
         <td><code>curl -fsSL https://open-design.ai/install.sh | sh -s &lt;agent&gt;</code></td>
         <td>curl, sh</td>
-        <td>Installs Open Design and immediately wires it to the named coding agent. Replace <code>&lt;agent&gt;</code> with the CLI slug from section A.3.</td>
+        <td>Installs the daemon and immediately wires it to the named coding agent. Replace <code>&lt;agent&gt;</code> with the CLI slug from section A.3.</td>
       </tr>
     </tbody>
   </table>
 
-  <div class="callout">
-    <p><strong>My take:</strong> The desktop app is the right starting point for nearly everyone. From-source only pays off if you plan to author custom skills or plugins --- the native module build chain (primarily <code>better-sqlite3</code>) fails silently when Node or pnpm versions drift, and that failure takes time to diagnose. If you want to ship a custom skill to your team today, start from the desktop app and layer the skill work on top. I've burned an afternoon on a Node version mismatch that the desktop path would have sidestepped entirely.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>The desktop app is the right starting point for nearly everyone. From-source only pays off if you plan to author custom skills or plugins --- the native module build chain (primarily <code>better-sqlite3</code>) fails silently when Node or pnpm versions drift, and that failure takes time to diagnose. If you want to ship a custom skill to your team today, start from the desktop app and layer the skill work on top. I've burned an afternoon on a Node version mismatch that the desktop path would have sidestepped entirely.</p>
+    </div>
   </div>
 
   <div class="code-block" data-label="From-source install" data-lang="bash">
@@ -677,8 +694,10 @@ $ docker compose up -d
 $ curl -fsSL https://open-design.ai/install.sh | sh -s claude-code</code></pre>
   </div>
 
-  <div class="callout warning">
-    <p>The one-line installer pipes a remote script directly to a shell. Before running it, inspect the script first: <code>curl -fsSL https://open-design.ai/install.sh | less</code>. Verify the domain matches the official repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a>. If you prefer not to pipe to shell, use the desktop installer or the from-source path instead.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>The one-line installer pipes a remote script directly to a shell. Before running it, inspect the script first: <code>curl -fsSL https://open-design.ai/install.sh | less</code>. Verify the domain matches the official repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a>. If you prefer not to pipe to shell, use the desktop installer or the from-source path instead.</p>
+    </div>
   </div>
 
   <!-- A.2 The od Command Surface -->
@@ -687,10 +706,10 @@ $ curl -fsSL https://open-design.ai/install.sh | sh -s claude-code</code></pre>
   <section class="chapter-section" id="appendix-A-2">
     <h2 class="section-title"><span class="section-num">A.2</span> The od Command Surface</h2>
 
-<p>The <code>od</code> CLI is the management interface for Open Design. It does not run generation --- the coding agent does that through MCP (Model Context Protocol). <code>od</code> handles setup, inspection, and lifecycle. The most-used subcommand by far is <code>od mcp install</code>, which you run once per coding-agent CLI. The others --- <code>od status</code> and <code>od plugin list</code> --- are diagnostic tools you'll reach for when the daemon or a plugin isn't behaving as expected. As of June 2026, the primary subcommands are listed below. A full flag reference for all <code>od</code> subcommands may be available at <code>/docs/cli-reference.md</code> in the repository; verify against the live repo for the most current surface.</p>
+<p>The <code>od</code> binary provides CLI management functions. The coding agent executes generation through MCP (Model Context Protocol). <code>od</code> handles setup, status checks, and lifecycle tasks. <code>od mcp install</code> connects individual agent clients. Diagnostic commands like <code>od status</code> and <code>od plugin list</code> report background state. Primary subcommands appear below; consult <code>/docs/cli-reference.md</code> in the repository for the full flag index.</p>
 
   <table>
-    <caption>od CLI Subcommands — Open Design v0.9.0, June 2026</caption>
+    <caption>od CLI Subcommands Reference</caption>
     <thead>
       <tr>
         <th>Command</th>
@@ -777,14 +796,16 @@ $ od mcp install cursor --uninstall</code></pre>
   <section class="chapter-section" id="appendix-A-3">
     <h2 class="section-title"><span class="section-num">A.3</span> MCP Install per CLI</h2>
 
-<p>As of June 2026, Open Design supports at least 17 confirmed coding-agent CLIs via the <code>od mcp install</code> command (the v0.9.0 README headline cites 21; verify the full current list in the repository's agent registry at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a>). The 17 named slugs confirmed from the v0.9.0 README are listed below. The command auto-writes the correct MCP server config into each agent's config directory. Run it once per agent; re-run after upgrading Open Design to refresh the server config. See <a href="#ch-10">Chapter 10</a> for the MCP architecture and multi-agent orchestration patterns built on top of this connection. Scan, don't read --- find your CLI slug, run the command, and move on.</p>
+<p>The <code>od mcp install</code> command configures at least 17 supported coding-agent CLIs (the README headline cites 21; verify current entries in the agent registry at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a>). The 17 confirmed slugs appear below. The command writes the required server parameters directly to client settings files. Re-run after upgrading to refresh configurations. See <a href="10.html#ch-10">Chapter 10</a> for details on multi-agent orchestration. Select your CLI slug below to install.</p>
 
-  <div class="callout warning">
-    <p>Per-CLI config file locations vary. <code>od mcp install</code> writes to the correct location automatically. If you need to inspect or manually edit the config, use the <code>--print</code> flag first to see where and what it writes. Exact paths per CLI are not documented in a single canonical source; always run <code>--print</code> to confirm the path on your machine before editing manually.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>Client configuration directories vary by tool. <code>od mcp install</code> handles target paths automatically. Use <code>--print</code> to preview generated output before writing directly to disk.</p>
+    </div>
   </div>
 
   <table>
-    <caption>MCP Install by CLI — Open Design v0.9.0, June 2026</caption>
+    <caption>MCP Install by CLI</caption>
     <thead>
       <tr>
         <th>CLI</th>
@@ -796,87 +817,87 @@ $ od mcp install cursor --uninstall</code></pre>
       <tr>
         <td>Claude Code</td>
         <td><code>od mcp install claude-code</code></td>
-        <td>Run <code>--print</code> to confirm; typically <code>~/.claude/</code></td>
+        <td>Check with <code>--print</code>; default <code>~/.claude/</code></td>
       </tr>
       <tr>
         <td>OpenAI Codex CLI</td>
         <td><code>od mcp install codex</code></td>
-        <td>Run <code>--print</code> to confirm</td>
+        <td>Inspect path via <code>--print</code></td>
       </tr>
       <tr>
         <td>Cursor</td>
         <td><code>od mcp install cursor</code></td>
-        <td>Run <code>--print</code> to confirm; typically <code>~/.config/cursor/</code></td>
+        <td>Verify output using <code>--print</code>; default <code>~/.config/cursor/</code></td>
       </tr>
       <tr>
         <td>GitHub Copilot CLI</td>
         <td><code>od mcp install copilot</code></td>
-        <td>Run <code>--print</code> to confirm</td>
+        <td>Pass <code>--print</code> to view directory</td>
       </tr>
       <tr>
         <td>Google Gemini CLI</td>
         <td><code>od mcp install gemini</code></td>
-        <td>Run <code>--print</code> to confirm. Note: as of June 2026 Google announced a Gemini CLI sunset around 2026-06-18 --- verify current status before relying on this integration</td>
+        <td>Check target path via <code>--print</code>. Note: Google announced a Gemini CLI sunset around mid-2026; verify status before deployment</td>
       </tr>
       <tr>
         <td>OpenCode</td>
         <td><code>od mcp install opencode</code></td>
-        <td>Run <code>--print</code> to confirm</td>
+        <td>Use <code>--print</code> flag to locate target</td>
       </tr>
       <tr>
         <td>Hermes</td>
         <td><code>od mcp install hermes</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Check location with <code>--print</code> (community-supported)</td>
       </tr>
       <tr>
         <td>Kimi CLI</td>
         <td><code>od mcp install kimi</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Inspect config path with <code>--print</code> (community-supported)</td>
       </tr>
       <tr>
         <td>OpenClaw</td>
         <td><code>od mcp install openclaw</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Verify destination using <code>--print</code> (community-supported)</td>
       </tr>
       <tr>
         <td>Google Antigravity</td>
         <td><code>od mcp install antigravity</code></td>
-        <td>Run <code>--print</code> to confirm; experimental</td>
+        <td>Display path via <code>--print</code> (experimental)</td>
       </tr>
       <tr>
         <td>Mistral Vibe</td>
         <td><code>od mcp install vibe</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Locate directory with <code>--print</code> (community-supported)</td>
       </tr>
       <tr>
         <td>Pi</td>
         <td><code>od mcp install pi</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Use <code>--print</code> to display path (community-supported)</td>
       </tr>
       <tr>
         <td>Cline</td>
         <td><code>od mcp install cline</code></td>
-        <td>Run <code>--print</code> to confirm; VS Code extension MCP settings</td>
+        <td>Check location via <code>--print</code> (VS Code extension settings)</td>
       </tr>
       <tr>
         <td>Trae</td>
         <td><code>od mcp install trae</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Pass <code>--print</code> to view destination (community-supported)</td>
       </tr>
       <tr>
         <td>Qwen</td>
         <td><code>od mcp install qwen</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Verify path with <code>--print</code> (community-supported)</td>
       </tr>
       <tr>
         <td>DeepSeek</td>
         <td><code>od mcp install deepseek</code></td>
-        <td>Run <code>--print</code> to confirm; community-supported</td>
+        <td>Inspect target via <code>--print</code> (community-supported)</td>
       </tr>
       <tr>
         <td>BYOK Proxy / Ollama</td>
         <td><code>od mcp install ollama</code></td>
-        <td>Set <code>OPENAI_BASE_URL</code> and <code>OPENAI_API_KEY</code> env vars before installing. Run <code>--print</code> to confirm config path</td>
+        <td>Set <code>OPENAI_BASE_URL</code> and <code>OPENAI_API_KEY</code> env vars before installation. Check config path via <code>--print</code></td>
       </tr>
     </tbody>
   </table>
@@ -884,8 +905,8 @@ $ od mcp install cursor --uninstall</code></pre>
 
   <p>The full command block for all named slugs:</p>
 
-  <div class="code-block" data-label="od mcp install — all named CLI slugs" data-lang="bash">
-    <pre><code># od mcp install — all named CLI slugs (v0.9.0, June 2026)
+  <div class="code-block" data-label="od mcp install — CLI slugs" data-lang="bash">
+    <pre><code># od mcp install — CLI slugs
 $ od mcp install claude-code     # Claude Code
 $ od mcp install codex           # OpenAI Codex CLI
 $ od mcp install cursor          # Cursor
@@ -911,7 +932,7 @@ $ od mcp install ollama          # BYOK / local Ollama</code></pre>
   <section class="chapter-section" id="appendix-A-4">
     <h2 class="section-title"><span class="section-num">A.4</span> File Layout and Config</h2>
 
-<p>Open Design stores all project state in a <code>.od/</code> directory at your home directory by default. The layout below reflects v0.9.0 (June 2, 2026). Understanding this layout matters for three practical reasons: knowing what to back up (<code>app.sqlite</code> and <code>artifacts/</code>), knowing what is safe to delete (<code>sessions/</code>), and knowing where to look when diagnosing a broken generation (<code>history.jsonl</code>). The <code>config.json</code> in the root of <code>.od/</code> is where daemon-level settings live; project-level overrides are stored inside each project directory under <code>artifacts/</code>. The <code>OD_DATA_DIR</code> environment variable relocates the <code>.od/</code> directory; this behavior is confirmed for Docker and daemon-mode deployments. Whether it applies to the desktop app is not documented in available sources --- verify against the repository if you need to relocate the data directory in the desktop app.</p>
+<p>The application stores state in a <code>.od/</code> directory within the user's home directory. This layout separates persistent configuration, project databases, and execution logs. <code>app.sqlite</code> and <code>artifacts/</code> contain project state and should be included in routine backups. The <code>sessions/</code> folder holds temporary UI data. Daemon configuration resides in <code>.od/config.json</code>, whereas individual projects maintain local overrides. Set <code>OD_DATA_DIR</code> to relocate the data root in Docker or daemon environments.</p>
 
   <div class="file-tree">
     <pre><code>.od/
@@ -928,14 +949,16 @@ $ od mcp install ollama          # BYOK / local Ollama</code></pre>
 └── media-config.json        # Auto-created; auto-gitignored</code></pre>
   </div>
 
-  <p>Two files matter most for backup: <code>app.sqlite</code> (all project metadata and generation history) and the <code>artifacts/</code> directory (all rendered outputs). The <code>sessions/</code> directory is ephemeral --- deleting it does not lose work and can resolve stale UI state.</p>
+  <p>Prioritize two targets during backups. <code>app.sqlite</code> retains project metadata alongside generation history, while <code>artifacts/</code> stores rendered assets. In contrast, <code>sessions/</code> is transient --- clearing it resolves UI glitches without risking project work.</p>
+  </section>
 
-  <h4 id="appendix-A.4.1">BYOK Proxy Routes</h4>
+  <section class="chapter-section" id="appendix-A-4-1">
+    <h2 class="section-title">BYOK Proxy Routes</h2>
 
-  <p>Open Design includes a built-in BYOK (Bring Your Own Key) proxy that routes inference to any configured provider. The daemon exposes proxy routes at the following paths on port 7456:</p>
+<p>Open Design includes a built-in BYOK (Bring Your Own Key) proxy that routes inference to any configured provider. The daemon exposes proxy routes at the following paths on port 7456:</p>
 
   <table>
-    <caption>BYOK Proxy Routes — Open Design v0.9.0, June 2026</caption>
+    <caption>BYOK Proxy Routes</caption>
     <thead>
       <tr>
         <th>Route</th>
@@ -962,7 +985,7 @@ $ od mcp install ollama          # BYOK / local Ollama</code></pre>
       <tr>
         <td><code>/proxy/ollama</code></td>
         <td>Ollama (local)</td>
-        <td>Set <code>OPENAI_BASE_URL=http://localhost:11434/v1</code>. The only fully local-inference path.</td>
+        <td>Set <code>OPENAI_BASE_URL=http://localhost:11434/v1</code> for local inference.</td>
       </tr>
       <tr>
         <td><code>/proxy/azure</code></td>
@@ -972,13 +995,17 @@ $ od mcp install ollama          # BYOK / local Ollama</code></pre>
     </tbody>
   </table>
 
-  <div class="callout warning">
-    <p>Local-first controls where your files and orchestration live, not where inference happens. If inference privacy is the goal, use the Ollama route (<code>/proxy/ollama</code>) with a local model. Every other route sends tokens to a cloud API. See <a href="#ch-01">Chapter 01</a> for the local-first vs local-inference distinction.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>Local-first controls where your files and orchestration live, not where inference happens. If inference privacy is the goal, use the Ollama route (<code>/proxy/ollama</code>) with a local model. Every other route sends tokens to a cloud API. See <a href="01.html#ch-01">Chapter 01</a> for the local-first vs local-inference distinction.</p>
+    </div>
   </div>
+  </section>
 
-  <h4 id="appendix-A.4.2">Docker Environment Config</h4>
+  <section class="chapter-section" id="appendix-A-4-2">
+    <h2 class="section-title">Docker Environment Config</h2>
 
-  <p>For Docker Compose deployments, the <code>deploy/.env.example</code> file documents the required environment variables. Copy it to <code>.env</code> before running <code>docker compose up</code>.</p>
+<p>For Docker Compose deployments, the <code>deploy/.env.example</code> file documents the required environment variables. Copy it to <code>.env</code> before running <code>docker compose up</code>.</p>
 
   <div class="code-block" data-label="deploy/.env.example" data-lang="bash">
     <pre><code># deploy/.env.example (relevant fields, v0.9.0)
@@ -999,10 +1026,12 @@ GOOGLE_API_KEY=...
 # For local Ollama (fully local inference):
 OPENAI_BASE_URL=http://localhost:11434/v1</code></pre>
   </div>
+  </section>
 
-  <h4 id="appendix-A.4.3">config.json Snippet</h4>
+  <section class="chapter-section" id="appendix-A-4-3">
+    <h2 class="section-title">config.json Snippet</h2>
 
-  <p>The daemon-level <code>.od/config.json</code> controls the active design system, default skill, and run mode. A minimal config that sets a custom brand system and enables daemon-only mode:</p>
+<p>The daemon-level <code>.od/config.json</code> controls the active design system, default skill, and run mode. A minimal config that sets a custom brand system and enables daemon-only mode:</p>
 
   <div class="code-block" data-label=".od/config.json example" data-lang="bash">
     <pre><code>{
@@ -1011,11 +1040,13 @@ OPENAI_BASE_URL=http://localhost:11434/v1</code></pre>
   "mode": "daemon"
 }</code></pre>
   </div>
+  </section>
 
-  <h4 id="appendix-A.4.4">Version Pin Reference</h4>
+  <section class="chapter-section" id="appendix-A-4-4">
+    <h2 class="section-title">Version Pin Reference</h2>
 
-  <table>
-    <caption>Version Pins for From-Source Install — June 2026</caption>
+<table>
+    <caption>Version Pins for From-Source Install</caption>
     <thead>
       <tr>
         <th>Dependency</th>
@@ -1029,29 +1060,34 @@ OPENAI_BASE_URL=http://localhost:11434/v1</code></pre>
         <td>Node.js</td>
         <td><code>~24</code> (approximately Node 24.x)</td>
         <td><code>nvm use 24</code> or install via <a href="https://nodejs.org">nodejs.org</a></td>
-        <td>June 2026</td>
+        <td>v0.9 release</td>
       </tr>
       <tr>
         <td>pnpm</td>
         <td><code>10.33.x</code></td>
         <td><code>corepack enable</code> then <code>corepack use pnpm@10.33.x</code></td>
-        <td>June 2026</td>
+        <td>v0.9 release</td>
       </tr>
       <tr>
-        <td>Open Design</td>
-        <td><code>v0.9.0</code> (June 2, 2026)</td>
+        <td>Daemon</td>
+        <td><code>v0.9.0</code></td>
         <td>Clone the <code>open-design-v0.9.0</code> tag or use the desktop installer</td>
-        <td>June 2026</td>
+        <td>v0.9 release</td>
       </tr>
     </tbody>
   </table>
 
-  <div class="callout">
-    <p><strong>My take:</strong> Keep this appendix open in a second window during setup. The install path, <code>od mcp install</code> commands, and <code>.od/</code> layout cover 90% of what you need in the first hour. The only thing that beats it for setup speed is the desktop app, which makes most of section A.1 irrelevant if you go that route. Commands age with releases --- when in doubt, the repository README is the source of truth and always current.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>Keep this reference open during configuration. While manual installs and CLI commands address specific edge cases, using the desktop installer simplifies the entire process by wiring your local environment automatically.</p>
+    </div>
   </div>
 
-  <div class="callout tip">
-    <p><strong>Next:</strong> <a href="#appendix-B">Appendix B</a> catalogs the skills, brand systems, and plugins that ship in the box as of June 2026. Use it to locate a starting skill or brand system, then return here when you need to re-run an install command or check a config path.</p>
+    <div class="callout tip">
+    <div class="callout-body">
+      <p><strong>Next:</strong> <a href="B.html#appendix-B">Appendix B</a> catalogs skills, brand systems, and plugins. Select target components there, returning here whenever you need to check config paths or execution flags.</p>
+    </div>
   </div>
   </section>
         </div>
@@ -1127,7 +1163,7 @@ OPENAI_BASE_URL=http://localhost:11434/v1</code></pre>
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1217,7 +1253,7 @@ OPENAI_BASE_URL=http://localhost:11434/v1</code></pre>
         </div>
       </div>
       <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
-        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. Free for personal/noncommercial use (CC BY-NC-ND 4.0); commercial license required for business use.</p>
         <div class="flex gap-6">
           <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
           <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
@@ -1232,15 +1268,15 @@ OPENAI_BASE_URL=http://localhost:11434/v1</code></pre>
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>
     <div class="border-t border-white">
       <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div class="font-mono text-[11px] text-white/60 leading-relaxed">
-          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
-          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+          <p>&copy;2026 Mehran Mozaffari. Free for personal/noncommercial use (CC BY-NC-ND 4.0); commercial license required for business use.</p>
+          <p class="mt-1">First edition. Published July 2026. Prose: CC BY-NC-ND 4.0 (personal/noncommercial); commercial license available. Code samples Apache-2.0/MIT as noted.</p>
         </div>
         <div class="flex items-center gap-6">
           <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.1">
+  <meta name="bw-version" content="0.1.2">
   <title>Evaluating the Stack for Your Organization - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #cc8252; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="ch-14" style="background-color: #cc8252; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -618,7 +618,7 @@
 
     <p>The product has three install paths, each targeting a different adoption context. A small design team evaluating on their own terms reaches for the desktop app. An engineering team that wants to fork or extend skills and plugins installs from source. A platform team deploying for a department chooses Docker Compose. These are not tiers --- they are different operating contracts.</p>
 
-    <p>As of June 2026, the desktop app covers the most common entry point: zero-config, auto-detects coding-agent CLIs on your <code>PATH</code> at startup, and stores everything in <code>~/.od/</code>. Most leaders should start here. It eliminates the native-build failures that trip up first-time from-source installs (covered in <a href="ch-02.html#ch-02-1" class="xref">Section 2.1</a>).</p>
+    <p>As of June 2026, the desktop app covers the most common entry point: zero-config, auto-detects coding-agent CLIs on your <code>PATH</code> at startup, and stores everything in <code>~/.od/</code>. Most leaders should start here. It eliminates the native-build failures that trip up first-time from-source installs (covered in <a href="02.html#ch-02-1" class="xref">Section 2.1</a>).</p>
 
     <div class="table-wrapper">
       <table>
@@ -650,7 +650,7 @@
       </table>
     </div>
 
-    <p>The most common adoption mistake is jumping straight to the Docker Compose path to "do it properly" before the team understands the tool. I've seen it done --- the platform team builds a shared server before anyone has generated a single artifact, and the rollout stalls on infra debates. Start with the desktop app for the first two weeks. Get the four-beat loop (<a href="ch-03.html#ch-03-1" class="xref">Section 3.1</a>) running across two or three people before you centralize anything.</p>
+    <p>The most common adoption mistake is jumping straight to the Docker Compose path to "do it properly" before the team understands the tool. I've seen it done --- the platform team builds a shared server before anyone has generated a single artifact, and the rollout stalls on infra debates. Start with the desktop app for the first two weeks. Get the four-beat loop (<a href="03.html#ch-03-1" class="xref">Section 3.1</a>) running across two or three people before you centralize anything.</p>
 
     <div class="callout tip">
       <div class="callout-body">
@@ -678,7 +678,7 @@
     <h3>The sandbox</h3>
     <p>Every generated artifact is designed to render inside a sandboxed <code>srcdoc</code> iframe. Open Design's architecture documentation describes the sandbox as designed so that model-generated code cannot access the DOM outside the iframe, reach the filesystem, or make network calls. The Electron desktop shell adds a second sandboxed renderer layer with sidecar IPC. Together, the documented design intent is that Open Design can run arbitrary model-generated HTML safely on your machine, which is the stated security case for local-first generation. Treat this as documented architecture, not an audited security guarantee; verify against the source before relying on it for high-assurance environments.</p>
 
-    <p>The sandbox is not optional in the standard build. Do not disable it, and treat any fork or hosted variant that removes it as a red flag. Generated code is untrusted code by definition. The one inconvenience is preview-vs-export divergence on external assets --- covered fully in <a href="ch-08.html#ch-08-6" class="xref">Section 8.6</a>.</p>
+    <p>The sandbox is not optional in the standard build. Do not disable it, and treat any fork or hosted variant that removes it as a red flag. Generated code is untrusted code by definition. The one inconvenience is preview-vs-export divergence on external assets --- covered fully in <a href="08.html#ch-08-6" class="xref">Section 8.6</a>.</p>
 
     <h3>Reviewing automated refactors</h3>
     <p>The code-refresh-to-brand scenario plugin reads a git repository and a <code>DESIGN.md</code> and produces a diff refactoring components to match the brand spec. The diff is not auto-applied; it is staged for human review in <code>git</code>. Before any org-wide adoption of this plugin, establish a review policy: the diff must pass CI and get a human approval before merge. The plugin can touch large portions of a codebase. <!-- TODO-VERIFY: code-refresh plugin dry-run and rollback support status in v0.9.0 not confirmed; verify at plugins/_official/scenarios/od-code-migration/SKILL.md --> </p>
@@ -741,7 +741,7 @@
 
     <p>For a team of ten designers, a hosted per-seat tool might cost a flat monthly fee regardless of whether any design work happens that month. Open Design costs only the model tokens consumed by actual generations. A slow month costs less. A heavy sprint costs more. That variability is a feature for some organizations and a planning problem for others.</p>
 
-    <p>The agent model cost depends entirely on which CLI you wire. Claude Code (Anthropic) and Cursor charge their own rates. OpenCode (MIT) is open-source and free to run; its model cost is determined by your BYOK key. As of June 2026, the cost structure of individual agents is covered in <a href="ch-11.html#ch-11-1" class="xref">Chapter 11</a>; use that analysis to project model spend before committing to a CLI pairing.</p>
+    <p>The agent model cost depends entirely on which CLI you wire. Claude Code (Anthropic) and Cursor charge their own rates. OpenCode (MIT) is open-source and free to run; its model cost is determined by your BYOK key. As of June 2026, the cost structure of individual agents is covered in <a href="11.html#ch-11-1" class="xref">Chapter 11</a>; use that analysis to project model spend before committing to a CLI pairing.</p>
 
     <div class="table-wrapper">
       <table>
@@ -789,7 +789,7 @@
 <p class="section-en">Why agent-agnostic matters and how MCP delivers it</p>
     <p class="section-intro">The agent CLI market has experienced significant churn: Google announced Gemini CLI will sunset on June 18, 2026, OpenCode was rebranded from a previous product in January 2026, and new entrants ship monthly. Wiring your design workflow to a single proprietary agent is a rollout risk with a documented recent history.</p>
 
-    <p>Open Design uses MCP (Model Context Protocol) as the interface between the design system and any agent CLI. MCP is an open standard, and as of June 2026, Open Design documents support for 21+ coding-agent CLIs via MCP, including Claude Code, Cursor, GitHub Copilot, OpenCode, Codex CLI, Gemini CLI, Cline, Trae, Kimi CLI, Aider, and others. <!-- TODO-VERIFY: exact list of all 21+ CLIs; README names 16+ explicitly; full list in agent-adapters.md; verify before publication --> The full list is in <a href="ch-11.html#ch-11-1" class="xref">Chapter 11</a>.</p>
+    <p>Open Design uses MCP (Model Context Protocol) as the interface between the design system and any agent CLI. MCP is an open standard, and as of June 2026, Open Design documents support for 21+ coding-agent CLIs via MCP, including Claude Code, Cursor, GitHub Copilot, OpenCode, Codex CLI, Gemini CLI, Cline, Trae, Kimi CLI, Aider, and others. <!-- TODO-VERIFY: exact list of all 21+ CLIs; README names 16+ explicitly; full list in agent-adapters.md; verify before publication --> The full list is in <a href="11.html#ch-11-1" class="xref">Chapter 11</a>.</p>
 
     <p>The MCP interface means you can swap agents without migrating artifacts, brand systems, or skills. Your <code>DESIGN.md</code>, your project history, and every generated artifact stay in place. What changes is only the CLI invoking the generation. I run two agents simultaneously --- one proprietary, one open-source --- because a vendor sunset never strands me. That is the vendor independence argument in a single sentence.</p>
 
@@ -822,7 +822,7 @@
 
     <div class="callout warning">
       <div class="callout-body">
-        <p>Agent-agnostic via MCP does not mean all agents produce identical results. Different models have different instruction-following quality, context windows, and behavior on complex design prompts. Swapping agents is zero migration cost on the infrastructure side but may require prompt adjustments or skill tuning. Test any new agent on your house skills before relying on it for production generation. The agent comparison in <a href="ch-11.html#ch-11-1" class="xref">Chapter 11</a> covers quality and routing guidance per CLI.</p>
+        <p>Agent-agnostic via MCP does not mean all agents produce identical results. Different models have different instruction-following quality, context windows, and behavior on complex design prompts. Swapping agents is zero migration cost on the infrastructure side but may require prompt adjustments or skill tuning. Test any new agent on your house skills before relying on it for production generation. The agent comparison in <a href="11.html#ch-11-1" class="xref">Chapter 11</a> covers quality and routing guidance per CLI.</p>
       </div>
     </div>
 
@@ -953,7 +953,7 @@
 
     <p>The scorecard is most useful as a forcing function for conversations that adoption evaluations tend to skip. The governance axis forces a storage policy discussion before there are compliance incidents to drive it. The vendor independence axis forces the "what do we do if this agent sunsets" conversation before announcements like the Gemini CLI sunset happen again. Having these conversations during evaluation is much cheaper than having them after rollout.</p>
 
-    <p>A structured pilot produces better scorecard data than a theoretical evaluation. Choose one team, one real project, and run the four-beat loop (<a href="ch-03.html#ch-03-1" class="xref">Section 3.1</a>) for two weeks. At the end, score the four axes with real evidence. That evidence will be more useful than any vendor comparison document.</p>
+    <p>A structured pilot produces better scorecard data than a theoretical evaluation. Choose one team, one real project, and run the four-beat loop (<a href="03.html#ch-03-1" class="xref">Section 3.1</a>) for two weeks. At the end, score the four axes with real evidence. That evidence will be more useful than any vendor comparison document.</p>
 
     <div class="callout my-take">
       <div class="callout-header">My Take</div>
@@ -1035,7 +1035,7 @@
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1140,7 +1140,7 @@
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.1">
+  <meta name="bw-version" content="0.1.2">
   <title>150 Brand Systems - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #cdabfe; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="ch-05" style="background-color: #cdabfe; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -723,7 +723,7 @@
 <p class="section-en">Anatomy of the Brand Contract</p>
     <p class="section-intro">DESIGN.md is an open specification published by Google Labs as part of the Stitch project (per <a href="https://blog.google/innovation-and-ai/models-and-research/google-labs/stitch-design-md/">blog.google, announced 2025</a>); Stitch was subsequently succeeded by the hosted Claude Design tool. Open Design adopted the specification and extended it. The spec defines a single Markdown file with optional YAML front matter for compiled tokens and Markdown prose sections for rationale and rules. The brand contract---colors, type, spacing, layout, components, motion, voice, brand identity, and anti-patterns---lives in nine named sections.</p>
 
-    <h3 id="05.2.1">Two-Layer Structure</h3>
+    <h3 id="s-05-2-1">Two-Layer Structure</h3>
     <p>Every DESIGN.md has two layers. The YAML front matter is the compiled token layer---machine-readable values the daemon injects into skills. The Markdown prose is the rationale layer---human-readable rules and reasoning the agent reads to understand intent behind the tokens. Both layers matter. An agent that can read the prose understands why cobalt is the primary color and when to deviate; one that only reads tokens cannot.</p>
 
     <div class="file-tree">
@@ -807,7 +807,7 @@
       </table>
     </div>
 
-    <h3 id="05.2.2">The Manifest and tokens.css</h3>
+    <h3 id="s-05-2-2">The Manifest and tokens.css</h3>
     <p>The <code>manifest.json</code> is the identity card for a brand system. It declares the schema version, a unique ID, a human name, a category, a description, a source attribution, and the file locations. Modern systems must pass the manifest guard on import; legacy systems without a manifest still work but are skipped by the pnpm validation step. Below is an example <code>manifest.json</code> for a house brand system (fictitious "Acme" example; schema documented at github.com/nexu-io/open-design — Apache-2.0):</p>
 
     <pre><code>{
@@ -860,7 +860,7 @@
 <p class="section-en">From Contract to Rendered Artifact</p>
     <p class="section-intro">Understanding how the brand contract reaches a rendered artifact is what separates teams that get consistent output from teams that get inconsistent output. The path is a three-tier hierarchy: brand tokens win, then craft rules fill gaps, then skill defaults are the last resort. A skill that declares <code>od.design_system.requires: true</code> causes the daemon to inject the active brand system into the agent's context before generation begins.</p>
 
-    <h3 id="05.3.1">The Three-Tier Hierarchy</h3>
+    <h3 id="s-05-3-1">The Three-Tier Hierarchy</h3>
     <p>When a skill runs, the daemon resolves design tokens in this order:</p>
 
     <ol>
@@ -896,7 +896,7 @@
       <figcaption>Figure 5.3 — Token-to-artifact flow. The daemon resolves brand tokens, merges them with the skill's structural instructions, and sends the combined context to the agent before generation begins.</figcaption>
     </figure>
 
-    <h3 id="05.3.2">Skill Integration Mechanisms</h3>
+    <h3 id="s-05-3-2">Skill Integration Mechanisms</h3>
     <p>Skills can access the active DESIGN.md through three mechanisms, each appropriate to different use cases:</p>
 
     <pre><code># Mechanism 1: System-prompt injection (most common)
@@ -917,7 +917,7 @@ od:
 
     <p>System-prompt injection is the default because it keeps the skill's context window focused---injecting only the three or four sections a skill actually uses rather than the entire DESIGN.md. For a components-heavy skill like a dashboard, you'd declare <code>sections: ["colors", "components", "spacing"]</code>. For a content skill like a doc or email, you'd declare <code>sections: ["typography", "voice"]</code>.</p>
 
-    <h3 id="05.3.3">Lookup Order</h3>
+    <h3 id="s-05-3-3">Lookup Order</h3>
     <p>The daemon looks for a DESIGN.md file in this order:</p>
 
     <div class="file-tree">
@@ -937,7 +937,7 @@ od:
 <p class="section-en">Selecting the Right Brand Contract</p>
     <p class="section-intro">Picking a bundled system for a prototype is a one-click decision in the Open Design project UI---you select a brand from the library and every subsequent artifact in that project uses its tokens. Combining systems is more deliberate: you layer rules from one DESIGN.md on top of another by merging their sections. Both approaches are worth understanding, even if combining is something you'll rarely need.</p>
 
-    <h3 id="05.4.1">Choosing a Single System</h3>
+    <h3 id="s-05-4-1">Choosing a Single System</h3>
     <p>The fastest way to pick a system for prototyping is to match the visual language the stakeholder already knows. If you're building a feature for a developer tool, a brand with geometric dark-mode tokens gives reviewers a familiar frame---they focus on information architecture, not color preferences. If you're building a consumer experience, a photography-led card-heavy system shifts attention toward content density and touch targets.</p>
 
     <p>For internal prototyping where you have your own brand, select your house DESIGN.md. If you haven't authored one yet, use Neutral Modern---the built-in starter is intentionally opinionated enough to produce clean output but neutral enough not to confuse stakeholders.</p>
@@ -948,7 +948,7 @@ od:
       </div>
     </div>
 
-    <h3 id="05.4.2">Layering Brand Rules</h3>
+    <h3 id="s-05-4-2">Layering Brand Rules</h3>
     <p>Combining two systems means merging their DESIGN.md sections manually. The pattern is: take one system as the base (usually the one with the richer component spec), then override specific sections from a second system (usually for voice or motion). Keep the override minimal---replacing more than two sections usually produces incoherent output because the visual decisions in a brand system are interdependent.</p>
 
     <p>The safest layering approach is additive: add sections that the base system doesn't define rather than replacing sections it does define. If your base system has no Motion section and you want animation conventions, add the Motion section from another system. If it already has a strong Motion section, leave it alone.</p>
@@ -972,7 +972,7 @@ od:
       <figcaption>Figure 5.4 — "Generate from your material" — create a design system from a brand brief + GitHub repo / local code / .fig / assets. Open Design reads the supplied material and generates a DESIGN.md brand contract and companion <code>tokens.css</code> as a starting point for your house system. Real screenshot of Open Design v0.9.0 (captured June 2026).</figcaption>
     </figure>
 
-    <h3 id="05.5.1">Step-by-Step</h3>
+    <h3 id="s-05-5-1">Step-by-Step</h3>
 
     <div class="step">
       <span class="step-num">1</span>
@@ -1098,7 +1098,7 @@ od:
       </div>
     </div>
 
-    <h3 id="05.5.2">Starting From Figma</h3>
+    <h3 id="s-05-5-2">Starting From Figma</h3>
     <p>If your team already has a Figma design system, Open Design's plugin ecosystem includes migration tooling for extracting token values from external sources. Check the Open Design plugin registry for a current Figma-to-DESIGN.md extraction workflow, as plugin availability and naming can change between versions. If extraction tooling is available, treat its output as a skeleton---automated extraction misses rationale, voice rules, and anti-patterns, which you'll need to write by hand.</p>
 
         <div class="callout my-take">
@@ -1115,7 +1115,7 @@ od:
 <p class="section-en">Bridging DESIGN.md and Your Production Codebase</p>
     <p class="section-intro">Authoring a DESIGN.md solves the generation problem---every artifact the agent produces matches your brand. But it creates a secondary problem: your production codebase has its own design tokens, likely as CSS custom properties or a Tailwind config, and they will drift from DESIGN.md unless you actively maintain both. The brand contract is only as valuable as its accuracy against what's actually shipped.</p>
 
-    <h3 id="05.6.1">The Drift Problem</h3>
+    <h3 id="s-05-6-1">The Drift Problem</h3>
     <p>Drift looks like this: your DESIGN.md says the primary button is <code>border-radius: 8px</code>, but the production codebase uses <code>border-radius: 6px</code> after a design refresh six months ago. Artifacts generated today will use 8px. Stakeholders approve the prototype. Developers implement it and notice the 2px discrepancy. Someone changes one but not the other. Now you have two sources of truth, and neither is authoritative.</p>
 
     <figure>
@@ -1148,8 +1148,8 @@ borderRadius: { button: '6px' }</code></pre>
       <figcaption>Figure 5.5 — Brand drift vs brand in sync. The failure mode is common and silent---the artifacts still look fine; the discrepancy only surfaces when a developer compares the artifact to the production component.</figcaption>
     </figure>
 
-    <h3 id="05.6.2">The Code-Refresh Plugin</h3>
-    <p>Open Design includes a code-migration scenario plugin that closes this loop. You point the plugin at a git repository and an active DESIGN.md, and it produces a refactoring pull request that updates the codebase's token definitions to match the brand contract. The plugin's exact name in v0.9.0 is documented in the <code>plugins/_official/</code> folder of the Open Design repository; the 0.8.0 release notes reference codebase refactoring capability per the <a href="https://open-design.ai/blog/open-design-0-8-0-everything-is-a-plugin/">open-design.ai blog (2025)</a>. The plugin is covered in depth in <a href="ch-09.html#ch-09-4">section 9.4</a>; this section focuses on the conceptual pattern.</p>
+    <h3 id="s-05-6-2">The Code-Refresh Plugin</h3>
+    <p>Open Design includes a code-migration scenario plugin that closes this loop. You point the plugin at a git repository and an active DESIGN.md, and it produces a refactoring pull request that updates the codebase's token definitions to match the brand contract. The plugin's exact name in v0.9.0 is documented in the <code>plugins/_official/</code> folder of the Open Design repository; the 0.8.0 release notes reference codebase refactoring capability per the <a href="https://open-design.ai/blog/open-design-0-8-0-everything-is-a-plugin/">open-design.ai blog (2025)</a>. The plugin is covered in depth in <a href="09.html#ch-09-4">section 9.4</a>; this section focuses on the conceptual pattern.</p>
 
     <p>The code-refresh workflow runs in both directions:</p>
 
@@ -1192,7 +1192,7 @@ borderRadius: { button: '6px' }</code></pre>
       </table>
     </div>
 
-    <h3 id="05.6.3">Keeping Them in Sync Over Time</h3>
+    <h3 id="s-05-6-3">Keeping Them in Sync Over Time</h3>
     <p>Treat DESIGN.md as a design-system PR companion. When a design decision changes in production---a component gets a new radius, a color is updated for accessibility---the same PR that updates the component also updates DESIGN.md and <code>tokens.css</code>. Two extra minutes on a PR review prevents months of drift. I add a checklist item to every design-adjacent PR: "Does this change a design token? Update DESIGN.md and tokens.css."</p>
 
         <div class="callout tip">
@@ -1274,7 +1274,7 @@ borderRadius: { button: '6px' }</code></pre>
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1379,7 +1379,7 @@ borderRadius: { button: '6px' }</code></pre>
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

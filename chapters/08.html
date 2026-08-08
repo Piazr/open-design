@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.1">
+  <meta name="bw-version" content="0.1.2">
   <title>The Preview and Export Pipeline - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #60aeb8; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="ch-08" style="background-color: #60aeb8; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -806,7 +806,7 @@ data: {"type":"done"}</code></pre>
 
     <h3 id="ch-08-2-1">Hot Reload</h3>
 
-    <p>Once generation finishes, the preview continues to update if the artifact files change. The daemon watches the project directory for writes and pushes new <code>write_file</code> events over a persistent SSE connection. This means that if you manually edit an artifact file or if a second agent pass modifies it, the preview refreshes without any action on your part. The four-beat loop from <a href="ch-03.html#ch-03-2" class="xref">Section 3.2</a> is hot-reloaded by default.</p>
+    <p>Once generation finishes, the preview continues to update if the artifact files change. The daemon watches the project directory for writes and pushes new <code>write_file</code> events over a persistent SSE connection. This means that if you manually edit an artifact file or if a second agent pass modifies it, the preview refreshes without any action on your part. The four-beat loop from <a href="03.html#ch-03-2" class="xref">Section 3.2</a> is hot-reloaded by default.</p>
   </section>
 
   <section class="chapter-section" id="ch-08-3">
@@ -1225,7 +1225,7 @@ project-abc123/
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1330,7 +1330,7 @@ project-abc123/
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

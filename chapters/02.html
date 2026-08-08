@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.1">
+  <meta name="bw-version" content="0.1.2">
   <title>Install and Architecture - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #e98e52; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="ch-02" style="background-color: #e98e52; background-image: url('../assets/gradients/gradient_coral_peach.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -731,7 +731,7 @@ $ docker compose up -d</code></pre>
       <figcaption>Figure 2.1 — The Open Design home surface (v0.15.1). One composer with template, mode, agent, design-system, and working-directory levers; a template strip; recent projects; and a community rail. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026). For the older v0.9.0 artifact-tile layout, see archival figures in Appendix D.</figcaption>
     </figure>
 
-    <p>Once you have more than a handful of runs in flight, the <strong>Projects</strong> sidebar becomes the supervision surface. As of v0.15.1 it is a kanban board with a dedicated <strong>Needs input</strong> column --- paused agent turns that explicitly wait for a human reply rather than failing silently in the background. The full board layout is shown in <a href="appendix-D.html#fig-D-07">Figure D.7</a>.</p>
+    <p>Once you have more than a handful of runs in flight, the <strong>Projects</strong> sidebar becomes the supervision surface. As of v0.15.1 it is a kanban board with a dedicated <strong>Needs input</strong> column --- paused agent turns that explicitly wait for a human reply rather than failing silently in the background. The full board layout is shown in <a href="D.html#fig-D-07">Figure D.7</a>.</p>
 
     <div class="step">
       <span class="step-num">4</span>
@@ -764,7 +764,7 @@ $ docker compose up -d</code></pre>
     <ul>
       <li><strong>Instructions / Rules</strong> — fixed global rules injected into every chat. Stable policy, not facts.</li>
       <li><strong>Memory</strong> — saved facts categorised as User, Project, Reference, or Rule, with a master toggle and per-item edit/delete. Extracted from chats and injected when relevant.</li>
-      <li><strong>Design Jury</strong> — optional five-panel scored review that streams alongside generation so you can interrupt before shipping. Covered in depth in <a href="ch-08.html#ch-08" class="xref">Chapter 08</a>.</li>
+      <li><strong>Design Jury</strong> — optional five-panel scored review that streams alongside generation so you can interrupt before shipping. Covered in depth in <a href="08.html#ch-08" class="xref">Chapter 08</a>.</li>
     </ul>
 
     <figure class="figure--full" id="fig-ch02-instructions">
@@ -805,7 +805,7 @@ $ docker compose up -d</code></pre>
           </tr>
           <tr>
             <td><strong>Design Jury</strong></td>
-            <td>Optional five-panel scored review streamed beside generation (<a href="ch-08.html#ch-08" class="xref">Chapter 08</a>)</td>
+            <td>Optional five-panel scored review streamed beside generation (<a href="08.html#ch-08" class="xref">Chapter 08</a>)</td>
           </tr>
           <tr>
             <td><strong>Media providers</strong></td>
@@ -817,11 +817,11 @@ $ docker compose up -d</code></pre>
           </tr>
           <tr>
             <td><strong>Connectors</strong></td>
-            <td>Composio-backed external data sources for Live artifacts (<a href="ch-10.html#ch-10" class="xref">Chapter 10</a>)</td>
+            <td>Composio-backed external data sources for Live artifacts (<a href="10.html#ch-10" class="xref">Chapter 10</a>)</td>
           </tr>
           <tr>
             <td><strong>MCP server</strong></td>
-            <td>Copy-paste config that exposes Open Design tools to agent CLIs (<a href="ch-10.html#ch-10" class="xref">Chapter 10</a>)</td>
+            <td>Copy-paste config that exposes Open Design tools to agent CLIs (<a href="10.html#ch-10" class="xref">Chapter 10</a>)</td>
           </tr>
           <tr>
             <td><strong>Appearance</strong></td>
@@ -837,7 +837,7 @@ $ docker compose up -d</code></pre>
           </tr>
           <tr>
             <td><strong>Design systems</strong></td>
-            <td>Gallery of installed brand systems and quick attach controls (<a href="ch-05.html#ch-05" class="xref">Chapter 05</a>)</td>
+            <td>Gallery of installed brand systems and quick attach controls (<a href="05.html#ch-05" class="xref">Chapter 05</a>)</td>
           </tr>
           <tr>
             <td><strong>Project locations</strong></td>
@@ -866,7 +866,7 @@ $ docker compose up -d</code></pre>
 
     <figure class="figure--full" id="fig-ch02-external-mcp">
       <img src="../images/od-v015-29-settings-external-mcp.png" alt="Open Design Settings External MCP panel for registering third-party MCP servers" loading="lazy" />
-      <figcaption>Figure 2.2e — External MCP. Register servers beyond Open Design's own MCP surface; see <a href="ch-10.html#ch-10" class="xref">Chapter 10</a> for the full integration model. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+      <figcaption>Figure 2.2e — External MCP. Register servers beyond Open Design's own MCP surface; see <a href="10.html#ch-10" class="xref">Chapter 10</a> for the full integration model. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
     </figure>
 
     <figure class="figure--full" id="fig-ch02-connectors">
@@ -881,7 +881,7 @@ $ docker compose up -d</code></pre>
 
     <figure class="figure--full" id="fig-ch02-design-systems-settings">
       <img src="../images/od-v015-35-settings-design-systems.png" alt="Open Design Settings Design systems panel showing a gallery of installed brand systems" loading="lazy" />
-      <figcaption>Figure 2.2h — Design systems in Settings. Quick view of installed brand contracts; authoring and presets live in the sidebar surface covered in <a href="ch-05.html#ch-05" class="xref">Chapter 05</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+      <figcaption>Figure 2.2h — Design systems in Settings. Quick view of installed brand contracts; authoring and presets live in the sidebar surface covered in <a href="05.html#ch-05" class="xref">Chapter 05</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
     </figure>
 
     <figure class="figure--full" id="fig-ch02-project-locations">
@@ -907,7 +907,7 @@ $ docker compose up -d</code></pre>
       <figcaption>Figure 2.2l — Privacy and About. Data-handling toggles and version metadata for support tickets. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
     </figure>
 
-    <p>The full visual tour of every Settings panel --- including Execution mode and Design Jury --- is in <a href="appendix-D.html#appendix-D.7">Appendix D.7</a>.</p>
+    <p>The full visual tour of every Settings panel --- including Execution mode and Design Jury --- is in <a href="D.html#appendix-D-7">Appendix D.7</a>.</p>
 
     <!-- Troubleshooting table -->
     <h3 id="ch-02-2-trouble">When the First Run Breaks</h3>
@@ -1283,7 +1283,7 @@ $ docker compose up -d</code></pre>
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1388,7 +1388,7 @@ $ docker compose up -d</code></pre>
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

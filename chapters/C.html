@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.0">
+  <meta name="bw-version" content="0.1.2">
   <title>Troubleshooting and FAQ - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #8d7ab5; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="appendix-C" style="background-color: #8d7ab5; background-image: url('../assets/gradients/gradient_lavender_violet.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -554,6 +554,11 @@
         <a href="#appendix-C-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Daemon and MCP Connection</a>
         <a href="#appendix-C-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Proxy, Preview, and Export</a>
         <a href="#appendix-C-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Frequently Asked Questions</a>
+        <a href="#appendix-C-4-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Is local-first the same as local inference?</a>
+        <a href="#appendix-C-4-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Can I use the bundled brand systems for production work?</a>
+        <a href="#appendix-C-4-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Which agent CLI should I use?</a>
+        <a href="#appendix-C-4-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">What is the Apache-2.0 license for Open Design, and can I use it commercially?</a>
+        <a href="#appendix-C-4-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">How do I keep my skills and plugins up to date?</a>
       </div>
     </div>
   </nav>
@@ -569,6 +574,11 @@
           <a href="#appendix-C-2" data-section="appendix-C-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Daemon and MCP Connection</span></a>
           <a href="#appendix-C-3" data-section="appendix-C-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Proxy, Preview, and Export</span></a>
           <a href="#appendix-C-4" data-section="appendix-C-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Frequently Asked Questions</span></a>
+          <a href="#appendix-C-4-1" data-section="appendix-C-4-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Is local-first the same as local inference?</span></a>
+          <a href="#appendix-C-4-2" data-section="appendix-C-4-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Can I use the bundled brand systems for production work?</span></a>
+          <a href="#appendix-C-4-3" data-section="appendix-C-4-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Which agent CLI should I use?</span></a>
+          <a href="#appendix-C-4-4" data-section="appendix-C-4-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What is the Apache-2.0 license for Open Design, and can I use it commercially?</span></a>
+          <a href="#appendix-C-4-5" data-section="appendix-C-4-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>How do I keep my skills and plugins up to date?</span></a>
       </nav>
     </aside>
   </div>
@@ -585,6 +595,11 @@
           <a href="#appendix-C-2" data-section="appendix-C-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Daemon and MCP Connection</span></a>
           <a href="#appendix-C-3" data-section="appendix-C-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Proxy, Preview, and Export</span></a>
           <a href="#appendix-C-4" data-section="appendix-C-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Frequently Asked Questions</span></a>
+          <a href="#appendix-C-4-1" data-section="appendix-C-4-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Is local-first the same as local inference?</span></a>
+          <a href="#appendix-C-4-2" data-section="appendix-C-4-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Can I use the bundled brand systems for production work?</span></a>
+          <a href="#appendix-C-4-3" data-section="appendix-C-4-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Which agent CLI should I use?</span></a>
+          <a href="#appendix-C-4-4" data-section="appendix-C-4-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>What is the Apache-2.0 license for Open Design, and can I use it commercially?</span></a>
+          <a href="#appendix-C-4-5" data-section="appendix-C-4-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>How do I keep my skills and plugins up to date?</span></a>
       </nav>
       <main class="chapter-main">
         <div class="book-content">
@@ -598,8 +613,10 @@
     </div>
   </section>
 
-  <div class="callout warning">
-    <p>Version pins, command names, and per-CLI MCP configuration paths change with every Open Design release. This appendix reflects Open Design v0.9.0 (released June 2, 2026) and the MCP spec at 2025-11-25. Verify any command or path against the live repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a> before relying on it in a production setup.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>Version pins, command names, and per-CLI MCP configuration paths change with every Open Design release. This appendix reflects Open Design v0.9.0 (released June 2, 2026) and the MCP spec at 2025-11-25. Verify any command or path against the live repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a> before relying on it in a production setup.</p>
+    </div>
   </div>
 
   <!-- C.1 Install and Build Failures -->
@@ -618,8 +635,11 @@ $ pnpm --version   # Must output 10.33.x</code></pre>
 
   <pre><code>$ pnpm --filter @open-design/daemon rebuild better-sqlite3</code></pre>
 
-  <div class="callout">
-    <p><strong>My take:</strong> Ninety percent of first-run failures are version pins or a stopped daemon. Before reading the rest of this appendix, run <code>node --version</code> and <code>od status</code>. If those two checks pass, the real problem is almost always in the next section. I've set up Open Design on five different machines; the one that took the longest was the one where I skipped the version check first.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>Ninety percent of first-run failures are version pins or a stopped daemon. Before reading the rest of this appendix, run <code>node --version</code> and <code>od status</code>. If those two checks pass, the real problem is almost always in the next section. I've set up Open Design on five different machines; the one that took the longest was the one where I skipped the version check first.</p>
+    </div>
   </div>
 
   <div class="table-wrapper">
@@ -676,8 +696,10 @@ $ curl http://localhost:7456/health</code></pre>
 
   <p>MCP (Model Context Protocol) configuration is per-CLI: running <code>od mcp install claude-code</code> writes to Claude Code's config only. If you use multiple agent CLIs --- Claude Code plus OpenCode, for example --- you must run <code>od mcp install</code> for each. As of June 2026, Claude Code stores MCP servers in <code>~/.claude/settings.json</code> under <code>mcpServers</code>, while OpenCode uses <code>~/.config/opencode/opencode.jsonc</code> with a root <code>mcp</code> key and <code>type: "stdio"</code>.</p>
 
-  <div class="callout warning">
-    <p>Never disable the sandbox or expose the daemon port publicly to work around a connection problem. Both the Electron sandbox and the daemon's SSRF protection exist as load-bearing security controls. If an agent can't reach the daemon, the fix is always in the config --- not in loosening the security model. See <a href="#ch-08-1">section 08.1</a> for the full rationale.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>Never disable the sandbox or expose the daemon port publicly to work around a connection problem. Both the Electron sandbox and the daemon's SSRF protection exist as load-bearing security controls. If an agent can't reach the daemon, the fix is always in the config --- not in loosening the security model. See <a href="08.html#ch-08-1">section 08.1</a> for the full rationale.</p>
+    </div>
   </div>
 
   <div class="table-wrapper">
@@ -728,12 +750,15 @@ $ curl http://localhost:7456/health</code></pre>
 
 <p>The BYOK (Bring Your Own Key) proxy routes model calls to Anthropic, OpenAI, Azure, Google, or a local Ollama instance. Misconfigured keys produce 401 or 403 errors that are easily misread as a daemon failure. The proxy also includes SSRF (server-side request forgery) protection that blocks certain private-IP targets --- this is intentional, not a bug.</p>
 
-  <p>Preview/export divergence is the other common failure at this layer. The preview uses a sandboxed <code>srcdoc</code> iframe that resolves asset URLs relative to the embedding page. The HTML export inlines content differently. An artifact that looks correct in the preview can break in the exported file when external images or fonts are involved. Always verify the exported file --- not just the preview --- before shipping. This is covered in depth in <a href="#ch-08-6">section 08.6</a>.</p>
+  <p>Preview/export divergence is the other common failure at this layer. The preview uses a sandboxed <code>srcdoc</code> iframe that resolves asset URLs relative to the embedding page. The HTML export inlines content differently. An artifact that looks correct in the preview can break in the exported file when external images or fonts are involved. Always verify the exported file --- not just the preview --- before shipping. This is covered in depth in <a href="08.html#ch-08-6">section 08.6</a>.</p>
 
   <p>HyperFrames renders HTML-to-MP4 via frame capture and encode on your local CPU. As of June 2026, there is no GPU acceleration on most setups. A 15-second animation at 1080p can take several minutes on a mid-tier machine. <code>backdrop-filter: blur</code> effects are particularly expensive --- budget roughly 200ms per frame over 1920×1080. <!-- TODO-VERIFY: 200ms/frame figure is from HyperFrames performance docs; verify against current docs as this is hardware-dependent --> Use draft quality for iteration and full quality only for final renders.</p>
 
-  <div class="callout">
-    <p><strong>My take:</strong> Preview/export divergence is the failure mode I see readers dismiss too quickly. The preview is forgiving --- it runs inside a live browser context where external assets load fine. The exported HTML has to be self-contained, and that's where things break. I test every exported file by opening it with network access disabled. If it breaks, I know immediately instead of finding out after the artifact is in a stakeholder's inbox.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>Preview/export divergence is the failure mode I see readers dismiss too quickly. The preview is forgiving --- it runs inside a live browser context where external assets load fine. The exported HTML has to be self-contained, and that is where things break. I test every exported file by opening it with network access disabled. If it breaks, I know immediately instead of finding out after the artifact is in a stakeholder's inbox.</p>
+    </div>
   </div>
 
   <div class="table-wrapper">
@@ -783,29 +808,41 @@ $ curl http://localhost:7456/health</code></pre>
     <h2 class="section-title"><span class="section-num">C.4</span> Frequently Asked Questions</h2>
 
 <p>These are the questions that come up repeatedly once the common failures are resolved. They are not troubleshooting items --- they are conceptual clarifications that affect how you use Open Design day to day.</p>
+  </section>
 
-  <h4 id="appendix-C.4.1">Is local-first the same as local inference?</h4>
+  <section class="chapter-section" id="appendix-C-4-1">
+    <h2 class="section-title">Is local-first the same as local inference?</h2>
 
-  <p>No. Local-first means your files, your database, and your orchestration run on your machine. The daemon is local. The <code>.od/</code> project directory is local. Whether inference is local depends on which model provider you configure. If you use the BYOK proxy to call Anthropic, OpenAI, Azure, or Google, model inference happens in the cloud. Only Ollama keeps inference fully local. Local-first controls where your data and control live --- not where computation happens. Choose a local model if inference privacy is your goal. See <a href="#ch-01">Chapter 01</a> for the full discussion.</p>
+<p>No. Local-first means your files, your database, and your orchestration run on your machine. The daemon is local. The <code>.od/</code> project directory is local. Whether inference is local depends on which model provider you configure. If you use the BYOK proxy to call Anthropic, OpenAI, Azure, or Google, model inference happens in the cloud. Only Ollama keeps inference fully local. Local-first controls where your data and control live --- not where computation happens. Choose a local model if inference privacy is your goal. See <a href="01.html#ch-01">Chapter 01</a> for the full discussion.</p>
+  </section>
 
-  <h4 id="appendix-C.4.2">Can I use the bundled brand systems for production work?</h4>
+  <section class="chapter-section" id="appendix-C-4-2">
+    <h2 class="section-title">Can I use the bundled brand systems for production work?</h2>
 
-  <p>The 150 bundled brand systems are reference materials for learning the DESIGN.md schema and for prototyping. They are identified nominatively --- using names like Linear<!-- TODO-VERIFY: Legal wording is adequate nominative use; confirm with publication review --> or Stripe to describe the system's inspiration. They are not a license to ship artifacts that reproduce those companies' trademarked identities. Use the bundled systems to learn structure, then author your own DESIGN.md for production work. Chapter 05 covers this in detail.</p>
+<p>The 150 bundled brand systems are reference materials for learning the DESIGN.md schema and for prototyping. They are identified nominatively --- using names like Linear<!-- TODO-VERIFY: Legal wording is adequate nominative use; confirm with publication review --> or Stripe to describe the system's inspiration. They are not a license to ship artifacts that reproduce those companies' trademarked identities. Use the bundled systems to learn structure, then author your own DESIGN.md for production work. Chapter 05 covers this in detail.</p>
+  </section>
 
-  <h4 id="appendix-C.4.3">Which agent CLI should I use?</h4>
+  <section class="chapter-section" id="appendix-C-4-3">
+    <h2 class="section-title">Which agent CLI should I use?</h2>
 
-  <p>As of June 2026, Open Design supports 21 coding-agent CLIs. <!-- TODO-VERIFY: 21 CLI count from README, June 2026; confirm against live repository --> For most readers, Claude Code is the default: it has the most complete MCP integration and the most thoroughly tested skill-invocation behavior. OpenCode (MIT license) is the right choice if vendor independence is a priority. Cursor works well for teams already in that ecosystem. The comparison in Chapter 11 covers all criteria in depth. Don't pick based on what's most familiar --- pick based on the constraint that matters most for your project: privacy, license, or team fit.</p>
+<p>As of June 2026, Open Design supports 21 coding-agent CLIs. <!-- TODO-VERIFY: 21 CLI count from README, June 2026; confirm against live repository --> For most readers, Claude Code is the default: it has the most complete MCP integration and the most thoroughly tested skill-invocation behavior. OpenCode (MIT license) is the right choice if vendor independence is a priority. Cursor works well for teams already in that ecosystem. The comparison in Chapter 11 covers all criteria in depth. Don't pick based on what's most familiar --- pick based on the constraint that matters most for your project: privacy, license, or team fit.</p>
+  </section>
 
-  <h4 id="appendix-C.4.4">What is the Apache-2.0 license for Open Design, and can I use it commercially?</h4>
+  <section class="chapter-section" id="appendix-C-4-4">
+    <h2 class="section-title">What is the Apache-2.0 license for Open Design, and can I use it commercially?</h2>
 
-  <p>Open Design is licensed under Apache-2.0, which permits commercial use, modification, distribution, and private use, subject to including the license and notice files in any distribution. It does not grant trademark rights. Using Open Design commercially to generate artifacts for clients is permitted; shipping a product that reproduces a bundled brand system's trademarked identity is not. <!-- TODO-VERIFY: Apache-2.0 license confirmed as of June 2026 from repository README; verify license file contents for any additional notices --></p>
+<p>Open Design is licensed under Apache-2.0, which permits commercial use, modification, distribution, and private use, subject to including the license and notice files in any distribution. It does not grant trademark rights. Using Open Design commercially to generate artifacts for clients is permitted; shipping a product that reproduces a bundled brand system's trademarked identity is not. <!-- TODO-VERIFY: Apache-2.0 license confirmed as of June 2026 from repository README; verify license file contents for any additional notices --></p>
+  </section>
 
-  <h4 id="appendix-C.4.5">How do I keep my skills and plugins up to date?</h4>
+  <section class="chapter-section" id="appendix-C-4-5">
+    <h2 class="section-title">How do I keep my skills and plugins up to date?</h2>
 
-  <p>Skills, brand systems, and plugins ship with the Open Design repository. When a new version releases, pull the latest from the repository (<code>git pull origin main</code>) and re-run <code>pnpm install</code>. If you have authored custom skills or plugins, they live in your project directory and are not overwritten by upstream updates. If you have forked a bundled skill, you will need to merge upstream changes manually --- this is why Chapter 04 recommends layering on top of bundled skills rather than forking them outright.</p>
+<p>Skills, brand systems, and plugins ship with the Open Design repository. When a new version releases, pull the latest from the repository (<code>git pull origin main</code>) and re-run <code>pnpm install</code>. If you have authored custom skills or plugins, they live in your project directory and are not overwritten by upstream updates. If you have forked a bundled skill, you will need to merge upstream changes manually --- this is why Chapter 04 recommends layering on top of bundled skills rather than forking them outright.</p>
 
-  <div class="callout tip">
-    <p><strong>Next:</strong> This is the final appendix. For the full architectural context behind these failure modes, return to <a href="#ch-02">Chapter 02</a> (install and architecture), <a href="#ch-08">Chapter 08</a> (the preview and export pipeline), and <a href="#ch-10">Chapter 10</a> (the MCP server). For the skills and brand systems referenced in C.4, see <a href="#appendix-B">Appendix B</a>.</p>
+    <div class="callout tip">
+    <div class="callout-body">
+      <p><strong>Next:</strong> This is the final appendix. For the full architectural context behind these failure modes, return to <a href="02.html#ch-02">Chapter 02</a> (install and architecture), <a href="08.html#ch-08">Chapter 08</a> (the preview and export pipeline), and <a href="10.html#ch-10">Chapter 10</a> (the MCP server). For the skills and brand systems referenced in C.4, see <a href="B.html#appendix-B">Appendix B</a>.</p>
+    </div>
   </div>
   </section>
         </div>
@@ -881,7 +918,7 @@ $ curl http://localhost:7456/health</code></pre>
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -971,7 +1008,7 @@ $ curl http://localhost:7456/health</code></pre>
         </div>
       </div>
       <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
-        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. Free for personal/noncommercial use (CC BY-NC-ND 4.0); commercial license required for business use.</p>
         <div class="flex gap-6">
           <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
           <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
@@ -986,15 +1023,15 @@ $ curl http://localhost:7456/health</code></pre>
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>
     <div class="border-t border-white">
       <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div class="font-mono text-[11px] text-white/60 leading-relaxed">
-          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
-          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+          <p>&copy;2026 Mehran Mozaffari. Free for personal/noncommercial use (CC BY-NC-ND 4.0); commercial license required for business use.</p>
+          <p class="mt-1">First edition. Published July 2026. Prose: CC BY-NC-ND 4.0 (personal/noncommercial); commercial license available. Code samples Apache-2.0/MIT as noted.</p>
         </div>
         <div class="flex items-center gap-6">
           <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>

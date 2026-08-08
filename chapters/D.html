@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.0">
+  <meta name="bw-version" content="0.1.2">
   <title>A Visual Tour of the Open Design UI - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #60aeb8; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="appendix-D" style="background-color: #60aeb8; background-image: url('../assets/gradients/gradient_blue_turquoise.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -551,14 +551,20 @@
     <div class="page-shell">
       <div class="flex gap-8 overflow-x-auto py-3 -mb-px scrollbar-hide">
         <a href="#appendix-D-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Choosing how generations run</a>
-        <a href="#appendix-D.1b" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">D.1b The left navigation: every destination and when to use it</a>
+        <a href="#appendix-D-1b" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">D.1b The left navigation: every destination and when to use it</a>
         <a href="#appendix-D-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The home surface and artifact types</a>
         <a href="#appendix-D-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The generation loop</a>
-        <a href="#appendix-D.3b" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">D.3b Editing, comments, and feedback — refining in place</a>
+        <a href="#appendix-D-3c" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Inspecting the source: the Code view</a>
+        <a href="#appendix-D-3b" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">D.3b Editing, comments, and feedback — refining in place</a>
+        <a href="#appendix-D-3b-1" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The in-canvas visual editor</a>
+        <a href="#appendix-D-3b-2" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">The Comments panel</a>
+        <a href="#appendix-D-3b-3" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Run ratings and per-turn cost</a>
         <a href="#appendix-D-4" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Design systems</a>
+        <a href="#appendix-D-4b" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">D.4b Generating a design system from your own material</a>
         <a href="#appendix-D-5" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Plugins and automations</a>
         <a href="#appendix-D-6" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Use everywhere: CLI, MCP, HTTP, headless</a>
         <a href="#appendix-D-7" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">Settings</a>
+        <a href="#appendix-D-7-catalogue" class="whitespace-nowrap font-mono text-[13px] font-medium text-black/40 hover:text-black transition-colors">D.7a Settings catalogue — every rail item</a>
       </div>
     </div>
   </nav>
@@ -571,14 +577,20 @@
           <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
           <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
           <a href="#appendix-D-1" data-section="appendix-D-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Choosing how generations run</span></a>
-          <a href="#appendix-D.1b" data-section="appendix-D.1b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.1b The left navigation: every destination and when to use it</span></a>
+          <a href="#appendix-D-1b" data-section="appendix-D-1b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.1b The left navigation: every destination and when to use it</span></a>
           <a href="#appendix-D-2" data-section="appendix-D-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The home surface and artifact types</span></a>
           <a href="#appendix-D-3" data-section="appendix-D-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The generation loop</span></a>
-          <a href="#appendix-D.3b" data-section="appendix-D.3b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.3b Editing, comments, and feedback — refining in place</span></a>
+          <a href="#appendix-D-3c" data-section="appendix-D-3c" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Inspecting the source: the Code view</span></a>
+          <a href="#appendix-D-3b" data-section="appendix-D-3b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.3b Editing, comments, and feedback — refining in place</span></a>
+          <a href="#appendix-D-3b-1" data-section="appendix-D-3b-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The in-canvas visual editor</span></a>
+          <a href="#appendix-D-3b-2" data-section="appendix-D-3b-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Comments panel</span></a>
+          <a href="#appendix-D-3b-3" data-section="appendix-D-3b-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Run ratings and per-turn cost</span></a>
           <a href="#appendix-D-4" data-section="appendix-D-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Design systems</span></a>
+          <a href="#appendix-D-4b" data-section="appendix-D-4b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.4b Generating a design system from your own material</span></a>
           <a href="#appendix-D-5" data-section="appendix-D-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Plugins and automations</span></a>
           <a href="#appendix-D-6" data-section="appendix-D-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Use everywhere: CLI, MCP, HTTP, headless</span></a>
           <a href="#appendix-D-7" data-section="appendix-D-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Settings</span></a>
+          <a href="#appendix-D-7-catalogue" data-section="appendix-D-7-catalogue" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.7a Settings catalogue — every rail item</span></a>
       </nav>
     </aside>
   </div>
@@ -592,14 +604,20 @@
           <a href="preface.html" class="sidebar-link flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black py-2"><span>Preface</span></a>
           <p class="font-mono text-[11px] uppercase tracking-wider text-black/25 mt-6 mb-4">In this chapter</p>
           <a href="#appendix-D-1" data-section="appendix-D-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Choosing how generations run</span></a>
-          <a href="#appendix-D.1b" data-section="appendix-D.1b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.1b The left navigation: every destination and when to use it</span></a>
+          <a href="#appendix-D-1b" data-section="appendix-D-1b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.1b The left navigation: every destination and when to use it</span></a>
           <a href="#appendix-D-2" data-section="appendix-D-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The home surface and artifact types</span></a>
           <a href="#appendix-D-3" data-section="appendix-D-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The generation loop</span></a>
-          <a href="#appendix-D.3b" data-section="appendix-D.3b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.3b Editing, comments, and feedback — refining in place</span></a>
+          <a href="#appendix-D-3c" data-section="appendix-D-3c" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Inspecting the source: the Code view</span></a>
+          <a href="#appendix-D-3b" data-section="appendix-D-3b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.3b Editing, comments, and feedback — refining in place</span></a>
+          <a href="#appendix-D-3b-1" data-section="appendix-D-3b-1" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The in-canvas visual editor</span></a>
+          <a href="#appendix-D-3b-2" data-section="appendix-D-3b-2" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>The Comments panel</span></a>
+          <a href="#appendix-D-3b-3" data-section="appendix-D-3b-3" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Run ratings and per-turn cost</span></a>
           <a href="#appendix-D-4" data-section="appendix-D-4" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Design systems</span></a>
+          <a href="#appendix-D-4b" data-section="appendix-D-4b" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.4b Generating a design system from your own material</span></a>
           <a href="#appendix-D-5" data-section="appendix-D-5" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Plugins and automations</span></a>
           <a href="#appendix-D-6" data-section="appendix-D-6" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Use everywhere: CLI, MCP, HTTP, headless</span></a>
           <a href="#appendix-D-7" data-section="appendix-D-7" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>Settings</span></a>
+          <a href="#appendix-D-7-catalogue" data-section="appendix-D-7-catalogue" class="sidebar-link group flex items-center gap-3 font-mono text-[11px] text-black/35 hover:text-black transition-all duration-200 py-2"><span class="inline-block w-0 group-[.active]:w-9 h-px bg-black transition-all duration-200"></span><span>D.7a Settings catalogue — every rail item</span></a>
       </nav>
       <main class="chapter-main">
         <div class="book-content">
@@ -613,8 +631,10 @@
     </div>
   </section>
 
-  <div class="callout warning">
-    <p>Open Design changes quickly. These screenshots were refreshed against v0.11.0 on June 19, 2026, with earlier v0.9.0 screenshots retained only for narrow panels that were not recaptured. Screen layouts, button labels, and workflow order are subject to change in subsequent releases. When in doubt, check the live repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a>.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>Open Design changes quickly. These screenshots were refreshed against v0.11.0 on June 19, 2026, with earlier v0.9.0 screenshots retained only for narrow panels that were not recaptured. Screen layouts, button labels, and workflow order are subject to change in subsequent releases. When in doubt, check the live repository at <a href="https://github.com/nexu-io/open-design">github.com/nexu-io/open-design</a>.</p>
+    </div>
   </div>
 
   <!-- D.1 Choosing how generations run -->
@@ -638,7 +658,7 @@
     <figcaption>Figure D.2 — The agent detection grid. Each tile maps to one CLI. Highlighted tiles are detected; grey tiles are absent from <code>PATH</code> and link to the install page. Supported set as of June 2026 includes Claude Code, OpenAI Codex CLI, Gemini CLI (sunset June 18, 2026 --- transitional), OpenCode, Cursor, GitHub Copilot, Qwen, and others. Connecting two agents lets you route by constraint rather than habit. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
   </figure>
 
-  <p>I run Claude Code as my primary generation agent and OpenCode as a fallback. Claude Code has the most complete MCP (Model Context Protocol) integration and the most thoroughly tested skill-invocation behavior as of June 2026. OpenCode (MIT license) provides vendor independence --- when a provider changes pricing or rate limits, I switch the routing in settings rather than rebuilding a workflow. The reasoning behind that choice is in <a href="#ch-11" class="xref">Chapter 11</a>.</p>
+  <p>I run Claude Code as my primary generation agent and OpenCode as a fallback. Claude Code has the most complete MCP (Model Context Protocol) integration and the most thoroughly tested skill-invocation behavior as of June 2026. OpenCode (MIT license) provides vendor independence --- when a provider changes pricing or rate limits, I switch the routing in settings rather than rebuilding a workflow. The reasoning behind that choice is in <a href="11.html#ch-11" class="xref">Chapter 11</a>.</p>
 
   <p>Once you have a runtime selected, the model dropdown inside the runtime configuration popover lets you tune which model tier runs for a given session. This is where cost and latency trade-offs get made per-project rather than globally.</p>
 
@@ -685,14 +705,17 @@
     </table>
   </div>
 
-  <div class="callout">
-    <p><strong>My take:</strong> The runtime screen is one of the better UX decisions in v0.9.0. Putting inference routing at the front means you think about it before you've invested an hour in a project --- not after. The AMR path is genuinely useful for readers evaluating Open Design before committing to a CLI subscription. For production work, I switch to the local agent path immediately: the model versions are pinnable, the cost is predictable, and the MCP surface is complete. Start with AMR to get oriented, then migrate.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>The runtime screen is one of the better UX decisions in v0.9.0. Putting inference routing at the front means you think about it before you've invested an hour in a project --- not after. The AMR path is genuinely useful for readers evaluating Open Design before committing to a CLI subscription. For production work, I switch to the local agent path immediately: the model versions are pinnable, the cost is predictable, and the MCP surface is complete. Start with AMR to get oriented, then migrate.</p>
+    </div>
   </div>
 
   <!-- D.1b The left navigation: every destination and when to use it -->
   </section>
 
-  <section class="chapter-section" id="appendix-D.1b">
+  <section class="chapter-section" id="appendix-D-1b">
     <h2 class="section-title">D.1b The left navigation: every destination and when to use it</h2>
 
 <p>Open Design's left icon rail is the spine of the application. Every surface in the product is reachable from it in a single click, and each destination has a clear remit. The rail is narrow by design: seven items plus a settings gear. That constraint forces the product to have an opinion about what deserves a dedicated surface --- and understanding that opinion is the fastest way to orient yourself in the UI.</p>
@@ -754,17 +777,17 @@
 
   <p><strong>New project (<code>+</code>).</strong> The <code>+</code> icon at the top of the rail creates a fresh project slot with no prior context. There is no template picker, no copy-from-existing dialog, and no folder selector on this path --- it opens the blank prompt immediately. The use case is intentionally narrow: when you want to sketch something quickly and you don't want the agent to inherit context from a project you're mid-way through. One-off client requests, quick explorations, and proof-of-concept artifacts all belong here. Anything that deserves to persist gets moved to a named project later.</p>
 
-  <p><strong>Home.</strong> The home surface is the application's daily entry point and the screen most readers will spend the most time on. Its prompt field, artifact-type row, recent-projects list, and community gallery are covered in full in <a href="#appendix-D.2">D.2</a> --- see <a href="#fig-D-04">Figure D.4</a> for the full layout. Navigate here whenever you want to start a new generation without first choosing a project, or when you want to jump to a recent artifact in one click.</p>
+  <p><strong>Home.</strong> The home surface is the application's daily entry point and the screen most readers will spend the most time on. Its prompt field, artifact-type row, recent-projects list, and community gallery are covered in full in <a href="#appendix-D-2">D.2</a> --- see <a href="#fig-D-04">Figure D.4</a> for the full layout. Navigate here whenever you want to start a new generation without first choosing a project, or when you want to jump to a recent artifact in one click.</p>
 
   <p><strong>Projects.</strong> The Projects surface is where you supervise work at scale. As of v0.15.1 it is a kanban board grouped by run state --- Not started, Running, <strong>Needs input</strong>, Incomplete, Completed --- so paused agent turns queue explicitly for a human. Cards show name, design-system badge, origin, and date; Recent vs Your designs, search, and board/grid toggles sit in the top bar. Use it when you have more than a handful of in-flight runs. The full layout is shown in <a href="#fig-D-07">Figure D.7</a>.</p>
 
-  <p><strong>Automations.</strong> The Automations surface configures scheduled agent sessions --- jobs that run on a cron schedule without you at the keyboard. Twenty-four templates cover the most useful recurring jobs: ingesting a source URL into the memory tree, auto-extracting a design system from a live site, and crystallizing a successful generation run into a reusable skill. The full template grid is shown in <a href="#fig-D-27">Figure D.27</a>. A concrete use case: an "Extract design system" automation set to weekly will catch brand drift on a client's live site before it contaminates your next artifact batch --- a two-line configuration that replaces a recurring manual task. See <a href="#appendix-D.5">D.5</a> for the full automation catalog.</p>
+  <p><strong>Automations.</strong> The Automations surface configures scheduled agent sessions --- jobs that run on a cron schedule without you at the keyboard. Twenty-four templates cover the most useful recurring jobs: ingesting a source URL into the memory tree, auto-extracting a design system from a live site, and crystallizing a successful generation run into a reusable skill. The full template grid is shown in <a href="#fig-D-27">Figure D.27</a>. A concrete use case: an "Extract design system" automation set to weekly will catch brand drift on a client's live site before it contaminates your next artifact batch --- a two-line configuration that replaces a recurring manual task. See <a href="#appendix-D-5">D.5</a> for the full automation catalog.</p>
 
   <p><strong>Design systems.</strong> The Design systems surface is where you attach the brand contract that all generated artifacts in a project inherit. The three-tab structure --- Your systems, Official presets, Enterprise --- navigates from your own DESIGN.md files to the 150 bundled presets to organization-shared systems in a single panel. The management panel is shown in <a href="#fig-D-18">Figure D.18</a>; the presets library is shown in <a href="#fig-D-19">Figure D.19</a>. Use it before starting any client engagement: attaching a design system up front is cheaper than retrofitting consistent tokens across a dozen artifacts after the fact.</p>
 
-  <p><strong>Plugins.</strong> The Plugins surface is where team workflows become first-class tools. Installing a plugin takes one click from the Available tab; creating one opens an authoring flow. Once installed, a plugin's tools are callable by the agent in any session --- you don't have to remember the plugin is there or invoke it manually. The practical use case is packaging a repeatable multi-step export pipeline (version comment, changelog update, Slack notification) into a single tool so every team member runs the same steps with zero manual coordination. The full plugins surface is shown in <a href="#fig-D-23">Figure D.23</a>. See <a href="#appendix-D.5">D.5</a> and <a href="#ch-09" class="xref">Chapter 09</a> for the authoring model.</p>
+  <p><strong>Plugins.</strong> The Plugins surface is where team workflows become first-class tools. Installing a plugin takes one click from the Available tab; creating one opens an authoring flow. Once installed, a plugin's tools are callable by the agent in any session --- you don't have to remember the plugin is there or invoke it manually. The practical use case is packaging a repeatable multi-step export pipeline (version comment, changelog update, Slack notification) into a single tool so every team member runs the same steps with zero manual coordination. The full plugins surface is shown in <a href="#fig-D-23">Figure D.23</a>. See <a href="#appendix-D-5">D.5</a> and <a href="09.html#ch-09" class="xref">Chapter 09</a> for the authoring model.</p>
 
-  <p><strong>Integrations / Use everywhere.</strong> The Use everywhere page is the gateway to every non-UI surface: the <code>od</code> CLI, the MCP server, the HTTP API, and Skills &amp; headless invocation. It is linked from the home header as a persistent shortcut precisely because teams with existing agent CLIs often live here rather than in the Electron window. The overview and all five sub-tabs are covered in <a href="#appendix-D.6">D.6</a>; the integrations overview is shown in <a href="#fig-D-28">Figure D.28</a>. Use this destination to connect Open Design to Cursor, Claude Code, or any MCP client --- or to set up headless CI generation.</p>
+  <p><strong>Integrations / Use everywhere.</strong> The Use everywhere page is the gateway to every non-UI surface: the <code>od</code> CLI, the MCP server, the HTTP API, and Skills &amp; headless invocation. It is linked from the home header as a persistent shortcut precisely because teams with existing agent CLIs often live here rather than in the Electron window. The overview and all five sub-tabs are covered in <a href="#appendix-D-6">D.6</a>; the integrations overview is shown in <a href="#fig-D-28">Figure D.28</a>. Use this destination to connect Open Design to Cursor, Claude Code, or any MCP client --- or to set up headless CI generation.</p>
 
   <p><strong>Settings.</strong> The Settings gear in the top-right corner of the rail opens the consolidated configuration panel: runtime selection, connected agents, API keys, daemon port, language, and advanced daemon flags. It is not a passive reference page --- it is the surface you revisit every time the environment changes. The most common operations: clicking Rescan after installing a new CLI (the agent grid won't update automatically), rotating an Anthropic or OpenAI key, and adjusting the daemon port when 7456 conflicts with another local service. The full panel is shown in <a href="#fig-D-34">Figure D.34</a>. Switching model tier mid-session --- say, from Opus to Sonnet for a rapid iteration cycle --- is a single dropdown change here and takes effect on the next generation run.</p>
 
@@ -783,9 +806,9 @@
 
   <p>By v0.15.1 the home surface no longer leads with seven fixed artifact-type tiles as the primary control. The composer carries a <strong>Template</strong> picker (project types such as Website clone, Slide deck, Prototype, Wireframe, Mobile, Document, HyperFrames, WebGL, Live artifact) plus Ask / Plan / Design modes. Artifact family still matters --- templates and skills encode it --- but the daily ritual is set-the-levers-then-send, not pick-a-tile-then-type.</p>
 
-  <figure class="figure--full" id="fig-D-04b">
+  <figure class="figure--full" id="fig-D-04a">
     <img src="../images/od-v015-02-mode-dropdown.png" alt="Open Design Ask Plan Design mode dropdown with Light Standard Heavy badges and Design mode teaching card" loading="lazy" />
-    <figcaption>Figure D.4b — Modes as cost contracts. Ask (Light), Plan (Standard), Design (Heavy), each with teaching copy in the dropdown. See <a href="#ch-03" class="xref">Chapter 03</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    <figcaption>Figure D.4a — Modes as cost contracts. Ask (Light), Plan (Standard), Design (Heavy), each with teaching copy in the dropdown. See <a href="03.html#ch-03" class="xref">Chapter 03</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
   <p>The table below still maps common output families to chapters. Prefer the template strip and skill picker for the live UI; use the table as a reading map.</p>
@@ -806,43 +829,43 @@
           <td>Prototype</td>
           <td>Self-contained HTML file</td>
           <td>Interactive UI mockup for a new feature; stakeholder review before engineering begins</td>
-          <td><a href="#ch-03" class="xref">Ch 03</a>, <a href="#ch-06" class="xref">Ch 06</a></td>
+          <td><a href="03.html#ch-03" class="xref">Ch 03</a>, <a href="06.html#ch-06" class="xref">Ch 06</a></td>
         </tr>
         <tr>
           <td>Live artifact</td>
           <td>Deployable component wired to a connector</td>
           <td>A dashboard tile that reads from a live API; an embedded form that writes to a database</td>
-          <td><a href="#ch-07" class="xref">Ch 07</a></td>
+          <td><a href="07.html#ch-07" class="xref">Ch 07</a></td>
         </tr>
         <tr>
           <td>Slide deck</td>
           <td>Presentation-grade HTML with print layout</td>
           <td>Investor pitch deck; design review for a new brand system; team onboarding walkthrough</td>
-          <td><a href="#ch-06" class="xref">Ch 06</a></td>
+          <td><a href="06.html#ch-06" class="xref">Ch 06</a></td>
         </tr>
         <tr>
           <td>Image</td>
           <td>Generated raster (PNG/JPEG)</td>
           <td>Hero image for a landing page; concept illustration for a product spec; brand photography stand-in</td>
-          <td><a href="#ch-07" class="xref">Ch 07</a></td>
+          <td><a href="07.html#ch-07" class="xref">Ch 07</a></td>
         </tr>
         <tr>
           <td>Video</td>
           <td>MP4 or animated export</td>
           <td>Product demo clip; explainer for a new feature; social-media ad creative</td>
-          <td><a href="#ch-07" class="xref">Ch 07</a></td>
+          <td><a href="07.html#ch-07" class="xref">Ch 07</a></td>
         </tr>
         <tr>
           <td>HyperFrames</td>
           <td>Animated HTML rendered to MP4</td>
           <td>Motion design with frame-accurate timing; scroll-based narrative; CSS animation exported for distribution</td>
-          <td><a href="#ch-07" class="xref">Ch 07</a></td>
+          <td><a href="07.html#ch-07" class="xref">Ch 07</a></td>
         </tr>
         <tr>
           <td>Audio</td>
           <td>Generated voiceover or sound effect</td>
           <td>Narration track for a product video; sonic branding sample; accessibility audio description</td>
-          <td><a href="#ch-07" class="xref">Ch 07</a></td>
+          <td><a href="07.html#ch-07" class="xref">Ch 07</a></td>
         </tr>
       </tbody>
     </table>
@@ -862,7 +885,7 @@
     <figcaption>Figure D.6 — The home prompt field with a real brief entered. The send affordance shows the currently selected model so you know what will run before committing. A longer brief here narrows the generation space and typically produces a better first artifact than a bare noun. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
   </figure>
 
-  <p>The <em>Use everywhere</em> link in the header is a persistent shortcut to the integrations surface covered in <a href="#appendix-D.6">D.6</a>. The <em>Local CLI</em> link opens the CLI tab of that same page. Both are reachable from every screen --- they're in the global navigation, not buried in settings.</p>
+  <p>The <em>Use everywhere</em> link in the header is a persistent shortcut to the integrations surface covered in <a href="#appendix-D-6">D.6</a>. The <em>Local CLI</em> link opens the CLI tab of that same page. Both are reachable from every screen --- they're in the global navigation, not buried in settings.</p>
 
   <p>As your project count grows, the recent-projects list on the home surface becomes your primary navigation. Each entry shows the project name, artifact type, last-modified timestamp, and a thumbnail of the most recent artifact. If you need to manage projects at scale --- archive, rename, or organize into folders --- the dedicated Projects surface has the full control set.</p>
 
@@ -891,18 +914,18 @@
     <figcaption>Figure D.9 — The project workspace (v0.15.1). The left pane is the chat surface: prior conversation turns and context-aware starters. The right pane is the preview and design files panel. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
-  <p>The conversation starters in the chat pane deserve attention. They are not generic suggestions; they are derived from the current project state and the skill that generated the last artifact. After a landing-page run, the starters might offer "Change the hero to a video background," "Add a pricing section below the fold," and "Export for stakeholder review." They compress what would otherwise be a prompt-recall problem into a one-click operation. As of v0.15.1 the same surface also exposes <strong>NEXT STEP</strong> chips with a <em>More</em> overflow --- see <a href="#fig-D-09b">Figure D.9b</a>.</p>
+  <p>The conversation starters in the chat pane deserve attention. They are not generic suggestions; they are derived from the current project state and the skill that generated the last artifact. After a landing-page run, the starters might offer "Change the hero to a video background," "Add a pricing section below the fold," and "Export for stakeholder review." They compress what would otherwise be a prompt-recall problem into a one-click operation. As of v0.15.1 the same surface also exposes <strong>NEXT STEP</strong> chips with a <em>More</em> overflow --- see <a href="#fig-D-09a">Figure D.9a</a>.</p>
 
-  <figure class="figure--full" id="fig-D-09b">
+  <figure class="figure--full" id="fig-D-09a">
     <img src="../images/od-v015-13-next-step-more.png" alt="Open Design NEXT STEP suggestion chips with More menu for additional follow-up prompts" loading="lazy" />
-    <figcaption>Figure D.9b — NEXT STEP suggestions (v0.15.1). Context-aware follow-ups after a generation completes. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    <figcaption>Figure D.9a — NEXT STEP suggestions (v0.15.1). Context-aware follow-ups after a generation completes. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
   <p>Before Open Design sends your prompt to the agent, it optionally runs an interactive brief form. This step is driven by the skill's recipe: if the skill defines intake fields, they surface here. If the skill defines no intake fields, the brief form is skipped and the prompt goes directly to the agent. The brief form is the mechanism by which Open Design asks before it improvises a pixel.</p>
 
   <figure class="figure--full" id="fig-D-10">
     <img src="../images/fig-open-design-interactive-brief-fo-5zqkim.jpg" alt="Open Design interactive brief form showing sequential question fields including 'Who is buying?', 'Visual tone', 'Brand context', and 'Pricing', with a progress indicator and a 'Generate' button at the bottom" loading="lazy" />
-    <figcaption>Figure D.10 — The interactive brief form. Intake fields are defined in the skill's recipe; this example shows the four fields a product landing-page skill asks for: audience, visual tone, brand context, and pricing tier. Filling them in takes under a minute. Skipping them means the agent substitutes defaults you didn't choose --- which is the most common source of misaligned first generations. See <a href="#ch-04" class="xref">Chapter 04</a> for the skill-recipe model that drives these fields. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
+    <figcaption>Figure D.10 — The interactive brief form. Intake fields are defined in the skill's recipe; this example shows the four fields a product landing-page skill asks for: audience, visual tone, brand context, and pricing tier. Filling them in takes under a minute. Skipping them means the agent substitutes defaults you didn't choose --- which is the most common source of misaligned first generations. See <a href="04.html#ch-04" class="xref">Chapter 04</a> for the skill-recipe model that drives these fields. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
   </figure>
 
   <p>The brief form also serves as a forcing function for your own clarity. If you can't answer "Who is buying?" in one sentence, the artifact prompt won't be specific enough to produce a useful first generation. The form turns vague intent into structured input before any tokens are spent. That's cheaper than generating and iterating toward clarity after the fact.</p>
@@ -927,18 +950,23 @@
     <img src="../images/od-v011-demo-live-console-prompt-process-result.png" alt="Open Design workspace showing a fictional Acme Signal live operations console with prompt, generated files, process trace, and preview" loading="lazy" />
     <figcaption>Figure D.13 — The in-app preview pane with a generated live-artifact-style console. The left side preserves the prompt and files; the right side shows the sandboxed artifact plus its process trace. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
   </figure>
+  </section>
 
-  <h4 id="appendix-D.3c">Inspecting the source: the Code view</h4>
+  <section class="chapter-section" id="appendix-D-3c">
+    <h2 class="section-title">Inspecting the source: the Code view</h2>
 
-  <p>The <em>Code</em> tab in the preview pane exposes the full HTML source of the generated artifact. This is not a minified bundle --- it is readable, commented source. Every Open Design artifact opens with a <code>DESIGN TOKENS</code> block inside a <code>:root</code> CSS custom-property declaration: an <code>oklch</code> color palette, a typography scale (step labels mapped to <code>font-size</code> and <code>line-height</code>), a spacing scale (8-point grid expressed as <code>--space-*</code> variables), and a border-radius set. The rest of the artifact references these tokens throughout. Use case: your engineering team is handing off a prototype to production. Opening the Code view confirms that the output is token-driven design-as-code --- every visual decision is an explicit variable in the <code>:root</code> block, not a hardcoded hex value buried in a selector. The handoff conversation changes from "can you match this screenshot?" to "here are the token values; implement against these."</p>
+<p>The <em>Code</em> tab in the preview pane exposes the full HTML source of the generated artifact. This is not a minified bundle --- it is readable, commented source. Every Open Design artifact opens with a <code>DESIGN TOKENS</code> block inside a <code>:root</code> CSS custom-property declaration: an <code>oklch</code> color palette, a typography scale (step labels mapped to <code>font-size</code> and <code>line-height</code>), a spacing scale (8-point grid expressed as <code>--space-*</code> variables), and a border-radius set. The rest of the artifact references these tokens throughout. Use case: your engineering team is handing off a prototype to production. Opening the Code view confirms that the output is token-driven design-as-code --- every visual decision is an explicit variable in the <code>:root</code> block, not a hardcoded hex value buried in a selector. The handoff conversation changes from "can you match this screenshot?" to "here are the token values; implement against these."</p>
 
   <figure class="figure--full" id="fig-D-14">
     <img src="../images/od-v015-10-code-view.png" alt="Open Design Code view showing generated HTML source with DESIGN TOKENS block in root CSS custom properties" loading="lazy" />
     <figcaption>Figure D.14 — The workspace Code view (v0.15.1). Verify token-driven source structure after the visual preview communicates intent. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
-  <div class="callout">
-    <p><strong>My take:</strong> Token-driven output is the difference between an artifact that can be maintained and one that can only be regenerated. When every color, size, and spacing decision is a named variable in the <code>:root</code> block, a developer can update the brand by changing six lines. When those decisions are scattered as hardcoded values across three hundred selectors, updating the brand means touching every rule and hoping nothing was missed. The Code view is the fastest way to audit whether a generation is production-viable or whether it hardcoded values the brief didn't constrain. If you see raw hex values or pixel literals outside the token block, that is a signal to tighten the DESIGN.md before the next run.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>Token-driven output is the difference between an artifact that can be maintained and one that can only be regenerated. When every color, size, and spacing decision is a named variable in the <code>:root</code> block, a developer can update the brand by changing six lines. When those decisions are scattered as hardcoded values across three hundred selectors, updating the brand means touching every rule and hoping nothing was missed. The Code view is the fastest way to audit whether a generation is production-viable or whether it hardcoded values the brief didn't constrain. If you see raw hex values or pixel literals outside the token block, that is a signal to tighten the DESIGN.md before the next run.</p>
+    </div>
   </div>
 
   <p>When the artifact is ready to leave Open Design, the Share / Export menu lists every available output format. A prototype artifact exports as standalone HTML, PDF, PPTX, a ZIP archive, Markdown source, or a deployed URL on Vercel or Cloudflare Pages. Export format availability depends on artifact type: video and HyperFrames artifacts add MP4 to the menu; slide decks add PPTX; live artifacts add a deploy path. The honest version: check the export menu for your specific artifact type rather than assuming all formats apply to everything.</p>
@@ -948,23 +976,27 @@
     <figcaption>Figure D.15 — The export surface for an approved artifact. The panel keeps selected formats, output path, and archive manifest beside the prompt and preview so the generated work can leave Open Design with provenance intact. Mock-safe screenshot from Open Design v0.11.0, captured June 2026.</figcaption>
   </figure>
 
-  <div class="callout warning">
-    <p>The preview renders inside a sandboxed <code>srcdoc</code> iframe that resolves external assets from the live browser context. The exported HTML file resolves assets differently. An artifact that looks correct in the preview can have broken images or missing fonts in the exported file when those assets are loaded from an external URL. Always open the exported HTML file with network access disabled before treating it as done. This is the failure mode documented in <a href="#appendix-C.3" class="xref">Appendix C.3</a>.</p>
+    <div class="callout warning">
+    <div class="callout-body">
+      <p>The preview renders inside a sandboxed <code>srcdoc</code> iframe that resolves external assets from the live browser context. The exported HTML file resolves assets differently. An artifact that looks correct in the preview can have broken images or missing fonts in the exported file when those assets are loaded from an external URL. Always open the exported HTML file with network access disabled before treating it as done. This is the failure mode documented in <a href="C.html#appendix-C-3" class="xref">Appendix C.3</a>.</p>
+    </div>
   </div>
 
-  <p>The first generation rarely ships unmodified. The four-beat loop expects iteration: generate, preview, follow-up in the chat pane, repeat. When the artifact is right, you export from the design files panel. <a href="#ch-03" class="xref">Chapter 03</a> walks this loop step by step; <a href="#ch-08" class="xref">Chapter 08</a> covers the export pipeline and the divergence behavior between preview and exported file.</p>
+  <p>The first generation rarely ships unmodified. The four-beat loop expects iteration: generate, preview, follow-up in the chat pane, repeat. When the artifact is right, you export from the design files panel. <a href="03.html#ch-03" class="xref">Chapter 03</a> walks this loop step by step; <a href="08.html#ch-08" class="xref">Chapter 08</a> covers the export pipeline and the divergence behavior between preview and exported file.</p>
 
   <!-- D.3b Editing, comments, and feedback — refining in place -->
   </section>
 
-  <section class="chapter-section" id="appendix-D.3b">
+  <section class="chapter-section" id="appendix-D-3b">
     <h2 class="section-title">D.3b Editing, comments, and feedback — refining in place</h2>
 
 <p>Re-prompting is not always the right tool for a small change. When the layout is good and you want to nudge a heading colour, tighten a line height, or adjust a background, a full generation round-trip costs time and tokens and risks drifting the parts of the artifact you were happy with. Open Design provides three lighter-weight refinement mechanisms that sit between "looks good" and "prompt again": the in-canvas visual editor, the Comments panel, and the thumbs-up / thumbs-down run rating.</p>
+  </section>
 
-  <h4 id="appendix-D.3b.1">The in-canvas visual editor</h4>
+  <section class="chapter-section" id="appendix-D-3b-1">
+    <h2 class="section-title">The in-canvas visual editor</h2>
 
-  <p>The visual editor is accessed by clicking <em>Edit</em> in the preview toolbar. In edit mode, clicking any element in the rendered artifact selects it and opens a properties panel on the right side of the screen. The panel exposes two scopes of control. Element-level properties cover typography: font family, font size, weight, colour, alignment, and line-height. Page-level properties cover the artifact's global canvas: background colour and base font. Every change applies live to the preview. When you're done, clicking <em>Save</em> writes the change back to the artifact source without triggering a re-generation --- the HTML is patched in place.</p>
+<p>The visual editor is accessed by clicking <em>Edit</em> in the preview toolbar. In edit mode, clicking any element in the rendered artifact selects it and opens a properties panel on the right side of the screen. The panel exposes two scopes of control. Element-level properties cover typography: font family, font size, weight, colour, alignment, and line-height. Page-level properties cover the artifact's global canvas: background colour and base font. Every change applies live to the preview. When you're done, clicking <em>Save</em> writes the change back to the artifact source without triggering a re-generation --- the HTML is patched in place.</p>
 
   <figure class="figure--full" id="fig-D-16">
     <img src="../images/fig-open-design-in-canvas-visual-edi-w8ifyt.jpg" alt="Open Design in-canvas visual editor showing the preview toolbar with an active Edit toggle, a selected heading element on the rendered artifact with a selection outline, and a right-side properties panel displaying typography controls for font family, size, weight, colour, alignment, and line-height, plus page-level controls for background colour and base font" loading="lazy" />
@@ -972,10 +1004,12 @@
   </figure>
 
   <p>The editor's scope is intentional. It covers typographic and color properties --- the surface-level adjustments that account for the majority of post-generation tweaks. It does not expose layout rules, component structure, or JavaScript behavior. That is the right boundary: layout and behavior changes affect the artifact's semantic structure and warrant a re-prompt so the agent can maintain internal consistency. A heading-colour nudge or a background swap does not.</p>
+  </section>
 
-  <h4 id="appendix-D.3b.2">The Comments panel</h4>
+  <section class="chapter-section" id="appendix-D-3b-2">
+    <h2 class="section-title">The Comments panel</h2>
 
-  <p>The Comments panel is Open Design's mechanism for async design review. To drop a comment, click the <em>Comment</em> tool in the preview toolbar and then click any element in the rendered artifact. A pin appears at the click target and a text input opens. The comment is stored against the element --- not as a floating annotation but as a reference tied to the specific DOM node you clicked. All comments on the artifact collect in the Comments side panel, which lists each comment with its target element, author, and timestamp. Pinned comments are visible in the preview as numbered markers.</p>
+<p>The Comments panel is Open Design's mechanism for async design review. To drop a comment, click the <em>Comment</em> tool in the preview toolbar and then click any element in the rendered artifact. A pin appears at the click target and a text input opens. The comment is stored against the element --- not as a floating annotation but as a reference tied to the specific DOM node you clicked. All comments on the artifact collect in the Comments side panel, which lists each comment with its target element, author, and timestamp. Pinned comments are visible in the preview as numbered markers.</p>
 
   <figure class="figure--full" id="fig-D-17">
     <img src="../images/fig-open-design-comments-panel-showi-ulq0e9.jpg" alt="Open Design Comments panel showing a rendered artifact preview with numbered comment pins on specific elements, and a right-side Comments side panel listing each comment with the target element label, comment text, author, and timestamp" loading="lazy" />
@@ -983,15 +1017,20 @@
   </figure>
 
   <p>The use case is async design review and handoff. When you share an artifact with a stakeholder or a developer, they can open the project, read the artifact in Preview mode, and drop comments directly on the elements they want to flag. You return to the project later and see every note pinned to its exact location in the rendered output --- no "third paragraph from the top, the blue one" ambiguity. Comments don't trigger generation and don't cost tokens. They're a lightweight communication layer on top of the artifact, which is where design feedback belongs.</p>
+  </section>
 
-  <h4 id="appendix-D.3b.3">Run ratings and per-turn cost</h4>
+  <section class="chapter-section" id="appendix-D-3b-3">
+    <h2 class="section-title">Run ratings and per-turn cost</h2>
 
-  <p>Every completed agent turn in the chat pane carries two pieces of metadata that appear alongside the "Done" marker: the run cost (in USD) and the elapsed time. These are not buried in a log --- they appear inline in the conversation so you build intuition about what different generation types cost and how long they take. A first-generation landing page runs around $0.60--$0.80 at Opus 4.8; a follow-up iteration that modifies one section costs closer to $0.10--$0.20. Seeing the cost at each turn is the fastest way to learn where to use a lighter model tier.</p>
+<p>Every completed agent turn in the chat pane carries two pieces of metadata that appear alongside the "Done" marker: the run cost (in USD) and the elapsed time. These are not buried in a log --- they appear inline in the conversation so you build intuition about what different generation types cost and how long they take. A first-generation landing page runs around $0.60--$0.80 at Opus 4.8; a follow-up iteration that modifies one section costs closer to $0.10--$0.20. Seeing the cost at each turn is the fastest way to learn where to use a lighter model tier.</p>
 
   <p>Each completed turn also carries a thumbs-up / thumbs-down rating control. Rating a run sends a signal to the harness: a thumbs-up marks the generation strategy as successful for this brief type; a thumbs-down marks it for deprioritization in future runs on similar briefs. The signal is used by the harness to weight skill selection and model tier choices in subsequent sessions for your account. It is not a global training signal --- it shapes your agent's behavior, not another user's. The practical use case: if a run produces an artifact that's exactly what you wanted, rate it up. If the agent took the brief in a direction you'll never want again, rate it down. Two clicks of steering is cheaper than two paragraphs of corrective prompting.</p>
 
-  <div class="callout">
-    <p><strong>My take:</strong> The edit-in-place and re-prompt paths are not interchangeable. Re-prompting is the right call when the generation got the structure wrong, chose the wrong layout pattern, or missed the brief in a way that affects more than one element. Edit-in-place is the right call when the structure is correct and you want to adjust one property --- a colour, a font size, a heading weight. Using re-prompt for a single color tweak costs tokens and risks regressing the parts you were happy with. Using edit-in-place to fix a structural problem just moves deck chairs. The heuristic: if the change requires updating more than three properties across more than two elements, re-prompt. If it's one element and one property, reach for the editor.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>The edit-in-place and re-prompt paths are not interchangeable. Re-prompting is the right call when the generation got the structure wrong, chose the wrong layout pattern, or missed the brief in a way that affects more than one element. Edit-in-place is the right call when the structure is correct and you want to adjust one property --- a colour, a font size, a heading weight. Using re-prompt for a single color tweak costs tokens and risks regressing the parts you were happy with. Using edit-in-place to fix a structural problem just moves deck chairs. The heuristic: if the change requires updating more than three properties across more than two elements, re-prompt. If it's one element and one property, reach for the editor.</p>
+    </div>
   </div>
 
   <!-- D.4 Design systems -->
@@ -1007,7 +1046,7 @@
     <figcaption>Figure D.18 — The design systems management panel (v0.15.1). Top tabs switch between <em>Design system</em> and <em>Template</em>; source tabs navigate from your files to bundled presets to org-shared assets. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
-  <p>The <em>Your systems</em> tab is where you attach a DESIGN.md you've authored. If you've followed the workflow in <a href="#ch-05" class="xref">Chapter 05</a>, your brand contract is already versioned in git alongside your project files. Pointing Open Design at it takes one click. The system is then "active" for the project: every generation prompt is prefixed with the DESIGN.md context before the model sees your brief.</p>
+  <p>The <em>Your systems</em> tab is where you attach a DESIGN.md you've authored. If you've followed the workflow in <a href="05.html#ch-05" class="xref">Chapter 05</a>, your brand contract is already versioned in git alongside your project files. Pointing Open Design at it takes one click. The system is then "active" for the project: every generation prompt is prefixed with the DESIGN.md context before the model sees your brief.</p>
 
   <figure class="figure--full" id="fig-D-18a">
     <img src="../images/od-v015-04-design-system-picker.png" alt="Open Design design system picker on the home composer listing bundled brand systems" loading="lazy" />
@@ -1018,11 +1057,14 @@
 
   <figure class="figure--full" id="fig-D-19">
     <img src="../images/fig-open-design-official-presets-lib-i6i5eu.jpg" alt="Open Design Official presets library showing a scrollable grid of brand design system cards, each with a system name, a color token swatch, and a short descriptor; 150 systems total" loading="lazy" />
-    <figcaption>Figure D.19 — The Official presets library. Each card shows the system name, a token swatch, and a short descriptor. Selecting a preset attaches its DESIGN.md to the current project; all subsequent generations inherit its color ramp, type scale, and component rules. These are nominative references for prototyping and learning, not a license to ship a trademarked identity --- see <a href="#appendix-C.4.2" class="xref">Appendix C.4.2</a>. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
+    <figcaption>Figure D.19 — The Official presets library. Each card shows the system name, a token swatch, and a short descriptor. Selecting a preset attaches its DESIGN.md to the current project; all subsequent generations inherit its color ramp, type scale, and component rules. These are nominative references for prototyping and learning, not a license to ship a trademarked identity --- see <a href="C.html#appendix-C-4-2" class="xref">Appendix C.4.2</a>. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
   </figure>
 
-  <div class="callout">
-    <p><strong>My take:</strong> The 150 bundled presets are useful for one thing: showing what a well-structured DESIGN.md looks like at scale. I don't use them in production work. The fastest path to a coherent artifact series is a DESIGN.md you authored against your actual brand --- even a thin one covering only color and type. A 40-line custom system beats a 400-line borrowed one because the agent has no ambiguity about which tokens are load-bearing. Use the presets to learn the schema, then author your own. <a href="#ch-05" class="xref">Chapter 05</a> is the right starting point.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>The 150 bundled presets are useful for one thing: showing what a well-structured DESIGN.md looks like at scale. I don't use them in production work. The fastest path to a coherent artifact series is a DESIGN.md you authored against your actual brand --- even a thin one covering only color and type. A 40-line custom system beats a 400-line borrowed one because the agent has no ambiguity about which tokens are load-bearing. Use the presets to learn the schema, then author your own. <a href="05.html#ch-05" class="xref">Chapter 05</a> is the right starting point.</p>
+    </div>
   </div>
 
   <p>The <em>Template</em> tab on the design systems panel addresses a different problem from brand systems. A brand system defines visual identity --- colors, type, spacing, and component rules. A template defines <em>structural identity</em> --- the layout scaffold and information architecture of a particular artifact type. Templates are useful when you want to start from a proven structural pattern (a SaaS landing page, a three-column dashboard, an onboarding wizard) and then apply your brand on top. The two concepts are composable: you select a structural template and a brand system and the generation step has both constraints to work within. Use case: your team builds SaaS dashboards for multiple clients. You have one structural template that defines the shell (nav, sidebar, content area, header), and each client gets their own brand system attached. Every client's artifact starts from the same proven layout and ends with their own visual identity.</p>
@@ -1040,9 +1082,12 @@
   </figure>
 
   <!-- D.4b Generating a design system from your own material -->
-  <h4 id="appendix-D.4b">D.4b Generating a design system from your own material</h4>
+  </section>
 
-  <p>The "Create new design system" button at the bottom of the design systems panel opens a flow that the bundled presets panel can't replace: generating a DESIGN.md from your own brand material. Open Design accepts four input types --- a brand brief (free text), a GitHub repository URL, a local file path, and a Figma or other asset bundle. The agent inspects the material, extracts color tokens, type scale, spacing rhythm, and component patterns, and writes a structured DESIGN.md that you review and confirm before it becomes active in your project.</p>
+  <section class="chapter-section" id="appendix-D-4b">
+    <h2 class="section-title">D.4b Generating a design system from your own material</h2>
+
+<p>The "Create new design system" button at the bottom of the design systems panel opens a flow that the bundled presets panel can't replace: generating a DESIGN.md from your own brand material. Open Design accepts four input types --- a brand brief (free text), a GitHub repository URL, a local file path, and a Figma or other asset bundle. The agent inspects the material, extracts color tokens, type scale, spacing rhythm, and component patterns, and writes a structured DESIGN.md that you review and confirm before it becomes active in your project.</p>
 
   <p>The practical consequence is that you teach Open Design your house brand once. Every subsequent artifact in every project that uses this design system inherits the brand contract automatically --- without you re-specifying colors, fonts, or component rules in every prompt. When the brand evolves, you re-run the extraction against the updated material and the diff surfaces what changed. Brand drift across artifacts becomes a diffing problem, not a prompt-hygiene problem.</p>
 
@@ -1064,7 +1109,7 @@
     <figcaption>Figure D.23 — The Plugins surface (v0.15.1). Reusable workflows enter the system from the Available tab before they run inside a project. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
-  <p>The concrete use case for plugins is packaging and distributing a team workflow. Say your team has a standard export step: every prototype gets a version comment injected, a changelog updated, and a Slack notification sent. Without a plugin, each team member runs those steps manually or copies a script. With a plugin, the steps are encapsulated into a single tool call that any agent can invoke. The plugin installs in one click from the Available tab and is available in every Open Design session from that point forward. <a href="#ch-09" class="xref">Chapter 09</a> covers authoring and distributing plugins from first principles.</p>
+  <p>The concrete use case for plugins is packaging and distributing a team workflow. Say your team has a standard export step: every prototype gets a version comment injected, a changelog updated, and a Slack notification sent. Without a plugin, each team member runs those steps manually or copies a script. With a plugin, the steps are encapsulated into a single tool call that any agent can invoke. The plugin installs in one click from the Available tab and is available in every Open Design session from that point forward. <a href="09.html#ch-09" class="xref">Chapter 09</a> covers authoring and distributing plugins from first principles.</p>
 
   <p>The <em>Available</em> tab inside the Plugins surface is the marketplace catalog. It lists every plugin published to the configured registry sources, with provenance tags (Community, Official, Verified) and per-plugin detail cards that include description, version history, and an Install button. Two catalog entries visible in v0.9.0 are instructive: <em>Community Registry Starter</em> (a scaffold for bootstrapping a private plugin registry for a team) and <em>Community Import Smoke Test</em> (a validation plugin for verifying a registry import). Use case: discovering and installing a community plugin from a configured marketplace is a two-step operation --- find the entry in the Available tab, read the provenance tags and detail card, click Install. The plugin is active in your environment and available to the agent in the same session.</p>
 
@@ -1102,8 +1147,11 @@
     <li><strong>Crystallize successful run into skill.</strong> After a generation run that produced an artifact you're happy with, this automation packages the run's prompt, skill invocation, and design system state into a reusable skill recipe. Use this when you've iterated to a pattern that works and want to reproduce it reliably rather than reconstructing the prompt from memory.</li>
   </ul>
 
-  <div class="callout">
-    <p><strong>My take:</strong> The automations surface is the most underused feature in my current Open Design setup. I set up the "Extract design system" automation for a client project and it caught a brand drift I wouldn't have noticed for two weeks --- a spacing-rhythm change on their live site that would have made my next batch of artifacts look subtly wrong. The 24 templates are well-chosen starting points; the real value is in the three or four you wire to your actual workflow and forget about. Start with the memory ingestion and design-system extraction templates. See <a href="#ch-09" class="xref">Chapter 09</a> for the plugin and automation authoring model.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>The automations surface is the most underused feature in my current Open Design setup. I set up the "Extract design system" automation for a client project and it caught a brand drift I wouldn't have noticed for two weeks --- a spacing-rhythm change on their live site that would have made my next batch of artifacts look subtly wrong. The 24 templates are well-chosen starting points; the real value is in the three or four you wire to your actual workflow and forget about. Start with the memory ingestion and design-system extraction templates. See <a href="09.html#ch-09" class="xref">Chapter 09</a> for the plugin and automation authoring model.</p>
+    </div>
   </div>
 
   <!-- D.6 Use everywhere: CLI, MCP, HTTP, headless -->
@@ -1128,10 +1176,10 @@
     <figcaption>Figure D.29 — The Integrations <em>Connectors</em> tab (v0.15.1). Composio key entry and a searchable connector grid for wiring live data into Live artifacts. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
-  <p>The <em>CLI · od</em> tab is a full command reference, not a summary. Every <code>od</code> subcommand is shown with copy-paste examples: <code>od media generate</code>, <code>od run</code>, <code>od plugin install</code>, <code>od skills list</code>, <code>od design-systems list</code>, <code>od status</code>, and <code>od doctor</code>. Use this tab as the primary reference for driving generation from a shell or CI pipeline: the examples are runnable verbatim and include the flag set you'll reach for most often. The <code>od doctor</code> command deserves a call-out --- it performs a self-check of the daemon, connected agents, and API keys and reports any misconfiguration in a single structured output. Run it first whenever something doesn't work before reaching for manual diagnostics.</p>
+  <p>The <em>CLI · od</em> tab is a full command reference, not a summary. Every <code>od</code> subcommand is shown with copy-paste examples: <code>od media generate</code>, <code>od run</code>, <code>od plugin install</code>, <code>od skill list</code> (plural alias <code>od skills list</code> is also supported), <code>od design-systems list</code>, <code>od status</code>, and <code>od doctor</code>. Use this tab as the primary reference for driving generation from a shell or CI pipeline: the examples are runnable verbatim and include the flag set you'll reach for most often. The <code>od doctor</code> command deserves a call-out --- it performs a self-check of the daemon, connected agents, and API keys and reports any misconfiguration in a single structured output. Run it first whenever something doesn't work before reaching for manual diagnostics.</p>
 
   <figure class="figure--full" id="fig-D-30">
-    <img src="../images/fig-open-design-cli-tab-showing-the--hkmsby.jpg" alt="Open Design CLI tab showing the full od command reference with subcommands including od media generate, od run, od plugin install, od skills list, od design-systems list, od status, and od doctor, each with copy-paste usage examples" loading="lazy" />
+    <img src="../images/fig-open-design-cli-tab-showing-the--hkmsby.jpg" alt="Open Design CLI tab showing the full od command reference with subcommands including od media generate, od run, od plugin install, od skill list, od design-systems list, od status, and od doctor, each with copy-paste usage examples" loading="lazy" />
     <figcaption>Figure D.30 — The <code>od · CLI</code> tab. Full command reference for the <code>od</code> binary: every subcommand is shown with runnable examples. The most useful commands for CI work are <code>od media generate</code> (headless artifact production), <code>od run</code> (execute a named skill), and <code>od doctor</code> (self-check daemon + agents + keys). Copy any example directly --- the format is stable across patch versions. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
   </figure>
 
@@ -1149,7 +1197,7 @@
     <figcaption>Figure D.32 — The HTTP API tab. REST endpoints for generation, export, status, and skill invocation. The daemon streams artifact events over SSE; the tab documents the event schema alongside the REST routes. Use this surface for headless automation --- webhooks, custom tooling, Slack bots, and CI pipelines that need raw HTTP access rather than a CLI binary. Real screenshot of Open Design v0.9.0, captured June 2026.</figcaption>
   </figure>
 
-  <p>The <em>Skills &amp; headless</em> tab covers programmatic skill invocation: running a named skill with a JSON payload, piping output to a file, and chaining skill runs into a batch pipeline. It is the reference surface for the <code>od skill run &lt;skill-name&gt; --json</code> pattern used in the CI examples throughout <a href="#ch-16" class="xref">Chapter 16</a>.</p>
+  <p>The <em>Skills &amp; headless</em> tab covers programmatic skill invocation: running a named skill with a JSON payload, piping output to a file, and chaining skill runs into a batch pipeline. It is the reference surface for the <code>od skill run &lt;skill-name&gt; --json</code> pattern used in the CI examples throughout <a href="16.html#ch-16" class="xref">Chapter 16</a>.</p>
 
   <figure class="figure--full" id="fig-D-33">
     <img src="../images/fig-open-design-skills-and-headless--1v7bqd.jpg" alt="Open Design Skills and headless tab showing a command panel with skill invocation syntax, a JSON payload editor, and example batch pipeline commands for chaining multiple skill runs" loading="lazy" />
@@ -1174,37 +1222,37 @@
           <td>Electron UI</td>
           <td><code>pnpm tools-dev</code> or the installed app</td>
           <td>Interactive generation, brief filling, visual preview, project management</td>
-          <td><a href="#ch-02" class="xref">Ch 02</a>, <a href="#ch-03" class="xref">Ch 03</a></td>
+          <td><a href="02.html#ch-02" class="xref">Ch 02</a>, <a href="03.html#ch-03" class="xref">Ch 03</a></td>
         </tr>
         <tr>
           <td><code>od</code> CLI</td>
           <td><code>od generate</code>, <code>od export</code>, <code>od status</code></td>
           <td>Scripted generation, CI pipelines, headless iteration, batch runs</td>
-          <td><a href="#ch-13" class="xref">Ch 13</a></td>
+          <td><a href="13.html#ch-13" class="xref">Ch 13</a></td>
         </tr>
         <tr>
           <td>MCP server</td>
           <td><code>od mcp install &lt;agent-cli&gt;</code></td>
           <td>Calling Open Design tools from within any supported agent CLI conversation</td>
-          <td><a href="#ch-10" class="xref">Ch 10</a></td>
+          <td><a href="10.html#ch-10" class="xref">Ch 10</a></td>
         </tr>
         <tr>
           <td>HTTP API</td>
           <td><code>http://localhost:7456</code> (daemon default)</td>
           <td>Custom tooling, webhooks, external orchestration, Slack bots</td>
-          <td><a href="#ch-10" class="xref">Ch 10</a></td>
+          <td><a href="10.html#ch-10" class="xref">Ch 10</a></td>
         </tr>
         <tr>
           <td>Skills headless</td>
           <td><code>od skill run &lt;skill-name&gt; --json</code></td>
           <td>Programmatic skill invocation, batch generation, CI artifact production</td>
-          <td><a href="#ch-04" class="xref">Ch 04</a>, <a href="#ch-16" class="xref">Ch 16</a></td>
+          <td><a href="04.html#ch-04" class="xref">Ch 04</a>, <a href="16.html#ch-16" class="xref">Ch 16</a></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <p>The HTTP API deserves separate attention for teams building integrations. The daemon at <code>localhost:7456</code> serves a REST interface with SSE (server-sent events) streaming for artifact events. A CI job can POST a generation request, stream the SSE events to detect completion, and pull the exported artifact file --- all without a human at a keyboard. <a href="#ch-10" class="xref">Chapter 10</a> covers the MCP server in depth; <a href="#ch-16" class="xref">Chapter 16</a> shows how to thread the CLI and HTTP surfaces into a complete delivery pipeline. <a href="#ch-12" class="xref">Chapter 12</a> covers running multiple agents against the same daemon for fan-out generation.</p>
+  <p>The HTTP API deserves separate attention for teams building integrations. The daemon at <code>localhost:7456</code> serves a REST interface with SSE (server-sent events) streaming for artifact events. A CI job can POST a generation request, stream the SSE events to detect completion, and pull the exported artifact file --- all without a human at a keyboard. <a href="10.html#ch-10" class="xref">Chapter 10</a> covers the MCP server in depth; <a href="16.html#ch-16" class="xref">Chapter 16</a> shows how to thread the CLI and HTTP surfaces into a complete delivery pipeline. <a href="12.html#ch-12" class="xref">Chapter 12</a> covers running multiple agents against the same daemon for fan-out generation.</p>
 
   <!-- D.7 Settings -->
   </section>
@@ -1221,12 +1269,12 @@
 
   <p><strong>Teams (beta).</strong> The gear menu exposes a <em>Teams</em> entry for org-shared projects, design systems, and plugin distribution. As of v0.15.1 the surface is labeled beta --- expect layout and capability changes between releases. Use it when more than one designer needs the same canonical brand contract or automation set without manual file sharing.</p>
 
-  <figure class="figure--full" id="fig-D-34b">
+  <figure class="figure--full" id="fig-D-34a">
     <img src="../images/od-v015-26-teams.png" alt="Open Design Teams beta surface showing org membership and shared workspace controls" loading="lazy" />
     <figcaption>Figure D.34a — Teams (beta). Org membership and shared assets from the gear menu. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
-  <p>Inside Settings, three knowledge surfaces deserve explicit attention (see also <a href="#ch-02" class="xref">Chapter 02</a> and <a href="#ch-08" class="xref">Chapter 08</a>):</p>
+  <p>Inside Settings, three knowledge surfaces deserve explicit attention (see also <a href="02.html#ch-02" class="xref">Chapter 02</a> and <a href="08.html#ch-08" class="xref">Chapter 08</a>):</p>
 
   <ul>
     <li><strong>Instructions / Rules</strong> — fixed global rules for every chat.</li>
@@ -1238,10 +1286,12 @@
     <img src="../images/od-v015-24-settings-design-jury.png" alt="Open Design Settings Design Jury panel with toggle for five-panel review during agent runs" loading="lazy" />
     <figcaption>Figure D.35 — Design Jury. Enable to adjudicate runs before you treat them as shippable. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
+  </section>
 
-  <h4 id="appendix-D.7-catalogue">D.7a Settings catalogue — every rail item</h4>
+  <section class="chapter-section" id="appendix-D-7-catalogue">
+    <h2 class="section-title">D.7a Settings catalogue — every rail item</h2>
 
-  <p>The figures above cover the gear menu, Teams, and Design Jury. The catalogue below completes the Settings navigation rail as of v0.15.1 --- one figure per category so you can scan the full configuration surface without opening the app. Chapter 02 explains the knowledge layers; this subsection is the visual index.</p>
+<p>The figures above cover the gear menu, Teams, and Design Jury. The catalogue below completes the Settings navigation rail as of v0.15.1 --- one figure per category so you can scan the full configuration surface without opening the app. Chapter 02 explains the knowledge layers; this subsection is the visual index.</p>
 
   <figure class="figure--full" id="fig-D-35a">
     <img src="../images/od-v015-27-settings-open.png" alt="Open Design Settings dialog shell with left navigation rail listing all configuration categories" loading="lazy" />
@@ -1270,7 +1320,7 @@
 
   <figure class="figure--full" id="fig-D-35f">
     <img src="../images/od-v015-29-settings-external-mcp.png" alt="Open Design Settings External MCP panel" loading="lazy" />
-    <figcaption>Figure D.35f — External MCP. Register third-party MCP servers; see <a href="#ch-10" class="xref">Chapter 10</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    <figcaption>Figure D.35f — External MCP. Register third-party MCP servers; see <a href="10.html#ch-10" class="xref">Chapter 10</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
   <figure class="figure--full" id="fig-D-35g">
@@ -1280,7 +1330,7 @@
 
   <figure class="figure--full" id="fig-D-35h">
     <img src="../images/od-v015-31-settings-mcp-server.png" alt="Open Design Settings MCP server panel with mcpServers copy block" loading="lazy" />
-    <figcaption>Figure D.35h — MCP server. Copy-paste config for agent CLIs; covered in <a href="#ch-10" class="xref">Chapter 10</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    <figcaption>Figure D.35h — MCP server. Copy-paste config for agent CLIs; covered in <a href="10.html#ch-10" class="xref">Chapter 10</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
   <figure class="figure--full" id="fig-D-35i">
@@ -1300,7 +1350,7 @@
 
   <figure class="figure--full" id="fig-D-35l">
     <img src="../images/od-v015-35-settings-design-systems.png" alt="Open Design Settings Design systems gallery of installed brand systems" loading="lazy" />
-    <figcaption>Figure D.35l — Design systems. Installed brand systems gallery; authoring in <a href="#ch-05" class="xref">Chapter 05</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
+    <figcaption>Figure D.35l — Design systems. Installed brand systems gallery; authoring in <a href="05.html#ch-05" class="xref">Chapter 05</a>. Mock-safe screenshot from Open Design desktop v0.15.1 (July 2026).</figcaption>
   </figure>
 
   <figure class="figure--full" id="fig-D-35m">
@@ -1325,14 +1375,19 @@
 
   <p>One thing this panel deliberately omits: a log viewer. If a generation is completing without producing an artifact, or a model call is returning 401, the settings UI won't surface that. Run the daemon in foreground mode with <code>pnpm tools-dev run daemon</code> and read stderr. The settings panel handles the 80% case --- switching runtimes, adding an agent, rotating a key, adjusting the port. The remaining 20% of configuration and all diagnosis belongs in the terminal.</p>
 
-  <p>The <em>Advanced</em> section at the bottom of the settings panel exposes daemon flags that don't warrant a dedicated UI element: log verbosity, artifact storage path, and SSRF allowlist entries for local Ollama setups on non-standard addresses. The SSRF protection is a load-bearing security control --- don't disable it to work around a connection problem. If an Ollama endpoint is being blocked, add its address to the allowlist here rather than loosening the protection entirely. The rationale is in <a href="#ch-08" class="xref">section 08.1</a>.</p>
+  <p>The <em>Advanced</em> section at the bottom of the settings panel exposes daemon flags that don't warrant a dedicated UI element: log verbosity, artifact storage path, and SSRF allowlist entries for local Ollama setups on non-standard addresses. The SSRF protection is a load-bearing security control --- don't disable it to work around a connection problem. If an Ollama endpoint is being blocked, add its address to the allowlist here rather than loosening the protection entirely. The rationale is in <a href="08.html#ch-08" class="xref">section 08.1</a>.</p>
 
-  <div class="callout">
-    <p><strong>My take:</strong> The settings panel is deliberately thin, and that is the right call. Exposing every daemon flag in a GUI invites misconfiguration that's hard to debug because the person who set the flag doesn't remember setting it. The flags that matter day-to-day --- runtime, agent, key, port --- are here. Everything else is in the terminal where changes are visible in the shell history. I've configured Open Design on six machines; the settings panel handled four of them without any terminal work at all.</p>
+    <div class="callout my-take">
+    <div class="callout-header">My Take</div>
+    <div class="callout-body">
+      <p>The settings panel is deliberately thin, and that is the right call. Exposing every daemon flag in a GUI invites misconfiguration that's hard to debug because the person who set the flag doesn't remember setting it. The flags that matter day-to-day --- runtime, agent, key, port --- are here. Everything else is in the terminal where changes are visible in the shell history. I've configured Open Design on six machines; the settings panel handled four of them without any terminal work at all.</p>
+    </div>
   </div>
 
-  <div class="callout tip">
-    <p><strong>Next:</strong> This appendix is a visual reference, not a substitute for the chapters it illustrates. For the generate-to-export workflow in full, work through <a href="#ch-03" class="xref">Chapter 03</a>. For the brand-contract model behind design systems and presets, see <a href="#ch-05" class="xref">Chapter 05</a>. For plugins and automations from first principles, see <a href="#ch-09" class="xref">Chapter 09</a>. For the MCP server and HTTP API shown in the integrations page, see <a href="#ch-10" class="xref">Chapter 10</a>. For agent routing and the CLI comparison, see <a href="#ch-11" class="xref">Chapter 11</a>. For troubleshooting any screen shown here, turn to <a href="#appendix-C" class="xref">Appendix C</a>.</p>
+    <div class="callout tip">
+    <div class="callout-body">
+      <p><strong>Next:</strong> This appendix is a visual reference, not a substitute for the chapters it illustrates. For the generate-to-export workflow in full, work through <a href="03.html#ch-03" class="xref">Chapter 03</a>. For the brand-contract model behind design systems and presets, see <a href="05.html#ch-05" class="xref">Chapter 05</a>. For plugins and automations from first principles, see <a href="09.html#ch-09" class="xref">Chapter 09</a>. For the MCP server and HTTP API shown in the integrations page, see <a href="10.html#ch-10" class="xref">Chapter 10</a>. For agent routing and the CLI comparison, see <a href="11.html#ch-11" class="xref">Chapter 11</a>. For troubleshooting any screen shown here, turn to <a href="C.html#appendix-C" class="xref">Appendix C</a>.</p>
+    </div>
   </div>
   </section>
         </div>
@@ -1377,7 +1432,7 @@
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code with the open-source Claude Design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1467,7 +1522,7 @@
         </div>
       </div>
       <div class="flex flex-col items-start justify-between gap-4 border-t border-black pt-8 mt-12 md:flex-row md:items-center">
-        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. All rights reserved.</p>
+        <p class="font-mono text-xs text-black/30">&copy;2026 Mehran Mozaffari. Free for personal/noncommercial use (CC BY-NC-ND 4.0); commercial license required for business use.</p>
         <div class="flex gap-6">
           <a href="../" class="font-mono text-xs text-black/30 hover:text-black transition-colors">Home</a>
           <a href="../about.html" class="font-mono text-xs text-black/30 hover:text-black transition-colors">About</a>
@@ -1482,15 +1537,15 @@
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code with the open-source Claude Design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>
     <div class="border-t border-white">
       <div class="w-full px-6 md:px-12 lg:px-20 py-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div class="font-mono text-[11px] text-white/60 leading-relaxed">
-          <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
-          <p class="mt-1">First Edition. Published June 2026. All content, code examples, and illustrations are the original work of the author unless otherwise noted.</p>
+          <p>&copy;2026 Mehran Mozaffari. Free for personal/noncommercial use (CC BY-NC-ND 4.0); commercial license required for business use.</p>
+          <p class="mt-1">First edition. Published July 2026. Prose: CC BY-NC-ND 4.0 (personal/noncommercial); commercial license available. Code samples Apache-2.0/MIT as noted.</p>
         </div>
         <div class="flex items-center gap-6">
           <a href="../about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>

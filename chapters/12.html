@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="bw-version" content="0.1.1">
+  <meta name="bw-version" content="0.1.2">
   <title>Multi-Agent Design Teams - Open Design</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x2728;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -526,7 +526,7 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="chapter-hero" style="background-color: #a9b158; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
+  <section class="chapter-hero" id="ch-12" style="background-color: #a9b158; background-image: url('../assets/gradients/gradient_sage_yellow.png'); background-size: cover; background-position: center;">
     <div class="page-shell py-16 md:py-24 lg:py-32">
       <div class="flex flex-col justify-between md:flex-row md:items-end">
         <div class="max-w-3xl">
@@ -614,7 +614,7 @@
   </p>
 
   <p>
-    Open Design's daemon is a Node 24 Express server with SSE streaming (covered in <a href="ch-02.html#ch-02">Chapter 02</a>). It accepts concurrent requests over separate SSE channels and stores each artifact independently in the <code>.od/projects/&lt;id&gt;/</code> layout. As of June 2026, the daemon does not enforce a concurrency ceiling at the application layer---it relies on the underlying Node event loop and your provider's rate limits. That means you can connect multiple agent CLIs to the same project simultaneously. <!-- TODO-VERIFY: no documented concurrency ceiling in daemon source; verify against daemon implementation before publication -->
+    Open Design's daemon is a Node 24 Express server with SSE streaming (covered in <a href="02.html#ch-02">Chapter 02</a>). It accepts concurrent requests over separate SSE channels and stores each artifact independently in the <code>.od/projects/&lt;id&gt;/</code> layout. As of June 2026, the daemon does not enforce a concurrency ceiling at the application layer---it relies on the underlying Node event loop and your provider's rate limits. That means you can connect multiple agent CLIs to the same project simultaneously. <!-- TODO-VERIFY: no documented concurrency ceiling in daemon source; verify against daemon implementation before publication -->
   </p>
 
   <p>
@@ -781,7 +781,7 @@
     <h2 class="section-title"><span class="section-num">12.3</span> Routing Roles to Agents</h2>
 
 <p>
-    <a href="ch-11.html#ch-11">Chapter 11</a> covers the full agent comparison. The routing logic for multi-agent design work follows one principle: use capable proprietary agents for work that requires the most context-holding and the highest quality ceiling; use cheap or open agents for work that needs volume. This isn't a permanent hierarchy---agent capabilities and pricing churn monthly, and the table below will age. It reflects the best routing I've found as of June 2026. <!-- TODO-VERIFY: agent capability/pricing hierarchy from ch-11; verify OpenCode MIT license status has not changed -->
+    <a href="11.html#ch-11">Chapter 11</a> covers the full agent comparison. The routing logic for multi-agent design work follows one principle: use capable proprietary agents for work that requires the most context-holding and the highest quality ceiling; use cheap or open agents for work that needs volume. This isn't a permanent hierarchy---agent capabilities and pricing churn monthly, and the table below will age. It reflects the best routing I've found as of June 2026. <!-- TODO-VERIFY: agent capability/pricing hierarchy from ch-11; verify OpenCode MIT license status has not changed -->
   </p>
 
   <div class="table-wrapper">
@@ -838,7 +838,7 @@
     <h2 class="section-title"><span class="section-num">12.4</span> Running the Team</h2>
 
 <p>
-    The walkthrough below runs the Layout, Variations, and Copy roles in parallel against one design goal: a landing page for a local-first design tool. All three agents connect to the same Open Design project via MCP (Model Context Protocol), which was covered in <a href="ch-10.html#ch-10">Chapter 10</a>. Each agent generates into a separate artifact within the project.
+    The walkthrough below runs the Layout, Variations, and Copy roles in parallel against one design goal: a landing page for a local-first design tool. All three agents connect to the same Open Design project via MCP (Model Context Protocol), which was covered in <a href="10.html#ch-10">Chapter 10</a>. Each agent generates into a separate artifact within the project.
   </p>
 
   <div class="step">
@@ -922,7 +922,7 @@ $ od mcp install cursor
 
     <div class="callout warning">
     <div class="callout-body">
-      <p>As of June 2026, multiple agents sharing the same Open Design daemon also share the same BYOK proxy and the same provider rate-limit quota. If all three agents send model-inference requests at the same moment, they compete for the same API quota. The result is cascading 429 errors and partial artifacts. Stagger starts by five to ten seconds per agent, and if you're using the same provider for all roles, consider spreading roles across different providers via the BYOK configuration in <a href="ch-10.html#ch-10">Chapter 10</a>.</p>
+      <p>As of June 2026, multiple agents sharing the same Open Design daemon also share the same BYOK proxy and the same provider rate-limit quota. If all three agents send model-inference requests at the same moment, they compete for the same API quota. The result is cascading 429 errors and partial artifacts. Stagger starts by five to ten seconds per agent, and if you're using the same provider for all roles, consider spreading roles across different providers via the BYOK configuration in <a href="10.html#ch-10">Chapter 10</a>.</p>
     </div>
   </div>
 
@@ -975,7 +975,7 @@ Here are three HTML files. Combine them into
         <tr>
           <td>One or more agents return a 429 error mid-generation</td>
           <td>Concurrent requests exceeded provider rate limit; all agents share the BYOK proxy quota</td>
-          <td>Stagger agent starts by 5–10 seconds; or route roles to different providers in BYOK config (see <a href="ch-10.html#ch-10">Chapter 10</a>)</td>
+          <td>Stagger agent starts by 5–10 seconds; or route roles to different providers in BYOK config (see <a href="10.html#ch-10">Chapter 10</a>)</td>
         </tr>
         <tr>
           <td>Artifact preview is blank after generation completes</td>
@@ -1021,7 +1021,7 @@ Here are three HTML files. Combine them into
   </div>
 
   <p>
-    The test is simple: could you review all the outputs side by side in one sitting and pick a winner in under thirty minutes? If yes, parallelism earns its overhead. If the outputs require reconciliation, context-sharing, or sequential refinement before any of them are reviewable, you've added coordination for negative gain. Go back to one agent, define the goal more tightly, and run the generate-preview-iterate-export loop from <a href="ch-03.html#ch-03">Chapter 03</a>.
+    The test is simple: could you review all the outputs side by side in one sitting and pick a winner in under thirty minutes? If yes, parallelism earns its overhead. If the outputs require reconciliation, context-sharing, or sequential refinement before any of them are reviewable, you've added coordination for negative gain. Go back to one agent, define the goal more tightly, and run the generate-preview-iterate-export loop from <a href="03.html#ch-03">Chapter 03</a>.
   </p>
 
   <p>
@@ -1107,7 +1107,7 @@ Here are three HTML files. Combine them into
             </div>
           </div>
           <p class="text-2xl font-bold leading-[0.95] tracking-tight" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design</p>
-          <p class="mt-3 font-sans text-sm text-black/40">Local-first, agent-native design-as-code — the open-source AI design alternative. By Mehran Mozaffari. First Edition, June 2026.</p>
+          <p class="mt-3 font-sans text-sm text-black/40">An open-source design harness for AI coding agents. 16 chapters + 4 appendices. Version 0.1.2. By Mehran Mozaffari.</p>
         </div>
         <div class="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-3 flex-1">
           <a href="preface.html" class="group border-b border-black pb-4">
@@ -1212,7 +1212,7 @@ Here are three HTML files. Combine them into
     <div class="w-full px-6 md:px-12 lg:px-20 py-24 md:py-36">
       <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open<br>Design</h2>
       <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-        <p class="font-sans text-lg md:text-xl text-white">Local-first, agent-native design-as-code — the open-source AI design alternative</p>
+        <p class="font-sans text-lg md:text-xl text-white">open-source design harness for AI coding agents — local-first, agent-native design-as-code</p>
         <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
       </div>
     </div>

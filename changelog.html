@@ -185,14 +185,14 @@
   <header class="sticky top-0 z-50 flex h-14 items-center justify-between bg-white border-b border-black select-none">
     <div class="flex h-full items-center">
       <a href="index.html" id="logo-link" class="flex h-full items-center bg-black px-4 text-white hover:bg-neutral-900 transition-colors">
-        <span class="font-sans text-sm font-bold tracking-tight" style="font-family: 'Beausite Classic Medium', sans-serif">CC</span>
+        <span class="font-sans text-sm font-bold tracking-tight" style="font-family: 'Beausite Classic Medium', sans-serif">OD</span>
         <span class="ml-0.5 font-mono text-[10px] font-medium leading-none">'26</span>
       </a>
       <div id="menu-placeholder" class="h-full border-r border-black shrink-0 w-[120px] sm:w-[550px]"></div>
     </div>
     <div class="flex h-full items-center">
       <a href="https://github.com/imehr/open-design" target="_blank" rel="noopener" class="hidden items-center gap-1 border border-black px-4 py-2 text-sm font-medium text-black md:flex font-mono mr-4 hover:bg-black hover:text-white transition-colors duration-200">
-        View on GitHub
+        Book source on GitHub
       </a>
       <nav class="flex h-full items-center text-sm text-black">
         <a href="about.html" class="nav-hover-link">
@@ -249,11 +249,43 @@
       <!-- Left Column: Releases -->
       <div class="lg:col-span-8 changelog-content">
       <!-- bw:changelog-start -->
-        <!-- v0.1.0 -->
+        <!-- v0.1.2 -->
         <div class="release-entry">
           <div class="flex items-center gap-3 mb-6">
             <span class="release-badge new">Latest</span>
-            <span class="font-mono text-sm text-black/50">v0.1.0</span>
+            <span class="font-mono text-sm text-black/50">v0.1.2</span>
+            <span class="font-mono text-xs text-black/30">July 24, 2026</span>
+          </div>
+          <p class="section-tag">Release Summary</p>
+          <ul>
+          <li>Current public book package for <strong>Open Design</strong> (16 chapters + 4 appendices).</li>
+          <li>Edition metadata, front matter, cover, and website copy aligned to version <strong>0.1.2</strong>.</li>
+          <li>Open Design is positioned as an open-source design harness for AI coding agents: local-first, agent-native design-as-code for building real design artifacts.</li>
+          <li>License: CC BY-NC-ND 4.0 (prose); code samples Apache-2.0 / MIT as noted.</li>
+          </ul>
+          <p class="section-tag">Links</p>
+          <ul>
+          <li>Product repository: https://github.com/nexu-io/open-design</li>
+          <li>Book repository: https://github.com/imehr/open-design</li>
+          <li>Website: https://piazr.github.io/open-design/</li>
+          <li>Releases: https://github.com/imehr/open-design/releases</li>
+          </ul>
+          <p class="section-tag">Content Changes</p>
+          <ul>
+          <li>Website chapter pages and cover synced from the canonical 0.1.2 book output.</li>
+          <li>Homepage and about-page messaging updated to explain the design harness, skills, brand systems, plugins, MCP, and preview/export workflow.</li>
+          </ul>
+          <p class="section-tag">Validation</p>
+          <ul>
+          <li>Publication preflight and image audit pass before publishing.</li>
+          <li>Public book repo sync targets <code>imehr/open-design</code>; website sync targets <code>Piazr/open-design</code>.</li>
+          </ul>
+        </div>
+
+        <!-- v0.1.0 -->
+        <div class="release-entry">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="release-badge">v0.1.0</span>
             <span class="font-mono text-xs text-black/30">July 24, 2026</span>
           </div>
           <p class="section-tag">Release Summary</p>
@@ -302,15 +334,15 @@
             <p class="font-sans text-sm font-bold text-black">Download</p>
             <p class="text-xs text-black/60 mt-1">Get the latest version</p>
             <div class="mt-3 space-y-2">
-              <a href="https://github.com/imehr/open-design/releases/download/v0.1.1/open-design.pdf" class="flex items-center gap-2 text-sm text-coral hover:text-coral/80 transition-colors">
+              <a href="https://github.com/imehr/open-design/releases/download/open-design-v0.1.2/open-design.pdf" class="flex items-center gap-2 text-sm text-coral hover:text-coral/80 transition-colors">
                 <i data-lucide="file-text" class="size-4"></i>
                 PDF (209 pages, 19.2 MB)
               </a>
-              <a href="https://github.com/imehr/open-design/releases/download/v0.1.1/open-design.epub" class="flex items-center gap-2 text-sm text-coral hover:text-coral/80 transition-colors">
+              <a href="https://github.com/imehr/open-design/releases/download/open-design-v0.1.2/open-design.epub" class="flex items-center gap-2 text-sm text-coral hover:text-coral/80 transition-colors">
                 <i data-lucide="book-open" class="size-4"></i>
                 EPUB (18.3 MB)
               </a>
-              <a href="https://github.com/imehr/open-design/releases/download/v0.1.1/open-design.html" class="flex items-center gap-2 text-sm text-coral hover:text-coral/80 transition-colors">
+              <a href="https://github.com/imehr/open-design/releases/download/open-design-v0.1.2/open-design.html" class="flex items-center gap-2 text-sm text-coral hover:text-coral/80 transition-colors">
                 <i data-lucide="globe" class="size-4"></i>
                 Single-file HTML
               </a>
@@ -357,9 +389,9 @@
     <!-- Book Name Branding Block -->
     <div class="w-full border-b border-white bg-black text-white relative">
       <div class="mx-4 md:mx-8 lg:mx-12 xl:mx-20 py-24 md:py-36 px-6 md:px-12 lg:px-20">
-        <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design<br>for Designers</h2>
+        <h2 class="font-bold leading-[0.85] tracking-[-0.03em] text-[18vw] md:text-[13vw]" style="font-family: 'Beausite Classic Medium', Inter, sans-serif">Open Design<br>for AI Agents</h2>
         <div class="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
-          <p class="font-sans text-lg md:text-xl text-white">A Designer's Guide to AI-Assisted Workflows</p>
+          <p class="font-sans text-lg md:text-xl text-white">An open-source design harness for AI coding agents</p>
           <p class="font-mono text-[13px] text-white/70">By Mehran Mozaffari</p>
         </div>
       </div>
@@ -371,13 +403,14 @@
         <div class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div class="font-mono text-[11px] text-white/50 leading-relaxed">
             <p>&copy;2026 Mehran Mozaffari. All rights reserved.</p>
-            <p class="mt-1">First Edition. Published July 2026. All content, code examples, and illustrations are the original work of the author.</p>
+            <p class="mt-1">First Edition. Published July 2026. Version 0.1.2. All content, code examples, and illustrations are the original work of the author.</p>
           </div>
           <div class="flex items-center gap-6">
             <a href="about.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">About</a>
             <a href="changelog.html" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Changelog</a>
             <a href="index.html#chapters" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Chapters</a>
-            <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">GitHub</a>
+            <a href="https://github.com/imehr/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Book GitHub</a>
+            <a href="https://github.com/nexu-io/open-design" class="font-mono text-[11px] text-white/40 hover:text-white transition-colors">Harness GitHub</a>
           </div>
         </div>
       </div>
